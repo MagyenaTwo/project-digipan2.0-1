@@ -23,7 +23,7 @@
 # reportlab
 # apscheduler==3.10.1  
 # pandas
-# openpyxl
+openpyxl
 # supabase
 # requests
 
@@ -35,9 +35,8 @@ peewee==3.14.4
 psycopg2-binary
 Flask-SQLAlchemy==3.1.1
 SQLAlchemy==2.0.16
-reportlab
-apscheduler==3.10.1  
+# reportlab
+apscheduler==3.10.1  k?>K  
 pandas
-# openpyxl
 supabase
 requests

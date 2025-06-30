@@ -20,9 +20,10 @@ import requests
 from urllib.parse import unquote
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import current_app
-from reportlab.lib.units import inch
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import Paragraph
+
+# from reportlab.lib.units import inch
+# from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+# from reportlab.platypus import Paragraph
 from textwrap import fill, wrap
 from werkzeug.exceptions import NotFound
 from io import BytesIO
@@ -36,13 +37,14 @@ from werkzeug.security import check_password_hash
 import re
 from flask import Flask, send_from_directory, send_file, abort
 import io
-from reportlab.lib.pagesizes import letter
-from reportlab.lib.units import inch
-from reportlab.pdfgen import canvas
-from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4
-from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.pdfbase import pdfmetrics
+
+# from reportlab.lib.pagesizes import letter
+# from reportlab.lib.units import inch
+# from reportlab.pdfgen import canvas
+# from reportlab.lib import colors
+# from reportlab.lib.pagesizes import A4
+# from reportlab.pdfbase.ttfonts import TTFont
+# from reportlab.pdfbase import pdfmetrics
 import textwrap
 import base64
 from sqlalchemy import extract
@@ -55,14 +57,17 @@ from flask import session, redirect, url_for, flash, abort
 from collections import Counter
 import random
 import string
-from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
-from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet
 
-pdfmetrics.registerFont(TTFont("TimesNewRoman-Bold", "static/font/Times-Bold.TTF"))
+# from reportlab.lib.pagesizes import letter
+# from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
+# from reportlab.lib import colors
+# from reportlab.lib.styles import getSampleStyleSheet
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
 
-pdfmetrics.registerFont(TTFont("TimesNewRoman-Regular", "static/font/times.ttf"))
+# pdfmetrics.registerFont(TTFont("TimesNewRoman-Bold", "static/font/Times-Bold.TTF"))
+
+# pdfmetrics.registerFont(TTFont("TimesNewRoman-Regular", "static/font/times.ttf"))
 app = Flask(__name__)
 
 app.secret_key = "4321Lupa"
@@ -1740,35 +1745,6 @@ def laporan():
     )
 
 
-def create_pdf_report(data, title, headers, filename):
-    output = BytesIO()
-    pdf = SimpleDocTemplate(output, pagesize=letter)
-    elements = []
-    styles = getSampleStyleSheet()
-    elements.append(Paragraph(title, styles["Title"]))
-    table_data = [headers] + data
-    table = Table(table_data)
-    table.setStyle(
-        TableStyle(
-            [
-                ("BACKGROUND", (0, 0), (-1, 0), colors.grey),
-                ("TEXTCOLOR", (0, 0), (-1, 0), colors.whitesmoke),
-                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-                ("GRID", (0, 0), (-1, -1), 1, colors.black),
-                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                ("FONTNAME", (0, 1), (-1, -1), "Helvetica"),
-                ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
-            ]
-        )
-    )
-    elements.append(table)
-    pdf.build(elements)
-    output.seek(0)
-    return send_file(
-        output, mimetype="application/pdf", as_attachment=True, download_name=filename
-    )
-
-
 @app.route("/generate_report", methods=["POST"])
 def generate_report():
     report_type = request.form.get("report_type")
@@ -1781,20 +1757,47 @@ def generate_report():
     return "Invalid report type", 400
 
 
+def create_excel_report(data, title, headers, filename):
+    output = BytesIO()
+    wb = Workbook()
+    ws = wb.active
+    ws.title = title
+    ws.append(headers)
+    for row in data:
+        ws.append(row)
+    for i, column in enumerate(ws.columns, 1):
+        max_length = max(len(str(cell.value)) if cell.value else 0 for cell in column)
+        ws.column_dimensions[get_column_letter(i)].width = max_length + 2
+    wb.save(output)
+    output.seek(0)
+    return send_file(
+        output,
+        as_attachment=True,
+        download_name=filename,
+        mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    )
+
+
 @app.route("/generate_family_report", methods=["POST"])
 def generate_family_report():
     query = db.session.query(Family).all()
     data = [[f.nama_keluarga, f.nama, f.hubungan_keluarga] for f in query]
     headers = ["Nama Keluarga", "Nama Anggota", "Hubungan Keluarga"]
-    return create_pdf_report(data, "Laporan Keluarga", headers, "laporan_keluarga.pdf")
+    return create_excel_report(
+        data, "Laporan Keluarga", headers, "laporan_keluarga.xlsx"
+    )
 
 
 @app.route("/generate_financial_report", methods=["POST"])
 def generate_financial_report():
     query = db.session.query(Iuran).filter(Iuran.status_pembayaran == "Diterima").all()
-    data = [[i.nama_keluarga, i.jumlah_iuran, i.tanggal] for i in query]
+    data = [
+        [i.nama_keluarga, i.jumlah_iuran, i.tanggal.strftime("%Y-%m-%d")] for i in query
+    ]
     headers = ["Nama Keluarga", "Jumlah Iuran", "Tanggal Pembayaran"]
-    return create_pdf_report(data, "Laporan Keuangan", headers, "laporan_keuangan.pdf")
+    return create_excel_report(
+        data, "Laporan Keuangan", headers, "laporan_keuangan.xlsx"
+    )
 
 
 @app.route("/generate_expense_report", methods=["GET"])
@@ -1807,8 +1810,8 @@ def generate_expense_report():
         for p in query
     ]
     headers = ["Nama Kegiatan", "Jenis Pengeluaran", "Jumlah", "Tanggal"]
-    return create_pdf_report(
-        data, "Laporan Pengeluaran", headers, "laporan_pengeluaran.pdf"
+    return create_excel_report(
+        data, "Laporan Pengeluaran", headers, "laporan_pengeluaran.xlsx"
     )
 
 
