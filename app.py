@@ -2847,21 +2847,42 @@ def delete_warga(nama_lengkap):
 
 @app.route("/peraturan", methods=["GET", "POST"])
 def peraturan():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user_role = session.get("role")
+
+    # ========== POST REQUEST (Tambah Peraturan) ==========
     if request.method == "POST":
         isi = (request.form.get("isi") or "").strip()
+
         if not isi:
             return (
                 jsonify({"status": "error", "message": "Isi peraturan wajib diisi."}),
                 400,
             )
 
+        # Hanya admin yang bisa menambah peraturan
+        if user_role == "kader":
+            return (
+                jsonify(
+                    {
+                        "status": "error",
+                        "message": "Fitur ini hanya dapat diakses oleh Admin.",
+                    }
+                ),
+                403,
+            )
+
         new_rule = PeraturanRT(isi_peraturan=isi, tanggal_update=date.today())
         db.session.add(new_rule)
         db.session.commit()
+
         return jsonify(
             {"status": "success", "message": "Peraturan berhasil ditambahkan!"}
         )
 
+    # ========== GET REQUEST (Tampilkan Halaman) ==========
     rows = PeraturanRT.query.order_by(PeraturanRT.id.desc()).all()
     all_rules = [
         {
@@ -2873,7 +2894,35 @@ def peraturan():
         }
         for r in rows
     ]
-    return render_template("peraturan.html", all_rules=all_rules)
+
+    # Ambil pesan terbaru (3 pesan)
+    all_messages = Message.query.order_by(Message.timestamp.desc()).limit(3).all()
+    message_list_to_display = [
+        {
+            "message": msg.message,
+            "user": msg.user,
+            "nomor_whatsapp": (
+                "62" + msg.nomor_whatsapp[1:]
+                if msg.nomor_whatsapp.startswith("0")
+                else msg.nomor_whatsapp
+            ),
+            "timestamp": msg.timestamp.astimezone(
+                pytz.timezone("Asia/Jakarta")
+            ).strftime("%d %b %Y · %H:%M"),
+        }
+        for msg in all_messages
+    ]
+
+    # Ambil daftar user
+    all_users = User.query.order_by(User.username.asc()).all()
+
+    # Render template seperti di route /pendatang
+    return render_template(
+        "peraturan.html",
+        all_rules=all_rules,
+        messages=message_list_to_display,
+        all_users=all_users,
+    )
 
 
 @app.route("/edit_peraturan/<int:id>", methods=["POST"])
