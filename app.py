@@ -402,47 +402,48 @@ def login():
 
 @app.route("/logout")
 def logout():
-    if "user_id" in session:
-        jakarta_tz = pytz.timezone("Asia/Jakarta")
-        now_jakarta = datetime.now(jakarta_tz).replace(
-            tzinfo=None
-        )  # ✅ Buang informasi timezone
+    user_id = session.get("user_id")
+    if user_id:
+        user = User.query.get(user_id)
+        if user:  # Hanya buat log jika user masih ada
+            jakarta_tz = pytz.timezone("Asia/Jakarta")
+            now_jakarta = datetime.now(jakarta_tz).replace(tzinfo=None)
 
-        new_activity = Activity(
-            user_id=session["user_id"],
-            action="Logout dari sistem",
-            timestamp=now_jakarta,
-        )
-        db.session.add(new_activity)
-        db.session.commit()
+            new_activity = Activity(
+                user_id=user.id,
+                action="Logout dari sistem",
+                timestamp=now_jakarta,
+            )
+            db.session.add(new_activity)
+            db.session.commit()
 
-        username = session.get("username", "Tidak diketahui")
-        role = session.get("role", "Tidak diketahui")
+            username = session.get("username", "Tidak diketahui")
+            role = session.get("role", "Tidak diketahui")
 
-        recent_activities = (
-            Activity.query.filter_by(user_id=session["user_id"])
-            .order_by(Activity.timestamp.desc())
-            .limit(10)
-            .all()
-        )
+            recent_activities = (
+                Activity.query.filter_by(user_id=user.id)
+                .order_by(Activity.timestamp.desc())
+                .limit(10)
+                .all()
+            )
 
-        activity_list = "\n".join(
-            [
-                f"🔹 {act.action} - {act.timestamp.astimezone(jakarta_tz).strftime('%Y-%m-%d %H:%M:%S')}"
-                for act in recent_activities
-            ]
-        )
+            activity_list = "\n".join(
+                [
+                    f"🔹 {act.action} - {act.timestamp.astimezone(jakarta_tz).strftime('%Y-%m-%d %H:%M:%S')}"
+                    for act in recent_activities
+                ]
+            )
 
-        # Kirim notifikasi Telegram saat logout dengan aktivitas-aktivitas terakhir
-        send_telegram_notification(
-            f"<b>Hallo pengurus RT 08/01!</b>\n\n"
-            f"<b>Ada Pengurus RT yang Masuk!</b>\n\n"
-            f"👤 <b>Username:</b> {username}\n"
-            f"💼 <b>Role:</b> {role}\n\n"
-            f"<b>Riwayat Aktivitas Terakhir:</b>\n{activity_list}\n\n"
-            f"<b>Untuk detail lebih lanjut, silakan kunjungi website berikut:</b>\n"
-            f"<a href='https://digiwarga.vercel.app/login'>digiwarga.vercel.app/login</a>"
-        )
+            # Kirim notifikasi Telegram saat logout
+            send_telegram_notification(
+                f"<b>Hallo pengurus RT 08/01!</b>\n\n"
+                f"<b>Ada Pengurus RT yang Logout!</b>\n\n"
+                f"👤 <b>Username:</b> {username}\n"
+                f"💼 <b>Role:</b> {role}\n\n"
+                f"<b>Riwayat Aktivitas Terakhir:</b>\n{activity_list}\n\n"
+                f"<b>Untuk detail lebih lanjut, silakan kunjungi website berikut:</b>\n"
+                f"<a href='https://digiwarga.vercel.app/login'>digiwarga.vercel.app/login</a>"
+            )
 
     session.clear()
     flash("Anda telah keluar.", "info")
