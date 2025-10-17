@@ -5,23 +5,17 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
   <link href="static/img/logo/2.png" rel="icon">
-  <title>Digipan | Surat</title>
+  <title>Digipan | Peraturan</title>
   <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="static/css/ruang-admin.min.css" rel="stylesheet">
   <link href="static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-
 </head>
-<style>
-  
-</style>
 
 <body id="page-top">
   <div id="wrapper">
+   
     <!-- Sidebar -->
     <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/dashboard">
@@ -62,13 +56,13 @@
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Iuran</h6>
             <a class="collapse-item" href="/verifikasi-iuran">Verifikasi Iuran</a>
-             <a class="collapse-item" href="/statistik-iuran">Statistik Iuran</a>
-              <a class="collapse-item" href="/manual_iuran">Iuran Manual</a>
-              <a class="collapse-item" href="/pengeluaran">Pengeluaran</a>
+            <a class="collapse-item" href="/statistik-iuran">Statistik Iuran</a>
+             <a class="collapse-item" href="/manual_iuran">Iuran Manual</a>
+             <a class="collapse-item" href="/pengeluaran">Pengeluaran</a>
           </div>
         </div>
       </li>
-       <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link" href="{{ url_for('laporan') }}">
           <i class="fab fa-fw fa-wpforms"></i>
           <span>Laporan</span>
@@ -99,7 +93,7 @@
         Examples
       </div>
       <li class="nav-item">
-         <a class="nav-link" href="{{ url_for('pengguna') }}">
+        <a class="nav-link" href="{{ url_for('pengguna') }}">
           <i class="fab fa-fw fa-wpforms"></i>
           <span>Pengguna</span>
         </a>
@@ -110,7 +104,7 @@
           <span>Aktivasi Akun</span>
         </a>
       </li>
-      
+     
       <hr class="sidebar-divider">
       <div class="version" id="version-ruangadmin"></div>
     </ul>
@@ -143,7 +137,7 @@
                 </form>
               </div>
             </li>
-             <li class="nav-item dropdown no-arrow mx-1">
+            <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false" onclick="fetchNotifications()">
                   <i class="fas fa-bell fa-fw"></i>
@@ -182,7 +176,7 @@
               </a>
               {% endfor %}
 
-              <!-- Link untuk lebih banyak pesan -->
+               <!-- Link untuk lebih banyak pesan -->
               <a id="read-more-messages" class="dropdown-item text-center small text-gray-500" href="#">Baca lebih banyak</a>
           </div>
 
@@ -201,7 +195,6 @@
             </span>
               </a>
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-               
                 <a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Keluar
@@ -211,210 +204,193 @@
           </ul>
         </nav>
         <!-- Topbar -->
-        <!-- Container Fluid-->
-        <div class="container-fluid" id="container-wrapper">
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Data Surat</h1>
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Data Surat</li>
-            </ol>
-          </div> 
-                  <!-- DataTables with Unique Surat List -->
-        <div class="col-lg-12">
-          <div class="card mb-4">
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-              <h6 class="m-0 font-weight-bold text-primary">Daftar Surat</h6>
-            </div>
-            <div class="table-responsive p-3">
-              <table class="table align-items-center table-flush table-hover" id="dataTableHover">
-                <thead class="thead-light">
-                  <tr>
-                    <th>Nama</th>
-                    <th>Jenis Surat</th>
-                    <th>Tanggal</th>
-                    <th>Tujuan</th>
-                    <th>Status Surat</th>
-                    <th>Aksi</th>
-                    <th>Lihat Surat</th>
-                  </tr>
-                </thead>
-                          <tbody>
-            {% for surat in surat_list %}
-            <tr>
-              <td>{{ surat.nama }}</td>
-              <td>{{ surat.jenissurat }}</td>
-              <td>{{ surat.tanggal }}</td>
-              <td>{{ surat.tujuan }}</td>
-              <td>{{ surat.statussurat }}</td>
-              <td>
-                {% if surat.statussurat is none %}
-                  <!-- Tombol untuk mengubah status menjadi Selesai -->
-                  <form action="{{ url_for('update_status_surat', surat_id=surat.id) }}" method="POST">
-                    <button type="submit" class="btn btn-success">Selesai</button>
-                  </form>
-                {% endif %}
-              </td>
-              <td>
-          <a href="{{ url_for('lihat_surat', sid=surat.id) }}" 
-   class="btn btn-primary" 
-   data-jenissurat="{{ surat.jenissurat }}" 
-   onclick="lihatSurat(event)">
-   Lihat
-</a>
+       <!-- Container Fluid -->
+<div class="container-fluid" id="container-wrapper">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Peraturan</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Peraturan</li>
+    </ol>
+  </div>
 
-              </td>
-              
-            </tr>
-            {% endfor %}
-          </tbody>
+  <h4>Tambahkan Peraturan Baru</h4>
+  <form id="formPeraturan" method="POST" action="/peraturan">
+    <div class="form-group">
+      <label for="isi">Isi Peraturan</label>
+      <textarea class="form-control" id="isi" name="isi" rows="5" placeholder="Tuliskan isi peraturan..." required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Tambah Peraturan</button>
+  </form>
 
-                 <!-- Flash Messages -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <div class="alert alert-dismissible fade show">
-              {% for category, message in messages %}
-                <div class="alert alert-{{ category }}">{{ message }}</div>
-              {% endfor %}
-            </div>
-          {% endif %}
-        {% endwith %}
-              </table>
-            </div>
-          </div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div>
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} mt-3">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <div class="table-responsive mt-4">
+    <table class="table text-center" style="border: none; background-color: #ffffff;">
+      <thead>
+        <tr style="background-color: #f8f8f8;">
+          <th class="py-3">No</th>
+          <th class="py-3">Isi</th>
+          <th class="py-3">Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for rule in all_rules %}
+        <tr style="background-color: #ffffff; border-bottom: 1px solid #ddd;">
+          <td class="py-3">{{ loop.index }}</td>
+          <td class="py-3 text-start">{{ rule.isi[:100] }}...</td>
+          <td class="py-3">
+            <button class="btn btn-sm btn-outline-primary btn-edit"
+              data-id="{{ rule.id }}"
+              data-isi="{{ rule.isi }}">
+              <i class="fa fa-edit"></i> Edit
+            </button>
+            <button class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ rule.id }}">
+              <i class="fa fa-trash"></i> Hapus
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Peraturan</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <div class="modal-body">
+          <form id="editRuleForm">
+            <div class="mb-3">
+              <label for="editIsi" class="form-label">Isi</label>
+              <textarea class="form-control" id="editIsi" name="isi" rows="5"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="button" class="btn btn-primary" id="saveEditRule">Simpan Perubahan</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-       
-        
+</div>
+<!-- End Container Fluid -->
+</div>
 
-
-          </div>
-          <!--Row-->
-
-         </div>
-         
-    <!-- Tambahkan modal konfirmasi untuk memilih anggota keluarga yang akan dihapus -->
-<div class="modal fade" id="deleteFamilyMemberModal" tabindex="-1" role="dialog" aria-labelledby="deleteFamilyMemberLabel" aria-hidden="true">
+<div id="notification-popup" class="modal" tabindex="-1" role="dialog" style="display:none;">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="deleteFamilyMemberLabel">Pilih Anggota Keluarga untuk Dihapus</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <h5 class="modal-title">Notifikasi</h5>
+        <button type="button" class="close" onclick="closePopup()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
-          <label for="select-member-to-delete">Pilih Anggota Keluarga:</label>
-          <select id="select-member-to-delete" class="form-control">
-            <!-- Opsi anggota keluarga akan dimuat di sini -->
-          </select>
-        </div>
+        <p id="notification-message"></p>
       </div>
       <div class="modal-footer">
-        <button type="button" id="confirm-delete-family-member" class="btn btn-danger">Hapus</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-primary" onclick="closePopup()">Tutup</button>
       </div>
-      </div>
-      </div>
-      </div>
-      </div>
-      </div>
-    
-</div>
-          <!-- Modal Logout -->
-          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <p>Yakin ingin keluar?</p>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Batal</button>
-                  <a href="/logout" class="btn btn-primary">Keluar</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        <!---Container Fluid-->
-      </div>
-
-      <!-- Footer -->
-      <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - developed by Digipan 1.0
-              <!-- <b><a href="https://indrijunanda.gitlab.io/" target="_blank">indrijunanda</a></b> -->
-            </span>
-          </div>
-        </div>
-      </footer>
-      <!-- Footer -->
     </div>
   </div>
+</div>
 
-  <!-- Scroll to top -->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
+<footer class="sticky-footer bg-white">
+  <div class="container my-auto">
+    <div class="copyright text-center my-auto">
+      <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - developed by Digipan 1.0</span>
+    </div>
+  </div>
+</footer>
+</div>
+</div>
 
-  <script src="static/vendor/jquery/jquery.min.js"></script>
-  <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="static/vendor/jquery-easing/jquery.easing.min.js"></script>
-  <script src="static/js/ruang-admin.min.js"></script>
-  <script src="static/js/surat.js"></script>
-  <!-- Page level plugins -->
-  <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
-  <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-  <script src="static/js/main.js"></script> <!-- File JavaScript yang baru -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
 
-  <script>
-    $(document).ready(function () {
-      $('#dataTable').DataTable(); // ID From dataTable 
-      $('#dataTableHover').DataTable(); // ID From dataTable with Hover
+<script src="static/vendor/jquery/jquery.min.js"></script>
+<script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="static/vendor/jquery-easing/jquery.easing.min.js"></script>
+<script src="static/js/ruang-admin.min.js"></script>
+<script src="static/js/iuran.js"></script>
+<script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+<script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+<script src="static/js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+document.getElementById("formPeraturan").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  Swal.fire({ title: 'Menyimpan...', text: 'Harap tunggu.', allowOutsideClick: false, showConfirmButton: false, didOpen: () => Swal.showLoading() });
+  const formData = new FormData(this);
+  const response = await fetch("/peraturan", { method: "POST", body: formData });
+  const result = await response.json();
+  Swal.close();
+  Swal.fire(result.status === "success" ? "Berhasil!" : "Gagal!", result.message, result.status);
+  if (result.status === "success") location.reload();
+});
+
+document.querySelectorAll(".btn-delete").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const id = btn.dataset.id;
+    Swal.fire({
+      title: 'Yakin hapus?',
+      text: 'Peraturan akan dihapus permanen.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, hapus!'
+    }).then(res => {
+      if (res.isConfirmed) {
+        fetch(`/delete_peraturan/${id}`, { method: "POST" })
+          .then(r => r.json()).then(data => {
+            Swal.fire(data.status === "success" ? "Berhasil!" : "Gagal!", data.message, data.status);
+            if (data.status === "success") location.reload();
+          });
+      }
     });
+  });
+});
 
-   function lihatSurat(event) {
-    event.preventDefault(); // Mencegah aksi default dari tombol
-    const button = event.currentTarget;
-    const jenisSurat = button.getAttribute('data-jenissurat');
-    const userRole = "{{ user_role }}"; // Role pengguna dari backend
+let editId = null;
+document.querySelectorAll(".btn-edit").forEach(btn => {
+  btn.addEventListener("click", () => {
+    editId = btn.dataset.id;
+    document.getElementById("editIsi").value = btn.dataset.isi;
+    new bootstrap.Modal(document.getElementById("editModal")).show();
+  });
+});
 
-    if (userRole === "kader") {
-        // Jika role adalah "kader", tampilkan SweetAlert dengan transisi
-        Swal.fire({
-            icon: "error",
-            title: "Akses Terbatas",
-            text: "Fitur ini hanya dapat diakses oleh Admin.",
-            confirmButtonText: "OK",
-           // Warna tombol sesuai border
-            willClose: () => {
-                // Menambahkan animasi fade-out untuk popup saat ditutup
-                const popup = document.querySelector('.swal2-popup');
-                popup.classList.remove('swal2-show');
-            }
-        }).then(() => {
-            // SweetAlert otomatis ditutup setelah klik OK
-        });
-    } else {
-        // Jika role bukan "kader", arahkan ke URL
-        window.location.href = button.href;
-    }
-}
-
-
-  </script>
-
+document.getElementById("saveEditRule").addEventListener("click", async () => {
+  const data = {
+    isi: document.getElementById("editIsi").value
+  };
+  Swal.fire({ title: 'Menyimpan...', allowOutsideClick: false, showConfirmButton: false, didOpen: () => Swal.showLoading() });
+  const response = await fetch(`/edit_peraturan/${editId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+  const result = await response.json();
+  Swal.close();
+  Swal.fire(result.status === "success" ? "Berhasil!" : "Gagal!", result.message, result.status);
+  if (result.status === "success") location.reload();
+});
+</script>
 </body>
-
 </html>

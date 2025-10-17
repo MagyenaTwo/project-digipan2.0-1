@@ -41,17 +41,28 @@
         </div>
     </div>
 </div> -->
-
 <div class="sidebar minimized" id="sidebar">
     <button class="menu-toggle" onclick="toggleSidebar()">☰ <span class="sidebar-text">DIGIPAN</span></button>
     <div class="sidebar-content">
         <ul class="sidebar-menu">
+
+            <!-- 🔹 Menu Peraturan (baru ditambahkan) -->
+            <li>
+                 <a href="#" id="openPeraturanBtn" onclick="openPeraturanModal(); closeSidebar();">
+        <i class="fa fa-gavel"></i>
+        <span class="menu-text">Peraturan</span>
+    </a>
+            </li>
+
+            <!-- 🔹 Menu Tutorial -->
             <li>
                 <a href="#" id="openTutorialBtn" onclick="closeSidebar()">
                     <i class="fa fa-book"></i>
                     <span class="menu-text">Tutorial</span>
                 </a>
             </li>
+
+            <!-- 🔹 Menu Laporan -->
             <li>
                 <a href="#" onclick="toggleSubMenu('laporanSubmenu')">
                     <i class="fa fa-chart-bar"></i>
@@ -62,15 +73,19 @@
                     <li><a href="#" id="showPemasukanBtn" onclick="closeSidebar()">Pemasukan</a></li>
                 </ul>
             </li>
+
+            <!-- 🔹 Menu Keluar -->
             <li>
                 <a href="#" id="keluar" onclick="closeSidebar()">
                     <i class="fa fa-sign-out-alt"></i>
                     <span class="menu-text">Keluar</span>
                 </a>
             </li>
+
         </ul>
     </div>
 </div>
+
 
 
 <div id="pengeluaranModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
@@ -266,6 +281,47 @@
     </div>
 </div>
 
+<div id="peraturanModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; width: 80%; max-width: 600px; height: 80%; border-radius: 10px;">
+        
+        <div style="margin-top: 20px;">
+            <h2 style="text-align: center;">📜 Peraturan Lingkungan RT 08/01</h2>
+        </div>
+
+        <div style="margin-top: 15px; font-size: 14px; color: #777; text-align: center;">
+            <span>Terakhir Diperbarui: 
+                <strong>
+                    {% if all_rules and all_rules[0].tanggal_update %}
+                        {{ all_rules[0].tanggal_update }}
+                    {% else %}
+                        Belum ada data
+                    {% endif %}
+                </strong>
+            </span>
+        </div>
+
+        <button id="closePeraturanModalBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; margin-top: -15px;">Tutup</button>
+        <div style="height: 300px; overflow-y: auto; margin-top: 30px; border: 1px solid #ddd; border-radius: 6px; padding: 15px;">
+    <div style="font-size: 16px; color: #333; line-height: 1.6; padding-left: 10px;">
+        {% if all_rules %}
+           {% for rule in all_rules %}
+  <p style="text-align: left; font-size: 18px; line-height: 1.6;">
+   {{ loop.index }}. {{ rule.isi_peraturan }}
+  </p>
+{% endfor %}
+
+        {% else %}
+            <p><em>Tidak ada peraturan yang tersedia saat ini.</em></p>
+        {% endif %}
+    </div>
+</div>
+
+
+        <div style="margin-top: 10px; font-size: 11px; color: #555; text-align: center;">
+            <p><em>Catatan: Peraturan ini dibuat untuk menjaga ketertiban, keamanan, dan kenyamanan seluruh warga RT 08/01.</em></p>
+        </div>
+    </div>
+</div>
 
 
 <!-- Tambahkan link untuk Terms of Use dan Privacy Policy di bawah tombol buku tamu -->

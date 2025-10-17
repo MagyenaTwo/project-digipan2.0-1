@@ -278,3 +278,37 @@ document.getElementById('resetBtnPemasukan').addEventListener('click', function 
 });
 
 });
+
+// 🔹 Buka modal Peraturan
+function openPeraturanModal() {
+    document.getElementById('peraturanModal').style.display = 'block';
+}
+
+// 🔹 Tutup modal Peraturan
+document.getElementById('closePeraturanModalBtn').addEventListener('click', function() {
+    document.getElementById('peraturanModal').style.display = 'none';
+});
+
+// 🔹 Tutup jika klik di luar modal
+window.onclick = function(event) {
+    const modal = document.getElementById('peraturanModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}// 🔹 Buka modal Peraturan
+function openPeraturanModal() {
+    document.getElementById('peraturanModal').style.display = 'block';
+}
+
+// 🔹 Tutup modal Peraturan
+document.getElementById('closePeraturanBtn').addEventListener('click', function() {
+    document.getElementById('peraturanModal').style.display = 'none';
+});
+
+// 🔹 Tutup jika klik di luar modal
+window.onclick = function(event) {
+    const modal = document.getElementById('peraturanModal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+}

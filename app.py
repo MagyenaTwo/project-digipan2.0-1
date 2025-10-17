@@ -1,6 +1,6 @@
 import time
 from flask import Flask, render_template
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from flask import (
@@ -208,6 +208,15 @@ class Register(db.Model):
     status = db.Column(db.String(20), default="Aktif")
 
 
+class PeraturanRT(db.Model):
+    __tablename__ = "peraturan_rt"
+    __table_args__ = {"schema": "data_keluarga"}
+
+    id = db.Column(db.Integer, primary_key=True)
+    isi_peraturan = db.Column(db.Text, nullable=False)
+    tanggal_update = db.Column(db.Date, default=date.today)
+
+
 class Activity(db.Model):
     __tablename__ = "activity"
     __table_args__ = {"schema": "data_keluarga"}
@@ -341,12 +350,16 @@ def index():
 
 @app.route("/main")
 def main():
-    # Perbaikan pengecekan session
     if "user_id" not in session:
         flash("Anda harus login terlebih dahulu.", "warning")
         return redirect(url_for("index"))
 
-    return render_template("index.html")
+    all_rules = PeraturanRT.query.order_by(PeraturanRT.id.desc()).all()
+
+    # Debug sementara
+    print(f"Jumlah data peraturan: {len(all_rules)}")
+
+    return render_template("index.html", all_rules=all_rules)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -2832,5 +2845,74 @@ def delete_warga(nama_lengkap):
     return redirect(url_for("aktivasi"))
 
 
+@app.route("/peraturan", methods=["GET", "POST"])
+def peraturan():
+    if request.method == "POST":
+        isi = (request.form.get("isi") or "").strip()
+        if not isi:
+            return (
+                jsonify({"status": "error", "message": "Isi peraturan wajib diisi."}),
+                400,
+            )
+
+        new_rule = PeraturanRT(isi_peraturan=isi, tanggal_update=date.today())
+        db.session.add(new_rule)
+        db.session.commit()
+        return jsonify(
+            {"status": "success", "message": "Peraturan berhasil ditambahkan!"}
+        )
+
+    rows = PeraturanRT.query.order_by(PeraturanRT.id.desc()).all()
+    all_rules = [
+        {
+            "id": r.id,
+            "isi": r.isi_peraturan,
+            "tanggal_update": (
+                r.tanggal_update.strftime("%d %B %Y") if r.tanggal_update else ""
+            ),
+        }
+        for r in rows
+    ]
+    return render_template("peraturan.html", all_rules=all_rules)
+
+
+@app.route("/edit_peraturan/<int:id>", methods=["POST"])
+def edit_peraturan(id):
+    r = PeraturanRT.query.get(id)
+    if not r:
+        return (
+            jsonify({"status": "error", "message": "Peraturan tidak ditemukan."}),
+            404,
+        )
+
+    data = request.get_json() or {}
+    isi = (data.get("isi") or "").strip()
+    if not isi:
+        return (
+            jsonify({"status": "error", "message": "Isi peraturan wajib diisi."}),
+            400,
+        )
+
+    r.isi_peraturan = isi
+    r.tanggal_update = date.today()
+    db.session.commit()
+    return jsonify({"status": "success", "message": "Peraturan berhasil diperbarui!"})
+
+
+@app.route("/delete_peraturan/<int:id>", methods=["POST"])
+def delete_peraturan(id):
+    r = PeraturanRT.query.get(id)
+    if not r:
+        return (
+            jsonify({"status": "error", "message": "Peraturan tidak ditemukan."}),
+            404,
+        )
+    db.session.delete(r)
+    db.session.commit()
+    return jsonify({"status": "success", "message": "Peraturan berhasil dihapus!"})
+
+
+# if __name__ == "__main__":
+#     app.run(debug=True)
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
