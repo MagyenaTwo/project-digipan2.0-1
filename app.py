@@ -818,7 +818,7 @@ def surat_pengantar():
         flash("Akun Anda tidak aktif. Silakan hubungi admin.", "danger")
         return redirect(url_for("index"))
 
-    return render_template("surat/surat_pengantar.html")
+    return render_template("add_surat.html")
 
 
 @app.route("/tentang")
@@ -1042,15 +1042,15 @@ def kirim_surat():
         jenis_surat_formatted = data["jenissurat"].replace("_", " ")
 
         # # Kirim notifikasi Telegram dengan nama pengirim dan jenis surat
-        send_telegram_notification(
-            f"<b>Hallo pengurus RT 08/01!</b>\n\n"  # Menambahkan spasi baru
-            f"<b>Ada surat baru masuk nih!</b>\n\n"  # Menambahkan spasi baru
-            f"👤<b>Nama Pengirim:</b> {data['nama']}\n"
-            f"📝<b>Jenis Surat:</b> {jenis_surat_formatted}\n\n"
-            f"<i>Mohon segera diproses. Terima kasih atas perhatian dan kerjasamanya 😊!</i>\n\n"  # Spasi dan format italic
-            f"<b>Untuk detail lebih lanjut, silakan kunjungi website berikut:</b>\n"
-            f"<a href='https://digiwarga.vercel.app/login'>digiwarga.vercel.app/login</a>"
-        )
+        # send_telegram_notification(
+        #     f"<b>Hallo pengurus RT 08/01!</b>\n\n"  # Menambahkan spasi baru
+        #     f"<b>Ada surat baru masuk nih!</b>\n\n"  # Menambahkan spasi baru
+        #     f"👤<b>Nama Pengirim:</b> {data['nama']}\n"
+        #     f"📝<b>Jenis Surat:</b> {jenis_surat_formatted}\n\n"
+        #     f"<i>Mohon segera diproses. Terima kasih atas perhatian dan kerjasamanya 😊!</i>\n\n"  # Spasi dan format italic
+        #     f"<b>Untuk detail lebih lanjut, silakan kunjungi website berikut:</b>\n"
+        #     f"<a href='https://digiwarga.vercel.app/login'>digiwarga.vercel.app/login</a>"
+        # )
 
         return jsonify({"message": "Surat berhasil dikirim!"}), 200
     except Exception as e:
