@@ -1,21 +1,4 @@
 
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DIGIPAN — Iuran</title>
-<link href="static/img/logo/2.png" rel="icon">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-<style>
   :root {
    --brand: #34acb0;
    --brands: #ffc107;
@@ -68,7 +51,7 @@ header.scrolled .logo {
 
 /* Tetap jaga warna menu tetap putih */
 header.scrolled nav ul li a {
-    color: #34acb0 !important;
+  color: #34acb0 !important;
 }
 
 /* Tapi saat hover, boleh sedikit transparan */
@@ -416,6 +399,7 @@ header.scrolled .hamburger div {
       padding: 0;
       width: 100%;
       margin-top: 0;
+      
     }
     nav ul li ul li a:hover { background: var(--brand-light); }
 
@@ -448,292 +432,207 @@ header.scrolled .hamburger div {
   }
   header.scrolled nav ul li a i {
     color: white !important;
+    
+
   }
   }
-  /* === FORM CONTAINER === */
-.form-section {
-    max-width: 640px;
-    margin: 40px auto;
-    padding: 0 20px;
+  .intro-text {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
 }
-.form-container {
-    padding: 40px;
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    border-top: 5px solid var(--brand);
+
+.rules-list {
+  margin: 0 0 15px 0;
+  padding-left: 20px;
+}
+
+.rules-list li {
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.desc {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+}
+.subtext {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+.summary-top {
     display: flex;
-    flex-direction: column;
-    gap: 25px; /* sebelumnya 15px → lebih lega antar kelompok elemen */
-}
+    justify-content: center;
+    gap: 2rem;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
 
 
-
-/* === FORM TITLE === */
-.form-container h1 {
-    font-size: 1.8rem;
-    color: var(--brand);
-    text-align: center;
-    margin-bottom: 25px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--brand-light);
-    font-weight: 800;
-}
-
-/* === FORM GROUP === */
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* jarak label ke input */
-    margin-bottom: 20px; /* tambahkan margin antar field */
-}
-
-.form-group label {
-    font-weight: 600;
-    color: var(--text);
-    font-size: 1rem;
-}
-
-/* === INPUTS & SELECT === */
-.form-group input[type="text"],
-.form-group input[type="date"],
-.form-group select {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #e2e8f0;
-    border-radius: var(--radius);
-    font-size: 1rem;
-    color: var(--text);
-    background-color: var(--bg);
-    transition: border-color 0.2s, box-shadow 0.2s;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    border-color: var(--brand-dark);
-    box-shadow: 0 0 0 3px rgba(52, 172, 176, 0.2);
-    outline: none;
-}
-
-/* === NOTE TEXT === */
-.note {
-    margin-top: 3px;
-    font-size: 0.9rem;
-    color: var(--muted);
-}
-
-/* === SUBMIT BUTTON === */
-.submit-btn {
-    width: 100%;
-    padding: 15px;
-    background-color: var(--brand);
-    color: var(--white);
-    border: none;
-    border-radius: var(--radius);
-    font-size: 1.2rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-    margin-top: 15px;
-}
-
-.submit-btn:hover {
-    background-color: var(--brand-dark);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.submit-btn i {
-    margin-right: 8px;
-}
-
-/* === RESPONSIVE DESIGN === */
-@media (max-width: 900px) {
-    .form-section {
-        margin: 40px auto;
-        padding: 0 15px;
-    }
-
-    .form-container {
-        padding: 25px 20px;
-    }
-
-    .form-container h1 {
-        font-size: 1.6rem;
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        font-size: 0.95rem;
-    }
-
-    .form-group input[type="text"],
-    .form-group input[type="date"],
-    .form-group select {
-        padding: 10px;
-        font-size: 0.95rem;
-    }
-
-    .submit-btn {
-        padding: 12px;
-        font-size: 1.1rem;
-    }
-}
-
-/* --- Select2 Styling Override untuk menyesuaikan dengan field form DIGIPAN --- */
-
-/* Kontainer utama Select2 */
-.select2-container--default .select2-selection--single {
-    /* Meniru padding dan border-radius dari input form Anda */
-    padding: 6px 15px; 
-    height: auto; /* Hilangkan fixed height default Select2 */
-    border: 1px solid #e2e8f0; /* Border warna input Anda */
-    border-radius: var(--radius); /* Menggunakan radius 8px dari var(--radius) */
-    background-color: var(--bg); /* Menggunakan background warna input Anda */
-    transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-/* Teks yang terpilih di dalam kotak Select2 */
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    color: var(--text); /* Warna teks utama */
-    padding-left: 0; /* Hapus padding default Select2 */
-    line-height: 1.6; /* Menyesuaikan line-height dengan body */
-}
-
-/* Tombol panah (dropdown indicator) */
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-    height: 100%; /* Pastikan panah berada di tengah vertikal */
-    right: 8px;
-    top: 0;
-}
-
-/* Panah ikon Select2 (menggunakan caret bawaan Select2) */
-.select2-container--default .select2-selection--single .select2-selection__arrow b {
-    border-color: var(--muted) transparent transparent transparent !important; /* Ubah warna panah */
-    border-width: 6px 4px 0 4px !important;
-    margin-top: 2px !important; /* Geser panah sedikit ke bawah */
-}
-
-/* Efek saat Select2 dalam kondisi fokus/aktif */
-.select2-container--default.select2-container--focus .select2-selection--single {
-    border-color: var(--brand-dark); /* Border warna fokus Anda */
-    box-shadow: 0 0 0 3px rgba(52, 172, 176, 0.2); /* Shadow fokus Anda */
-}
-
-/* Tempat pencarian di dalam dropdown Select2 */
-.select2-container--default .select2-dropdown {
-    border: 1px solid #e2e8f0;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow); /* Tambahkan shadow agar terlihat elegan */
-}
-
-/* Input text di dalam kotak pencarian (search box) */
-.select2-search--dropdown .select2-search__field {
-    border: 1px solid #e2e8f0;
-    border-radius: var(--radius);
-    padding: 10px;
-    box-shadow: none;
-}
-.qris-container {
-    text-align: center;
-    margin-top: 20px;
-}
-.qris-container p {
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 10px;
-}
-.qris-image {
-    width: 200px;
-    max-width: 80%;
+  .summary-item {
+    background: #f9fafb;
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 250px;
+    transition: transform 0.2s ease;
+  }
+
+  .summary-item:hover {
+    transform: scale(1.03);
+  }
+
+  .summary-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+  }
+
+  .summary-item h3 {
+    margin: 5px 0 0;
+    color: #222;
+  }
+
+  .icon-green {
+    color: #16a34a;
+    font-size: 28px;
+  }
+
+  .icon-blue {
+    color: #2563eb;
+    font-size: 28px;
+  }
+
+.summary-box {
+  background: #f9f9f9;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
 }
-</style>
-</head>
-<body>
+.summary-box.green { border-left: 5px solid #22c55e; }
+.summary-box.red { border-left: 5px solid #ef4444; }
 
-<header>
-  <div class="nav-container">
-    <div class="logo">DigiWarga</div>
-    <nav>
-      <div class="hamburger" onclick="toggleMenu()">
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-      <ul id="navMenu">
-         <li><a href="/main"><i class="fas fa-home"></i> Beranda</a></li>
-        <li><a href="/main#layanan"><i class="fas fa-tools"></i> Layanan Utama</a></li>
-        <li>
-          <a href="/main#laporan"><i class="fas fa-file-invoice-dollar"></i> Laporan Keuangan ▾</a>
-          <ul>
-            <li><a href="/main#pemasukan">Pemasukan</a></li>
-            <li><a href="/main#pengeluaran">Pengeluaran</a></li>
-          </ul>
-        </li>
-         <li><a href="/main#informasi"><i class="fas fa-info-circle"></i> Informasi</a></li>
-        <li><a href="/main#tutorial"><i class="fas fa-book"></i> Tutorial</a></li>
-        <li><a href="/logoutuser" ><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
-<main>
-  
-    <section id="input-keluarga" class="form-section">
-    <div class="card form-container">
-        <h1>Formulir Iuran</h1>
+.data-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 10px;
+}
+.data-list li {
+  background: #fafafa;
+  border: 1px solid #eee;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.lihat-container {
+  display: flex;
+  gap: 10px;
+}
+.lihat-btn {
+  background-color: #e5e7eb;
+  color: #333;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.lihat-btn:hover {
+  background-color: #d1d5db;
+}
+/* Pastikan warna primer dan sekunder sudah didefinisikan di :root atau sejenisnya */
+:root {
+    --primary-color: #34acb0; /* Biru/Warna Utama Anda */
+    --secondary-color: #28a745; /* Hijau/Warna Kontras */
+    --text-light: #ffffff;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-        <form id="iuran-form" method="post" action="{{ url_for('kirim_iuran') }}" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="nama_keluarga">Nama Keluarga:</label>
-                <select name="nama_keluarga" id="nama_keluarga" class="select2-enabled" required>
-                    <option value="">Pilih Nama Keluarga</option>
-                    {% for item in nama_keluarga %}
-                        <option value="{{ item[0] }}">{{ item[0] }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+.about-digipan-section {
+    padding: 30px 20px;
+    background-color: #f0f4f8; /* Background ringan */
+    border-bottom: 1px solid var(--primary-color);
+     border-top: 1px solid var(--primary-color);
+}
 
-            <div class="form-group">
-                <label for="jumlah">Jumlah Iuran:</label>
-                <input type="text" id="jumlah" name="jumlah" class="rupiah" placeholder="Rp 0" required>
-            </div>
+.about-card-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex-wrap: wrap; /* Untuk responsif */
+}
 
-            <div class="form-group">
-                <label for="bukti_pembayaran">Bukti Pembayaran (Gambar/Foto):</label>
-                <input type="file" id="bukti_pembayaran" name="bukti_pembayaran" accept="image/*" required>
-            </div>
+.about-card {
+    flex: 1 1 45%; /* Fleksibel, maksimal 45% lebar */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    color: var(--text-light); /* Default text color putih */
+    min-width: 300px;
+}
 
-            <div class="qris-container">
-                <p>Scan QRIS untuk melakukan pembayaran:</p>
-                <img src="{{ url_for('static', filename='img/logo/frame.png') }}" alt="QRIS Pembayaran" class="qris-image">
-            </div>
+.about-card.primary-bg {
+    background: var(--primary-color);
+    background: linear-gradient(135deg, #5ce1e6, #34acb0); /* Gradien */
+}
 
-            <button type="submit" class="submit-btn">
-                <i class="fas fa-paper-plane"></i> Kirim Iuran
-            </button>
+.about-card.secondary-bg {
+    background: var(--secondary-color);
+    background: linear-gradient(135deg, #28a745, #5ce1e6);
+}
 
-            {% if error %}
-            <div id="error-message" style="color: red; text-align: center;">{{ error }}</div>
-            {% endif %}
-        </form>
-    </div>
-</section>
+.about-card h3 {
+    margin-top: 10px;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: var(--text-light);
+}
 
-</main>
-<footer>
-  <p>© <span id="year"></span> Digipan | all right reserved</a>.</p>
-</footer>
+.about-card p {
+    font-size: 1em;
+    line-height: 1.6;
+    opacity: 0.9;
+}
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="{{ url_for('static', filename='js/iuranv2.js') }}"></script>
-<script src="https://kit.fontawesome.com/your-own-kit.js" crossorigin="anonymous" async></script>
-</body>
-</html>
+.icon-large {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #ffc107; /* Warna kuning sebagai aksen */
+}
 
+.feature-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+.feature-item i {
+    margin-right: 10px;
+    color: #ffc107; /* Warna kuning untuk ikon checklist */
+}
+
+.card-action-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 15px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.card-action-link:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
