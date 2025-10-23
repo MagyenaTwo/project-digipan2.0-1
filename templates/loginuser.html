@@ -135,11 +135,13 @@
     </div>
 </div>
 
+    <div class="footer">© <span id="year"></span> RT 08 | All rights reserved.</div>
 
-    <div class="footer">© 2025 RT 08. All rights reserved.</div>
 
     <script src="{{ url_for('static', filename='js/login.js') }}"></script>
 <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
      window.addEventListener('DOMContentLoaded', (event) => {
     setTimeout(function() {
       const alert = document.querySelector('.alert');
