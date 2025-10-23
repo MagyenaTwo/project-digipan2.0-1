@@ -2,6 +2,7 @@ import time
 from flask import Flask, render_template
 from datetime import date, datetime, timedelta
 from flask_sqlalchemy import SQLAlchemy
+import httpx
 from sqlalchemy import func
 from flask import (
     Flask,
@@ -354,10 +355,7 @@ def main():
         flash("Anda harus login terlebih dahulu.", "warning")
         return redirect(url_for("index"))
 
-    all_rules = PeraturanRT.query.order_by(PeraturanRT.id.desc()).all()
-
-    # Debug sementara
-    print(f"Jumlah data peraturan: {len(all_rules)}")
+    all_rules = PeraturanRT.query.order_by(PeraturanRT.id.asc()).all()
 
     return render_template("index.html", all_rules=all_rules)
 
@@ -752,7 +750,7 @@ def input_keluarga():
         flash("Akun Anda tidak aktif.", "danger")
         return redirect(url_for("index"))
 
-    return render_template("input.html")
+    return render_template("add_keluarga.html")
 
 
 @app.route("/input", methods=["POST"])
@@ -780,16 +778,16 @@ def input_data():
         hubungan_keluarga_formatted = family_data.hubungan_keluarga.replace("_", " ")
 
         # Kirim notifikasi ke Telegram (kode dikomentari tetap ada di sini)
-        send_telegram_notification(
-            f"<b>Hallo pengurus RT 08/01!</b>\n\n"
-            f"<b>Ada keluarga baru nih!</b>\n\n"
-            f"👪<b>Nama Keluarga:</b> {nama_keluarga}\n"
-            f"🧑<b>Nama:</b> {family_data.nama}\n"
-            f"🔗<b>Hubungan Keluarga:</b> {hubungan_keluarga_formatted}\n\n"
-            f"<i>Mohon segera diproses. Terima kasih atas perhatian dan kerjasamanya 😊!</i>\n\n"
-            f"<b>Untuk detail lebih lanjut, silakan kunjungi website berikut:</b>\n"
-            f"<a href='https://digiwarga.vercel.app/login'>digiwarga.vercel.app/login</a>"
-        )
+        # send_telegram_notification(
+        #     f"<b>Hallo pengurus RT 08/01!</b>\n\n"
+        #     f"<b>Ada keluarga baru nih!</b>\n\n"
+        #     f"👪<b>Nama Keluarga:</b> {nama_keluarga}\n"
+        #     f"🧑<b>Nama:</b> {family_data.nama}\n"
+        #     f"🔗<b>Hubungan Keluarga:</b> {hubungan_keluarga_formatted}\n\n"
+        #     f"<i>Mohon segera diproses. Terima kasih atas perhatian dan kerjasamanya 😊!</i>\n\n"
+        #     f"<b>Untuk detail lebih lanjut, silakan kunjungi website berikut:</b>\n"
+        #     f"<a href='https://digiwarga.vercel.app/login'>digiwarga.vercel.app/login</a>"
+        # )
 
         # Berikan respons JSON
         return jsonify({"message": "Data keluarga berhasil ditambahkan!"}), 200
@@ -861,7 +859,7 @@ def input_iuran():
     )
 
     nama_keluarga = db.session.query(subquery.c["trim"]).all()
-    return render_template("iuran/input_iuran.html", nama_keluarga=nama_keluarga)
+    return render_template("add_iuran.html", nama_keluarga=nama_keluarga)
 
 
 # @app.route("/kirim_iuran", methods=["POST"])
@@ -951,23 +949,25 @@ def kirim_iuran():
 
         if file:
             try:
-                # Tambahkan timestamp ke nama file
                 timestamp = int(time.time())
                 original_filename = secure_filename(file.filename)
                 filename = f"{timestamp}_{original_filename}"
-                # Simpan file ke Supabase Storage
                 bucket_name = "digipan"
                 file_path = f"bukti_pembayaran/{filename}"
+
                 upload_response = supabase.storage.from_(bucket_name).upload(
                     file_path, file.read()
                 )
 
-                if hasattr(upload_response, "full_path"):
+                if isinstance(upload_response, httpx.Response):
+                    upload_data = upload_response.json()
+                else:
+                    upload_data = upload_response
+
+                if isinstance(upload_data, dict) and "Key" in upload_data:
                     file_url = supabase.storage.from_(bucket_name).get_public_url(
                         file_path
                     )
-
-                    # Simpan nama file dan data lainnya ke database
                     iuran_baru = Iuran(
                         nama_keluarga=nama_keluarga,
                         jumlah_iuran=float(
@@ -975,30 +975,15 @@ def kirim_iuran():
                             .replace(".", "")
                             .replace(",", ".")
                         ),
-                        bukti_pembayaran=file_url,  # Simpan URL file
+                        bukti_pembayaran=file_url,
                         status_pembayaran="Menunggu",
                     )
                     db.session.add(iuran_baru)
                     db.session.commit()
-
-                    # Kirim notifikasi Telegram
-                    send_telegram_notification(
-                        f"<b>Hallo pengurus RT 08/01!</b>\n\n"
-                        f"<b>Ada iuran baru masuk nih!</b>\n\n"
-                        f"👪 <b>Nama Keluarga:</b> {nama_keluarga}\n\n"
-                        f"💰 <b>Jumlah Iuran:</b> {jumlah_iuran}\n\n"
-                        f"📅 <b>Status Pembayaran:</b> Menunggu\n\n"
-                        f"<i>Mohon segera diproses. Terima kasih atas perhatian dan kerjasamanya 😊!</i>\n\n"
-                        f"<b>Untuk detail lebih lanjut, silakan kunjungi website berikut:</b>\n"
-                        f"<a href='https://digiwarga.vercel.app/login'>digiwarga.vercel.app/login</a>"
-                    )
-
-                    # Kembalikan respons JSON yang sukses
                     return jsonify(
                         {"success": True, "message": "Data berhasil dikirim"}
                     )
                 else:
-                    logging.error(f"Upload failed: {upload_response.text}")
                     return (
                         jsonify(
                             {
@@ -1008,9 +993,7 @@ def kirim_iuran():
                         ),
                         400,
                     )
-
-            except Exception as e:
-                logging.error(f"Exception: {e}")
+            except Exception:
                 db.session.rollback()
                 return (
                     jsonify(

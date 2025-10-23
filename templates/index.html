@@ -1,383 +1,1147 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link href="static/css/index.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="static/img/logo/2.png" rel="icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <title>DIGIPAN</title>
-   
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIGIPAN — Administrasi Modern</title>
+<link href="static/img/logo/2.png" rel="icon">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<style>
+  :root {
+   --brand: #34acb0;
+   --brands: #ffc107;
+    --brand-light: #34acb0;
+    --brand-dark: #5ce1e6;
+    --bg: #f4f8fa;
+    --card: #ffffff;
+    --text: #1a202c;
+    --muted: #4a5568;
+    --accent: #0000;
+    --white: #fff;
+    --radius: 8px;
+    --shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  * { box-sizing: border-box; margin:0; padding:0; }
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    line-height: 1.6;
+    font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s;
+  }
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+  a { text-decoration: none; color: var(--brand); }
+  h1, h2, h3 { color: var(--text); font-weight: 700; }
+header {
+  background: var(--brand);
+  color: #fff;
+  padding: 10px 20px;
+  box-shadow: 0 01px 8px rgba(0,0,0,0.2);
+  z-index: 100;
+  position: sticky;
+  top: 0;
+  transition: background 0.3s ease, backdrop-filter 0.3s ease;
+}
+/* Saat di-scroll: efek transparan + ubah warna teks & ikon */
+header.scrolled {
+  background: rgba(255, 255, 255, 0.1); /* semi-transparan */
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+/* Ubah warna teks dan logo di dalam header */
+/* Hanya ubah logo dan hamburger */
+header.scrolled .logo {
+  color: var(--brand) !important;
+}
+
+/* Tetap jaga warna menu tetap putih */
+header.scrolled nav ul li a {
+  color: #34acb0 !important;
+}
+
+/* Tapi saat hover, boleh sedikit transparan */
+header.scrolled nav ul li a:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Hamburger berubah jadi warna brand */
+header.scrolled .hamburger div {
+  background: var(--brand);
+}
+
+
+  .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1300px; margin:auto;}
+  .logo { font-size: 1.8rem; font-weight: 800; color: #fff; letter-spacing: 1px;}
+  nav ul { display: flex; gap: 30px; list-style: none;}
+  nav ul li { position: relative; }
+  nav ul li a { 
+    color: white; 
+    text-decoration: none; 
+    font-weight: 600; 
+    padding: 10px 15px; 
+    display: block; 
+    border-radius: 6px;
+    transition: background-color 0.2s, transform 0.2s;
+  }
+  nav ul li:hover > a { background: var(--brand-light); transform: translateY(-1px); }
+  
+  nav ul li ul { 
+    display: none; 
+    position: absolute; 
+    top: 50px;
+    left:0; 
+    background: var(--brand-dark); 
+    border-radius: var(--radius); 
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    z-index: 10;
+    padding: 8px 0;
+  }
+  nav ul li:hover ul { display:block; }
+  nav ul li ul li a { 
+    color: #fff;
+    padding: 10px 20px; 
+    font-weight: 500;
+  }
+  nav ul li ul li a:hover {
+    background: var(--brand);
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap:6px;
+    color: white;
+    cursor: pointer;
+    padding: 8px;
+  }
+  .hamburger div {
+    width: 30px;
+    height:3px;
+    background:white;
+    border-radius:2px;
+    transition: all 0.3s;
+  }
+
+  main { 
+    max-width: 1300px; 
+    margin: 0 auto; 
+    padding:0 20px; /* Hapus padding-top */
+  }
+  
+  /* Jarak antar Section */
+  #layanan, #laporan, #informasi, #tutorial {
+      margin-top: 60px;
+  }
+
+  h2 { 
+    font-size: 2rem; 
+    margin-bottom: 30px; 
+    color: var(--brand-dark);
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+    margin-top: 0; /* Hapus margin-top di sini, gunakan pada #layanan */
+  }
+  h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+  }
+  
+  /* --- Perubahan pada Card Layanan --- */
+  .card { 
+    background: var(--card); 
+    border-radius: var(--radius); 
+    box-shadow: var(--shadow); 
+    transition: all 0.3s;
+    overflow: hidden; 
+    display: flex; 
+    flex-direction: column;
+  }
+  .card:hover {
+    box-shadow: var(--shadow-hover);
+  }
+  
+  .card-content {
+    padding: 30px 30px 20px;
+    flex-grow: 1; 
+  }
+
+  .card h3 { 
+    margin-bottom: 15px; 
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+  }
+  .card h3 i {
+    color: var(--brand);
+    margin-right: 15px;
+    font-size: 1.8rem;
+  }
+  
+  .card p, .card li { color: var(--muted); font-size: 1.05rem;}
+  .card ul { list-style: none; padding-left: 0;}
+  .card li { 
+    margin-bottom: 10px;
+    border-left: 3px solid var(--brand-light);
+    padding-left: 10px;
+  }
+
+  /* Gaya untuk Action Link pada Layanan Utama */
+  .card-action {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: var(--brand); 
+    color: white;
+    text-align: center;
+    font-weight: 600;
+    transition: background-color 0.2s, transform 0.2s;
+    border-top: 1px solid var(--brand-light);
+  }
+  .card-action:hover {
+    background-color: var(--brand-dark);
+    transform: translateY(0); 
+  }
+  .card-action i {
+    margin-right: 10px;
+    color: white; 
+    font-size: 1.1rem;
+  }
+
+  footer { 
+    text-align:center; 
+    padding: 40px 20px; 
+    background: var(--brand-light); 
+    color: #ffff; 
+    margin-top: 80px;
+    font-size: 1rem;
+  }
+  footer a { color: var(--text); text-decoration: none; transition: color 0.2s;}
+  footer a:hover { color: #000;}
+
+  /* --- HERO SLIDER: FULL-WIDTH --- */
+  .hero-slider {
+      position: relative;
+      width: 100%;
+      margin: 0; 
+      overflow: hidden;
+      box-shadow: var(--shadow-hover);
+  }
+
+  .slides {
+      position: relative;
+      width: 100%;
+      height: 350px;
+  }
+
+  .slide {
+      position: absolute; 
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.8s ease-in-out;
+      z-index: 1; 
+  }
+
+  .slide.active {
+      opacity: 1;
+      z-index: 2;
+  }
+
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  /* --- DOT NAVIGATIONS --- */
+  .slider-dots {
+      text-align: center;
+      padding: 10px 0;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      margin-top: 0; 
+  }
+
+  .dot {
+      height: 8px;
+      width: 8px;
+      margin: 0 4px;
+      background-color: #bbb;
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s, border-color 0.3s;
+      border: 2px solid #bbb;
+  }
+
+  .dot.active {
+      background-color: var(--brand); 
+      border-color: var(--brand);
+      transform: scale(1.2);
+  }
+
+  /* --- CAPTION DI BAWAH SLIDER (PERBAIKAN UKURAN H1) --- */
+  .slider-captions {
+    text-align: center; 
+    max-width: 800px; 
+    margin: 0 auto 60px; /* Jarak yang cukup di bawah caption */
+    padding: 0 20px;
+  }
+
+  .slider-captions .caption {
+      position: relative;
+      padding: 0;
+      background: none; 
+      color: var(--text); 
+      display: none; 
+      transition: opacity 0.3s ease-in-out;
+      text-align: center;
+      z-index: 1;
+  }
+
+  .slider-captions .caption.active {
+      display: block; 
+  }
+
+ .slider-captions .caption h2 { /* Catatan: Saya ubah dari h1 ke h2 karena di HTML Anda menggunakan h2 */
+      color: var(--brand-dark); 
+      /* PERBAIKAN: Mengurangi ukuran H1, max 2.5rem (desktop) dan 1.6rem (mobile) */
+      font-size: clamp(1.5rem, 3vw, 2rem); /* Ukuran disesuaikan agar lebih besar */
+      margin-bottom: 5px; /* <--- Diubah menjadi 5px untuk jarak yang sangat tipis */
+      font-weight: 800;
+      text-shadow: none; 
+  }
+
+  .slider-captions .caption p {
+      color: var(--muted); 
+      font-size: clamp(1rem, 1.5vw, 1.4rem);
+      max-width: 700px;
+      font-weight: 400;
+      text-shadow: none; 
+      margin: 0 auto;
+  }
+  
+  .info-panel {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: #f0faff;
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(2, 8, 23, 0.08);
+    margin: 60px auto 60px;
+    transition: transform 0.2s;
+    max-width: 1300px;
+    
+  }
+  .info-panel:hover {
+    transform: translateY(-3px);
+  }
+  .info-icon i {
+    font-size: 36px;
+  }
+  .info-content h3 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+  }
+  .info-content p {
+    margin: 0;
+    color: #475569;
+  }
+
+
+  @media(max-width:900px){
+    .hamburger.open div:nth-child(1) { transform: rotate(-45deg) translate(-6px, 6px); }
+    .hamburger.open div:nth-child(2) { opacity: 0; }
+    .hamburger.open div:nth-child(3) { transform: rotate(45deg) translate(-6px, -6px); }
+
+    nav ul { 
+      display: none; 
+      flex-direction: column; 
+      background: var(--brand); 
+      position: absolute; 
+      top: 65px; 
+      right: 20px; 
+      border-radius: var(--radius); 
+      overflow: hidden; 
+      width: 280px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      padding: 10px 0;
+      gap: 0;
+      z-index: 110; 
+    }
+    nav ul.show { display:flex; }
+    .hamburger { display:flex; }
+    nav ul li a { padding: 14px 25px; border-radius: 0; }
+    nav ul li:hover > a { background: var(--brand-dark); transform: none; }
+    
+    nav ul li ul {
+      position: static;
+      background: var(--brand-dark);
+      box-shadow: none;
+      border-radius: 0;
+      padding: 0;
+      width: 100%;
+      margin-top: 0;
+      
+    }
+    nav ul li ul li a:hover { background: var(--brand-light); }
+
+    .card-grid {
+      grid-template-columns: 1fr;
+    }
+    h2 {
+      font-size: 1.5rem;
+    }
+    
+    /* Penyesuaian Mobile untuk Slider */
+    .hero-slider {
+        margin: 0;
+    }
+    .slides {
+        height: 250px; 
+    }
+    .slider-captions .caption h1 {
+        font-size: 1.6rem;
+    }
+    .slider-captions .caption p {
+        font-size: 1.1rem;
+    }
+    main { 
+        padding-top: 0;
+    }
+    header.scrolled nav ul li a {
+    color: white !important;
+    
+  }
+  header.scrolled nav ul li a i {
+    color: white !important;
+    
+
+  }
+  }
+  .intro-text {
+  color: #555;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+}
+
+.rules-list {
+  margin: 0 0 15px 0;
+  padding-left: 20px;
+}
+
+.rules-list li {
+  margin-bottom: 6px;
+  line-height: 1.5;
+}
+
+.desc {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 15px;
+}
+.subtext {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+.summary-top {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+
+
+  .summary-item {
+    background: #f9fafb;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 15px 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    min-width: 250px;
+    transition: transform 0.2s ease;
+  }
+
+  .summary-item:hover {
+    transform: scale(1.03);
+  }
+
+  .summary-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+  }
+
+  .summary-item h3 {
+    margin: 5px 0 0;
+    color: #222;
+  }
+
+  .icon-green {
+    color: #16a34a;
+    font-size: 28px;
+  }
+
+  .icon-blue {
+    color: #2563eb;
+    font-size: 28px;
+  }
+
+.summary-box {
+  background: #f9f9f9;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+.summary-box.green { border-left: 5px solid #22c55e; }
+.summary-box.red { border-left: 5px solid #ef4444; }
+
+.data-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 10px;
+}
+.data-list li {
+  background: #fafafa;
+  border: 1px solid #eee;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+.lihat-container {
+  display: flex;
+  gap: 10px;
+}
+.lihat-btn {
+  background-color: #e5e7eb;
+  color: #333;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.lihat-btn:hover {
+  background-color: #d1d5db;
+}
+/* Pastikan warna primer dan sekunder sudah didefinisikan di :root atau sejenisnya */
+:root {
+    --primary-color: #34acb0; /* Biru/Warna Utama Anda */
+    --secondary-color: #28a745; /* Hijau/Warna Kontras */
+    --text-light: #ffffff;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.about-digipan-section {
+    padding: 30px 20px;
+    background-color: #f0f4f8; /* Background ringan */
+    border-bottom: 1px solid var(--primary-color);
+     border-top: 1px solid var(--primary-color);
+}
+
+.about-card-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex-wrap: wrap; /* Untuk responsif */
+}
+
+.about-card {
+    flex: 1 1 45%; /* Fleksibel, maksimal 45% lebar */
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+    color: var(--text-light); /* Default text color putih */
+    min-width: 300px;
+}
+
+.about-card.primary-bg {
+    background: var(--primary-color);
+    background: linear-gradient(135deg, #5ce1e6, #34acb0); /* Gradien */
+}
+
+.about-card.secondary-bg {
+    background: var(--secondary-color);
+    background: linear-gradient(135deg, #28a745, #5ce1e6);
+}
+
+.about-card h3 {
+    margin-top: 10px;
+    font-size: 1.5em;
+    font-weight: 600;
+    color: var(--text-light);
+}
+
+.about-card p {
+    font-size: 1em;
+    line-height: 1.6;
+    opacity: 0.9;
+}
+
+.icon-large {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    color: #ffc107; /* Warna kuning sebagai aksen */
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 1em;
+}
+
+.feature-item i {
+    margin-right: 10px;
+    color: #ffc107; /* Warna kuning untuk ikon checklist */
+}
+
+.card-action-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 8px 15px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.card-action-link:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+</style>
 </head>
 <body>
-     <div class="splash-screen" id="splashScreen">
-        <img src="{{ url_for('static', filename='img/logo/digihd.jpg') }}" alt="Logo" class="splash-logo">
+<header>
+  <div class="nav-container">
+    <div class="logo">DigiWarga</div>
+    <nav>
+      <div class="hamburger" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul id="navMenu">
+         <li><a href="/main"><i class="fas fa-home"></i> Beranda</a></li>
+        <li><a href="#layanan"><i class="fas fa-tools"></i> Layanan Utama</a></li>
+        <li>
+          <a href="#laporan"><i class="fas fa-file-invoice-dollar"></i> Laporan Keuangan ▾</a>
+          <ul>
+            <li><a href="#pemasukan">Pemasukan</a></li>
+            <li><a href="#pengeluaran">Pengeluaran</a></li>
+          </ul>
+        </li>
+         <li><a href="#informasi"><i class="fas fa-info-circle"></i> Informasi</a></li>
+        <li><a href="#tutorial"><i class="fas fa-book"></i> Tutorial</a></li>
+        <li><a href="/logoutuser" ><i class="fas fa-sign-out-alt"></i> Keluar</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<div style="background: var(--bg);"> 
+    <section class="hero-slider">
+        <div class="slides">
+            <div class="slide active">
+                <img src="{{ url_for('static', filename='img/logo/onboarding0.png') }}" alt="Banner 1">
+            </div>
+            <div class="slide">
+                <img src="{{ url_for('static', filename='img/logo/onboarding1.png') }}" alt="Banner 2">
+            </div>
+            <div class="slide">
+                <img src="{{ url_for('static', filename='img/logo/onboarding2.png') }}" alt="Banner 3">
+            </div>
+            <div class="slide">
+                <img src="{{ url_for('static', filename='img/logo/onboarding3.png') }}" alt="Banner 4">
+            </div>
+        </div>
+        
+        
+    </section>
+<div class="slider-dots">
+            </div>
+ <div class="slider-captions">
+    <!-- Slide 0: Data Keluarga -->
+    <div class="caption active" id="cap-0">
+        
+        <p>Kelola dan pantau seluruh data keluarga dengan sistem digital yang aman dan terstruktur.</p>
     </div>
-    <div class="container">
-        <!-- Bagian Kiri -->
-        <div class="left-section">
-            <h1>DIGIPAN<span>08</span></h1>
-            <p>Platform website digital untuk digitalisasi warga rt 08 /01</p>
-            <div class="social-icons">
-                <i class="fab fa-facebook"></i>
-                <i class="fab fa-google-plus"></i>
-                <a href="https://wa.me/62811949275?text=Halo%20pengurus%20RT%2C%20ada%20yang%20ingin%20saya%20tanyakan" target="_blank" class="social-icon">
-    <i class="fab fa-whatsapp"></i>
+
+    <!-- Slide 1: Pembuatan Surat -->
+    <div class="caption" id="cap-1">
+        
+        <p>Buat berbagai surat keterangan secara otomatis dan efisien melalui platform kami.</p>
+    </div>
+
+    <!-- Slide 2: Iuran -->
+    <div class="caption" id="cap-2">
+        
+        <p>Lihat dan bayar iuran langsung melalui platform digital kami.</p>
+    </div>
+
+    <!-- Slide 3: Laporan Keuangan -->
+    <div class="caption" id="cap-3">
+        
+        <p>Transparansi laporan keuangan RT dengan lebih mudah dan cepat.</p>
+    </div>
+</div>
+
+</div>
+
+
+<main>
+    <div style="background: var(--bg);"> 
+    </div>
+
+<section id="tentang-digipan" class="about-digipan-section">
+  <div class="about-card-container">
+    <div class="about-card primary-bg">
+      <i class="fas fa-satellite-dish icon-large"></i>
+      <h3>DIGIPAN: Administrasi RT Digital 08</h3>
+      <p>Platform terpadu untuk efisiensi data warga, transparansi keuangan, dan pelayanan surat menyurat di lingkungan RT 08.</p>
+    </div>
+
+    <div class="about-card secondary-bg">
+      <div class="feature-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Data Warga Aman & Terstruktur</span>
+      </div>
+      <div class="feature-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Pembuatan Surat Mudah</span>
+      </div>
+       <div class="feature-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Laporan Keuangan Transparan</span>
+      </div>
+       <div class="feature-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Iuran Digital Cepat & Mudah</span>
+      </div>
+      <a href="#tutorial" class="card-action-link"><i class="fas fa-book-open"></i> Lihat Panduan</a>
+    </div>
+  </div>
+</section>
+<section id="layanan">
+  <h2>LAYANAN UTAMA WARGA</h2>
+  <div class="card-grid">
+
+    <div class="card" id="tambahKeluarga">
+      <div class="card-content">
+        <h3><i class="fas fa-user-friends"></i> Kelola Data Keluarga</h3>
+        <p>Input dan perbarui data keluarga Anda dengan mudah. Pastikan informasi selalu terbaru.</p>
+      </div>
+      <a href="/input_keluarga" class="card-action">
+        <i class="fas fa-plus-circle" data-color="#ffc107"></i> Tambah / Perbarui Data
+      </a>
+    </div>
+
+    <div class="card" id="catatIuran">
+      <div class="card-content">
+        <h3><i class="fas fa-cash-register"></i> Pembayaran Iuran</h3>
+        <p>Pembayaran iuran bulanan secara transparan dan efisien.</p>
+      </div>
+      <a href="/input_iuran" class="card-action">
+        <i class="fas fa-arrow-right" data-color="#ffc107"></i> Bayar Iuran
+      </a>
+    </div>
+
+    <div class="card" id="buatSurat">
+      <div class="card-content">
+        <h3><i class="fas fa-file-alt"></i> Buat Surat Pengantar</h3>
+        <p>Buat surat pengantar resmi secara cepat tanpa perlu ribet.</p>
+      </div>
+     <a href="#" id="ajukan-surat-btn" class="card-action">
+  <i class="fas fa-file-export" data-color="#ffc107"></i> Ajukan Surat Baru
 </a>
-</div>
-
-<!-- Kegiatan Warga -->
-<!-- <div class="kegiatan-warga">
-    <h2>Kegiatan Warga</h2>
-    <div class="kegiatan-slider-container">
-        <div class="kegiatan-slider">
-            <img src="{{ url_for('static', filename='img/logo/digihd.jpg') }}" alt="Kegiatan 1">
-            <img src="{{ url_for('static', filename='img/logo/digihd.jpg') }}" alt="Kegiatan 2">
-            <img src="{{ url_for('static', filename='img/logo/digihd.jpg') }}" alt="Kegiatan 3">
-        </div>
     </div>
-</div> -->
-<div class="sidebar minimized" id="sidebar">
-    <button class="menu-toggle" onclick="toggleSidebar()">☰ <span class="sidebar-text">DIGIPAN</span></button>
-    <div class="sidebar-content">
-        <ul class="sidebar-menu">
 
-            <!-- 🔹 Menu Peraturan (baru ditambahkan) -->
-            <li>
-                 <a href="#" id="openPeraturanBtn" onclick="openPeraturanModal(); closeSidebar();">
-        <i class="fa fa-gavel"></i>
-        <span class="menu-text">Peraturan</span>
-    </a>
-            </li>
+  </div>
+</section>
 
-            <!-- 🔹 Menu Tutorial -->
-            <li>
-                <a href="#" id="openTutorialBtn" onclick="closeSidebar()">
-                    <i class="fa fa-book"></i>
-                    <span class="menu-text">Tutorial</span>
-                </a>
-            </li>
+<section id="laporan">
+  <h2>LAPORAN KEUANGAN RT</h2>
 
-            <!-- 🔹 Menu Laporan -->
-            <li>
-                <a href="#" onclick="toggleSubMenu('laporanSubmenu')">
-                    <i class="fa fa-chart-bar"></i>
-                    <span class="menu-text">Laporan</span>
-                </a>
-                <ul class="submenu" id="laporanSubmenu" style="display: none;">
-                    <li><a href="#" id="showPengeluaranBtn" onclick="closeSidebar()">Pengeluaran</a></li>
-                    <li><a href="#" id="showPemasukanBtn" onclick="closeSidebar()">Pemasukan</a></li>
-                </ul>
-            </li>
+  <!-- 🔹 Ringkasan Utama (Total Kas & Iuran Bersih) -->
+  <div class="summary-top">
+    <div class="summary-item">
+      <i class="fas fa-wallet icon-green"></i>
+      <div>
+        <p>Total Kas RT</p>
+        <h3 id="total-kas">Rp 0</h3>
+      </div>
+    </div>
+    <!-- 🔹 Kalau mau hapus yang ini, pastikan div di atas & bawah tetap lengkap -->
+    <!-- <div class="summary-item">
+      <i class="fas fa-hand-holding-usd icon-blue"></i>
+      <div>
+        <p>Total Iuran Bersih</p>
+        <h3 id="total-iuran">Rp 0</h3>
+      </div>
+    </div> -->
+  </div>
 
-            <!-- 🔹 Menu Keluar -->
-            <li>
-                <a href="#" id="keluar" onclick="closeSidebar()">
-                    <i class="fa fa-sign-out-alt"></i>
-                    <span class="menu-text">Keluar</span>
-                </a>
-            </li>
+  <div class="card-grid">
+    <!-- Kartu Pemasukan -->
+    <div class="card" id="pemasukan">
+      <div class="card-content">
+        <h3 class="text-green-600"><i class="fas fa-arrow-up"></i> Pemasukan RT</h3>
+     <p class="subtext">Ringkasan jumlah dana yang diterima dari iuran warga serta kontribusi lain.</p>
+        <div class="summary-box green">
+          <div><strong>Total Pemasukan:</strong> <span id="total-pemasukan">Rp 0</span></div>
+        </div>
+      </div>
+    </div>
 
+    <!-- Kartu Pengeluaran -->
+    <div class="card" id="pengeluaran">
+      <div class="card-content">
+        <h3><i class="fas fa-arrow-down" style="color: red;"></i> Pengeluaran RT</h3>
+        <p class="subtext">Daftar pengeluaran kegiatan atau kebutuhan warga RT 08.</p>
+        <div class="summary-box red">
+          <div><strong>Total Pengeluaran:</strong> <span id="total-pengeluaran">Rp 0</span></div>
+        </div>
+
+        <h4>Rincian Pengeluaran:</h4>
+        <ul id="pengeluaran-list" class="data-list"></ul>
+        <div class="lihat-container">
+          <button id="lihat-lebih" class="lihat-btn" style="display:none;">Lihat Lebih Banyak</button>
+          <button id="lihat-sedikit" class="lihat-btn" style="display:none;">Lihat Lebih Sedikit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="informasi">
+  <h2>INFORMASI</h2>
+  <div class="card-grid single-card">
+    <div class="card" id="peraturan-warga">
+      <div class="card-content">
+        <h3><i class="fas fa-scroll" data-color="#34acb0"></i> Tata Tertib Warga RT 08/01</h3>
+        <p class="intro-text">
+          Berikut daftar peraturan penting yang berlaku di lingkungan RT 08/01:
+        </p>
+
+        <ul class="rules-list">
+          {% if all_rules %}
+            {% for rule in all_rules %}
+              <li>
+                <strong>{{ loop.index }}.</strong> {{ rule.isi_peraturan | safe }}
+              </li>
+            {% endfor %}
+          {% else %}
+            <li><em>Belum ada peraturan yang tercatat.</em></li>
+          {% endif %}
         </ul>
+
+        <p class="note">
+          Dengan mematuhi tata tertib ini, kita wujudkan lingkungan yang aman, nyaman, dan harmonis. 🌿
+        </p>
+      </div>
     </div>
-</div>
+  </div>
+</section>
 
 
+</main>
+<section id="tutorial" class="info-panel" style="cursor: pointer;">
+  <div class="info-icon">
+    <i class="fas fa-video" data-color="#ff6b6b"></i>
+  </div>
+  <div class="info-content">
+    <h3>Pusat Bantuan & Tutorial</h3>
+    <p>Klik di sini untuk melihat panduan video penggunaan Portal RT.</p>
+  </div>
+</section>
 
-<div id="pengeluaranModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; width: 80%; max-width: 600px; height: 80%;">
-        <div style="margin-top: 20px;">
-            <h2>Laporan Pengeluaran RT 08/01</h2>
-            <!-- Pengeluaran Sejajar -->
-            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                <span style="flex-basis: 120px; text-align: left;">Pengeluaran</span>
-                <span style="margin-right: 10px;">:</span>
-                <span style="flex-grow: 1; text-align: left;">
-                    <strong id="total-pengeluaran">0</strong>
-                </span>
-            </div>
-            <!-- Total Kas Sejajar -->
-            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                <span style="flex-basis: 120px; text-align: left;">Total Kas</span>
-                <span style="margin-right: 10px;">:</span>
-                <span style="flex-grow: 1; text-align: left;">
-                    <strong id="total-kas">0</strong>
-                </span>
-            </div>
-        </div>
-
-        <!-- Tanggal Update -->
-        <div style="margin-top: 20px; font-size: 14px; color: #777;">
-            <span>Terakhir Update: <strong id="last-update-date-pengeluaran">Tanggal Update</strong></span>
-        </div>
-
-        <!-- Filter Bulan dan Tahun -->
-        <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="flex: 1; margin-right: 10px;">
-                <select id="filter-bulan" style="width: 100%; padding: 5px;">
-                    <option value="">Pilih Bulan</option>
-                    <option value="1">Januari</option>
-                    <option value="2">Februari</option>
-                    <option value="3">Maret</option>
-                    <option value="4">April</option>
-                    <option value="5">Mei</option>
-                    <option value="6">Juni</option>
-                    <option value="7">Juli</option>
-                    <option value="8">Agustus</option>
-                    <option value="9">September</option>
-                    <option value="10">Oktober</option>
-                    <option value="11">November</option>
-                    <option value="12">Desember</option>
-                </select>
-            </div>
-            <div style="flex: 1; margin-right: 10px;">
-                <select id="filter-tahun" style="width: 100%; padding: 5px;">
-                    <option value="">Pilih Tahun</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                    <option value="2027">2027</option>
-                    <option value="2028">2028</option>
-                </select>
-            </div>
-            <div style="flex: 1;">
-    <button id="filterBtn" style="width: 50%; padding: 5px; background-color: blue; color: white; border: none;">Filter</button>
-     <button id="resetBtn" style="width: 50%; padding: 5px; background-color: red; color: white; border: none;">Reset</button>
-</div>
-            
-        </div>
-
-        <!-- Tombol Tutup -->
-        <button id="closeModalBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; margin-top: -15px;">Tutup</button>
-<div style="height: 200px; overflow-y: auto; margin-top: 30px; border: 1px solid #ddd; position: relative;">
-    <table id="pengeluaran-table" style="width: 100%; border-collapse: collapse;">
-        <thead style="position: sticky; top: 0; background-color: #f4f4f4; z-index: 1;">
-            <tr>
-                 <th style="padding: 10px; width: 10%;">Nomor</th>
-                <th style="padding: 10px; width: 70%;">Kegiatan</th>
-                <th style="padding: 10px; width: 50%;">Jumlah (Rp)</th>
-            </tr>
-        </thead>
-        <tbody id="pengeluaran-ul">
-        </tbody>
-    </table>
-    
-</div>
- <!-- Catatan di bawah tabel -->
-        <div style="margin-top: 0px; font-size: 10px; color: #555;">
-            <p><em>Catatan: Data pengeluaran dan kas di atas akan diperbarui secara berkala.</em></p>
-        </div>
-    </div>
-</div>
-
-
-
-<div id="pemasukanModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; width: 80%; max-width: 600px; height: 80%;">
-        <div style="margin-top: 20px;">
-            <h2>Laporan Pemasukan RT 08/01</h2>
-            <!-- Pengeluaran Sejajar -->
-            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                <span style="flex-basis: 120px; text-align: left;">Pemasukan</span>
-                <span style="margin-right: 10px;">:</span>
-                <span style="flex-grow: 1; text-align: left;">
-                    <strong id="total-pemasukan">0</strong>
-                </span>
-            </div>
-          
-            <!-- <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                <span style="flex-basis: 120px; text-align: left;">Total Kas</span>
-                <span style="margin-right: 10px;">:</span>
-                <span style="flex-grow: 1; text-align: left;">
-                   <strong id="total-iuran">0</strong>
-                </span>
-            </div> -->
-        </div>
-
-        <!-- Tanggal Update -->
-        <div style="margin-top: 20px; font-size: 14px; color: #777;">
-            <span>Terakhir Update: <strong id="last-update-date-pemasukan">Tanggal Update</strong></span>
-        </div>
-
-        <!-- Filter Bulan dan Tahun -->
-        <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <div style="flex: 1; margin-right: 10px;">
-                <select id="filter-bulan-pemasukan" style="width: 100%; padding: 5px;">
-                    <option value="">Pilih Bulan</option>
-                    <option value="1">Januari</option>
-                    <option value="2">Februari</option>
-                    <option value="3">Maret</option>
-                    <option value="4">April</option>
-                    <option value="5">Mei</option>
-                    <option value="6">Juni</option>
-                    <option value="7">Juli</option>
-                    <option value="8">Agustus</option>
-                    <option value="9">September</option>
-                    <option value="10">Oktober</option>
-                    <option value="11">November</option>
-                    <option value="12">Desember</option>
-                </select>
-            </div>
-            <div style="flex: 1; margin-right: 10px;">
-                <select id="filter-tahun-pemasukan" style="width: 100%; padding: 5px;">
-                    <option value="">Pilih Tahun</option>
-                    <option value="2023">2023</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                    <option value="2027">2027</option>
-                    <option value="2028">2028</option>
-                </select>
-            </div>
-             <div style="flex: 1;">
-    <button id="filterBtnPemasukan" style="width: 50%; padding: 5px; background-color: blue; color: white; border: none;">Filter</button>
-     <button id="resetBtnPemasukan" style="width: 50%; padding: 5px; background-color: red; color: white; border: none;">Reset</button>
-</div>
-        </div>
-
-        <!-- Tombol Tutup -->
-        <button id="closePemasukanModalBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; margin-top: -15px;">Tutup</button>
-<div style="height: 200px; overflow-y: auto; margin-top: 30px; border: 1px solid #ddd; position: relative;">
-    <table id="pengeluaran-table" style="width: 100%; border-collapse: collapse;">
-        <thead style="position: sticky; top: 0; background-color: #f4f4f4; z-index: 1;">
-            <tr>
-                <th style="padding: 10px; width: 10%;">Nomor</th>
-                <th style="padding: 10px; width: 70%;">Pemasukan Iuran Keluarga</th>
-                <th style="padding: 10px; width: 50%;">Jumlah (Rp)</th>
-            </tr>
-        </thead>
-        <tbody id="pemasukan-ul">
-            
-        </tbody>
-    </table>
-    
-</div>
-
-        <div style="margin-top: 0px; font-size: 10px; color: #555;">
-            <p><em>Catatan: Data pemasukan dan kas di atas akan diperbarui secara berkala.</em></p>
-        </div>
-    </div>
-</div>
-
-
-<!-- Modal untuk Tutorial -->
-<div id="tutorialModal" class="modal" style="display:none;">
-    <div class="modal-content">
-        <span id="closeTutorialBtn" class="close">&times;</span>
-        
-        <!-- Iframe Video Tutorial -->
-        <iframe id="tutorialIframe" 
-            src="https://www.youtube.com/embed/TYoiellbaE4" 
-            frameborder="0" 
-            allow="autoplay; fullscreen; picture-in-picture" 
-            style="width: 80%; height: 80vh; margin: 0 auto; display: block;" 
-            title="Tutorial Formulir">
-        </iframe>
-    </div>
-</div>
-
-<div id="peraturanModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5);">
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; width: 80%; max-width: 600px; height: 80%; border-radius: 10px;">
-        
-        <div style="margin-top: 20px;">
-            <h2 style="text-align: center;">📜 Peraturan Lingkungan RT 08/01</h2>
-        </div>
-
-        <div style="margin-top: 15px; font-size: 14px; color: #777; text-align: center;">
-            <span>Terakhir Diperbarui: 
-                <strong>
-                    {% if all_rules and all_rules[0].tanggal_update %}
-                        {{ all_rules[0].tanggal_update }}
-                    {% else %}
-                        Belum ada data
-                    {% endif %}
-                </strong>
-            </span>
-        </div>
-
-        <button id="closePeraturanModalBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; margin-top: -15px;">Tutup</button>
-        <div style="height: 300px; overflow-y: auto; margin-top: 30px; border: 1px solid #ddd; border-radius: 6px; padding: 15px;">
-    <div style="font-size: 16px; color: #333; line-height: 1.6; padding-left: 10px;">
-        {% if all_rules %}
-           {% for rule in all_rules %}
-  <p style="text-align: left; font-size: 18px; line-height: 1.6;">
-   {{ loop.index }}. {{ rule.isi_peraturan }}
-  </p>
-{% endfor %}
-
-        {% else %}
-            <p><em>Tidak ada peraturan yang tersedia saat ini.</em></p>
-        {% endif %}
-    </div>
-</div>
-
-
-        <div style="margin-top: 10px; font-size: 11px; color: #555; text-align: center;">
-            <p><em>Catatan: Peraturan ini dibuat untuk menjaga ketertiban, keamanan, dan kenyamanan seluruh warga RT 08/01.</em></p>
-        </div>
-    </div>
-</div>
-
-
-<!-- Tambahkan link untuk Terms of Use dan Privacy Policy di bawah tombol buku tamu -->
-<div class="terms-privacy-links" style="margin-top: 150px;">
-        <a href="https://www.termsfeed.com/live/bbec1de1-63f9-4b26-b6d3-6f80305d5add" target="_blank">Syarat Penggunaan</a>|
-        <a href="https://www.termsfeed.com/live/e1ef9f6f-bfff-4320-af2e-fe16cba0e2cc" target="_blank">Kebijakan Privasi</a>|
-        <a href="#" target="_blank">Unduh Aplikasi</a>
-    </div>
-        </div>
-   <!-- Bagian Kanan -->
-   
-<div class="right-section">
-
-    <!-- Menu Item untuk Keluarga -->
-    <a href="{{ url_for('input_keluarga') }}" class="menu-link" style="text-decoration: none; color: inherit;">
-        <div class="menu-item about-us">
-            <img src="{{ url_for('static', filename='img/logo/index4.png') }}" class="menu-icon" alt="About Us">
-            <h2>Keluarga</h2>
-        </div>
-    </a>
-    
-    <!-- Menu Item untuk Surat -->
-    <a href="{{ url_for('surat_pengantar') }}" class="menu-link" style="text-decoration: none; color: inherit;">
-        <div class="menu-item services">
-            <img src="{{ url_for('static', filename='img/logo/index2.png') }}" class="menu-icon" alt="Services">
-            <h2>Surat</h2>
-        </div>
-    </a>
-
-    <!-- Menu Item untuk Iuran -->
-    <a href="{{ url_for('input_iuran') }}" class="menu-link" style="text-decoration: none; color: inherit;">
-        <div class="menu-item contact">
-            <img src="{{ url_for('static', filename='img/logo/index1.png') }}" class="menu-icon" alt="Contact">
-            <h2>Iuran</h2>
-        </div>
-    </a>
-
-    <!-- Menu Item untuk Tentang -->
-    <a href="{{ url_for('tentang') }}" class="menu-link" style="text-decoration: none; color: inherit;">
-        <div class="menu-item portfolio">
-            <img src="{{ url_for('static', filename='img/logo/index3.png') }}" class="menu-icon" alt="Portfolio">
-            <h2>Tentang</h2>
-        </div>
-    </a>
-</div>
-<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+<!-- Video tutorial (disembunyikan awalnya) -->
+<iframe 
+  id="tutorialIframe" 
+  src="https://www.youtube.com/embed/TYoiellbaE4"
+  frameborder="0"
+  allow="autoplay; fullscreen; picture-in-picture"
+  style="width: 80%; height: 80vh; margin: 20px auto; display: none; border-radius: 12px;"
+  title="Tutorial Formulir">
+</iframe>
+<footer>
+  <p>© <span id="year"></span> Digiwarga | all right reserved</a>.</p>
+</footer>
 
 <script>
+  document.getElementById("year").innerText = new Date().getFullYear();
 
-document.getElementById("keluar").addEventListener("click", function() {
-    // Redirect ke route logoutuser
-    window.location.href = "{{ url_for('logoutuser') }}";
+  function toggleMenu(){
+    const navMenu = document.getElementById("navMenu");
+    const hamburger = document.querySelector(".hamburger");
+    navMenu.classList.toggle("show");
+    hamburger.classList.toggle("open");
+  }
+function logoutUser() {
+    fetch("/logout")
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                Swal.fire({
+                    title: 'Berhasil Keluar!',
+                    text: data.message,
+                    icon: 'success',
+                    timer: 2000, // waktu 2 detik (2000 ms)
+                    timerProgressBar: true,
+                    showConfirmButton: false,
+                    background: '#f9f9f9',
+                    color: '#333',
+                    customClass: {
+                        popup: 'rounded-2xl shadow-lg',
+                    },
+                    didClose: () => {
+                        // setelah popup tertutup otomatis
+                        window.location.href = data.redirect;
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: 'Gagal Logout',
+                    text: 'Terjadi kesalahan, silakan coba lagi.',
+                    icon: 'error',
+                    confirmButtonText: 'Tutup'
+                });
+            }
+        })
+        .catch(error => {
+            console.error("Logout error:", error);
+            Swal.fire({
+                title: 'Kesalahan!',
+                text: 'Terjadi error saat logout.',
+                icon: 'error',
+                confirmButtonText: 'Tutup'
+            });
+        });
+}
+
+  document.addEventListener('click', function(e){
+    const menu = document.getElementById("navMenu");
+    const hamburger = document.querySelector(".hamburger");
+    if(menu.classList.contains('show') && !menu.contains(e.target) && !hamburger.contains(e.target)){
+      menu.classList.remove("show");
+      hamburger.classList.remove("open");
+    }
+  });
+  document.querySelectorAll('i[data-color]').forEach(icon => {
+  icon.style.color = icon.dataset.color;
+});
+
+// --- LOGIKA SLIDER FINAL ---
+
+let currentSlide = 0;
+const slides = document.querySelectorAll('.hero-slider .slide');
+const captions = document.querySelectorAll('.slider-captions .caption'); // Mengambil captions terpisah
+const dotsContainer = document.querySelector('.slider-dots');
+const totalSlides = slides.length;
+
+// Fungsi untuk membuat dots
+function generateDots() {
+    for (let i = 0; i < totalSlides; i++) {
+        const dot = document.createElement('span');
+        dot.classList.add('dot');
+        dot.setAttribute('data-slide-index', i);
+        dot.onclick = () => goToSlide(i); 
+        dotsContainer.appendChild(dot);
+    }
+}
+
+// Panggil fungsi untuk membuat dots
+generateDots();
+
+const dots = document.querySelectorAll('.dot');
+
+
+function showSlide(index) {
+  // 1. Update Slides (Gambar)
+  slides.forEach(slide => slide.classList.remove('active'));
+  slides[index].classList.add('active');
+
+  // 2. Update Captions (Teks di bawah)
+  captions.forEach(caption => caption.classList.remove('active'));
+  // Pastikan index captions sesuai dengan index slides (0, 1, 2, 3)
+  captions[index].classList.add('active'); 
+  
+  // 3. Update Dots (Indikator)
+  dots.forEach(dot => dot.classList.remove('active'));
+  dots[index].classList.add('active');
+}
+
+function nextSlide() {
+  currentSlide = (currentSlide + 1) % totalSlides;
+  showSlide(currentSlide);
+}
+
+// Fungsi navigasi saat dot diklik
+function goToSlide(index) {
+  currentSlide = index;
+  showSlide(currentSlide);
+}
+
+// Tampilkan slide pertama saat inisialisasi
+showSlide(currentSlide); 
+
+// Ganti slide setiap 5 detik
+setInterval(nextSlide, 5000);
+async function getLaporan() {
+  try {
+    const [resPemasukan, resPengeluaran] = await Promise.all([
+      fetch("/api/pemasukan"),
+      fetch("/api/pengeluaran")
+    ]);
+
+    const dataPemasukan = await resPemasukan.json();
+    const dataPengeluaran = await resPengeluaran.json();
+
+    // update elemen jika ada
+    const elPemasukan = document.getElementById("total-pemasukan");
+    const elKas = document.getElementById("total-kas");
+    const elPengeluaran = document.getElementById("total-pengeluaran");
+    const elIuran = document.getElementById("total-iuran");
+
+    if (elPemasukan) elPemasukan.textContent = "Rp " + dataPemasukan.total_pemasukan.toLocaleString();
+    if (elKas) elKas.textContent = "Rp " + dataPemasukan.total_kas.toLocaleString();
+    if (elPengeluaran) elPengeluaran.textContent = "Rp " + dataPengeluaran.total_pengeluaran.toLocaleString();
+    if (elIuran) elIuran.textContent = "Rp " + dataPengeluaran.total_iuran.toLocaleString();
+
+    // Rincian Pengeluaran
+    const pengeluaranList = document.getElementById("pengeluaran-list");
+    const lihatLebihBtn = document.getElementById("lihat-lebih");
+    const lihatSedikitBtn = document.getElementById("lihat-sedikit");
+
+    const pengeluaranData = dataPengeluaran.pengeluaran_data;
+
+    if (!pengeluaranData || pengeluaranData.length === 0) {
+      pengeluaranList.innerHTML = "<li>Tidak ada data pengeluaran.</li>";
+      lihatLebihBtn.style.display = "none";
+      lihatSedikitBtn.style.display = "none";
+      return;
+    }
+
+    let tampil = 1;
+    const totalData = pengeluaranData.length;
+
+    function renderList() {
+      pengeluaranList.innerHTML = pengeluaranData
+        .slice(0, tampil)
+        .map(p => `<li>${p.nama_kegiatan} <span>Rp ${p.jumlah.toLocaleString()}</span></li>`)
+        .join("");
+
+      // atur visibilitas tombol
+      if (tampil < totalData) {
+        lihatLebihBtn.style.display = "inline-block";
+        lihatSedikitBtn.style.display = "none";
+      } else {
+        lihatLebihBtn.style.display = "none";
+        lihatSedikitBtn.style.display = "inline-block";
+      }
+    }
+
+    lihatLebihBtn.addEventListener("click", () => {
+      tampil = totalData;
+      renderList();
+    });
+
+    lihatSedikitBtn.addEventListener("click", () => {
+      tampil = 1;
+      renderList();
+    });
+
+    renderList();
+  } catch (err) {
+    console.error("Gagal memuat data laporan:", err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", getLaporan);
+
+
+const tutorialSection = document.getElementById("tutorial");
+  const tutorialIframe = document.getElementById("tutorialIframe");
+
+  tutorialSection.addEventListener("click", () => {
+    // toggle tampilan iframe
+    if (tutorialIframe.style.display === "none") {
+      tutorialIframe.style.display = "block";
+      tutorialSection.querySelector("p").textContent = "Klik lagi untuk menutup video tutorial.";
+    } else {
+      tutorialIframe.style.display = "none";
+      tutorialSection.querySelector("p").textContent = "Klik di sini untuk melihat panduan video penggunaan Portal RT.";
+    }
   });
 
+window.addEventListener("scroll", function() {
+    const header = document.querySelector("header");
+    if (window.scrollY > 50) {
+      header.classList.add("scrolled");
+    } else {
+      header.classList.remove("scrolled");
+    }
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    // ... (kode JS lain seperti toggleMenu, scrollFunction, dll. ada di sini) ...
+
+    const suratButton = document.getElementById('ajukan-surat-btn');
+    
+    if (suratButton) {
+        suratButton.addEventListener('click', function(e) {
+            // Mencegah aksi default link (misalnya, melompat ke bagian atas halaman)
+            e.preventDefault(); 
+            
+            // Tampilkan SweetAlert2
+            Swal.fire({
+                title: 'UNDER DEVELOPMENT',
+                html: 'Saat ini fitur masih dalam tahap pengembangan.',
+                icon: 'warning', // Ikon peringatan
+                confirmButtonText: 'Mengerti',
+                confirmButtonColor: '#34acb0' // Warna brand Anda
+            });
+        });
+    }
+
+});
 </script>
+<script src="https://kit.fontawesome.com/your-own-kit.js" crossorigin="anonymous" async></script>
 </body>
 </html>
-
-
