@@ -58,12 +58,15 @@ document.addEventListener('click', function(e) {
 document.querySelectorAll('i[data-color]').forEach(icon => {
   icon.style.color = icon.dataset.color;
 });
-
 let currentSlide = 0;
+const slidesContainer = document.querySelector('.hero-slider .slides');
 const slides = document.querySelectorAll('.hero-slider .slide');
 const captions = document.querySelectorAll('.slider-captions .caption');
 const dotsContainer = document.querySelector('.slider-dots');
 const totalSlides = slides.length;
+
+const arrowLeft = document.querySelector('.arrow-left');
+const arrowRight = document.querySelector('.arrow-right');
 
 function generateDots() {
   for (let i = 0; i < totalSlides; i++) {
@@ -76,14 +79,12 @@ function generateDots() {
 }
 
 generateDots();
-
 const dots = document.querySelectorAll('.dot');
 
 function showSlide(index) {
-  slides.forEach(slide => slide.classList.remove('active'));
-  slides[index].classList.add('active');
+  slidesContainer.style.transform = `translateX(-${index * 100}%)`;
 
-  captions.forEach(caption => caption.classList.remove('active'));
+  captions.forEach(c => c.classList.remove('active'));
   captions[index].classList.add('active');
 
   dots.forEach(dot => dot.classList.remove('active'));
@@ -95,13 +96,31 @@ function nextSlide() {
   showSlide(currentSlide);
 }
 
+function prevSlide() {
+  currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+  showSlide(currentSlide);
+}
+
 function goToSlide(index) {
   currentSlide = index;
   showSlide(currentSlide);
 }
 
+// ⏩ Event tombol panah
+arrowRight.addEventListener('click', () => {
+  nextSlide();
+});
+
+arrowLeft.addEventListener('click', () => {
+  prevSlide();
+});
+
+// Tampilkan slide pertama
 showSlide(currentSlide);
+
+// ⏱️ Auto-slide setiap 5 detik
 setInterval(nextSlide, 5000);
+
 
 async function getLaporan() {
   try {
