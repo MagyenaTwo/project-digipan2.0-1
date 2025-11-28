@@ -1,4 +1,5 @@
 import time
+from dotenv import load_dotenv
 from flask import Flask, render_template
 from datetime import date, datetime, timedelta
 from flask_sqlalchemy import SQLAlchemy
@@ -71,22 +72,22 @@ from openpyxl.utils import get_column_letter
 # pdfmetrics.registerFont(TTFont("TimesNewRoman-Regular", "static/font/times.ttf"))
 app = Flask(__name__)
 
-app.secret_key = "4321Lupa"
-# app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(seconds=10)
-app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=2)
+load_dotenv()  # Load .env file
 
-# Database configuration for production
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "postgresql://postgres.egjlwlrqrhtxiafnsojz:D8mnXtg2fyEpBSsC@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres"
-)
+app.secret_key = os.getenv("SECRET_KEY")
+
+session_hours = int(os.getenv("SESSION_LIFETIME_HOURS", 2))
+app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=session_hours)
+
+# Database configuration
+app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
-
-# Inisialisasi Supabase
-url = "https://egjlwlrqrhtxiafnsojz.supabase.co"
-key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVnamx3bHJxcmh0eGlhZm5zb2p6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjQ5MTY2OTksImV4cCI6MjA0MDQ5MjY5OX0.lYeiR6EKs1F6UdvzKWJxjjZU3VEPP1ydAPUs6O7QGAA"
-supabase: Client = create_client(url, key)
+# Supabase
+supabase_url = os.getenv("SUPABASE_URL")
+supabase_key = os.getenv("SUPABASE_KEY")
+supabase: Client = create_client(supabase_url, supabase_key)
 
 
 UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), "uploads")
@@ -2752,7 +2753,9 @@ def get_register():
 def send_whatsapp_message(nomor_whatsapp, message):
     url = "https://api.fonnte.com/send"
 
-    headers = {"Authorization": "epNpDwe9gi9MabXMLZGG"}
+    fonnte_key = os.getenv("FONNTE_API_KEY")
+
+    headers = {"Authorization": fonnte_key}
 
     payload = {"target": nomor_whatsapp, "message": message, "countryCode": "62"}
 

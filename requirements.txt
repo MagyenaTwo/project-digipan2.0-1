@@ -40,3 +40,4 @@ apscheduler==3.10.1
 pandas
 supabase
 requests
+python-dotenv
