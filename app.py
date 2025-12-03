@@ -526,7 +526,12 @@ def dashboard():
         .subquery()
     )
 
-    family_count = db.session.query(func.count()).select_from(subquery).scalar()
+    family_count = (
+        db.session.query(func.count())
+        .select_from(Family)
+        .filter(Family.hubungan_keluarga == "Kepala Keluarga")
+        .scalar()
+    )
 
     # Menghitung jumlah total surat
     surat_count = db.session.query(SuratPengantar).count()
