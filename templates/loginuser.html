@@ -1,34 +1,49 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masuk & Daftar - RT 08</title>
-    <link href="static/img/logo/2.png" rel="icon">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- Google tag (gtag.js) -->
+<meta name="title" content="Smartdelapan - RT 08">
+<meta name="description" content="Aplikasi Smart Delapan untuk warga RT 08. Mudah digunakan untuk login, daftar, dan mengakses layanan RT.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Smartdelapan - RT 08">
+<meta property="og:description" content="Aplikasi digital RT 08 untuk layanan warga. Cepat, mudah, dan terintegrasi.">
+<meta property="og:image" content="{{ url_for('static', filename='img/logo/3.jpeg', _external=True) }}">
+<meta property="og:url" content="https://smartdelapan.id">
+<meta property="og:site_name" content="Smartdelapan">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Smartdelapan - RT 08">
+<meta name="twitter:description" content="Aplikasi layanan warga RT 08 yang modern dan mudah digunakan.">
+<meta name="twitter:image" content="{{ url_for('static', filename='img/logo/3.jpeg', _external=True) }}">
+
+<title>Smartdelapan</title>
+<link href="static/img/logo/3.jpeg" rel="icon">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-TRE5DFXKQB"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TRE5DFXKQB');
-</script><!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TRE5DFXKQB"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-TRE5DFXKQB');
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-TRE5DFXKQB');
 </script>
-    <!-- Menambahkan SweetAlert2 JS -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TRE5DFXKQB"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-TRE5DFXKQB');
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body>
 
@@ -38,7 +53,7 @@
         <!-- Form Masuk -->
         <div class="form-container active" id="login-form">
               <div class="logo-container">
-        <img src="{{ url_for('static', filename='img/logo/digihd.jpg') }}" alt="Logo" class="logo">
+        <img src="{{ url_for('static', filename='img/logo/3.jpeg') }}" alt="Logo" class="logo">
     </div>
             <div class="form-title">Masuk</div>
             <div class="form-subtitle">Silakan masuk untuk melanjutkan</div>
