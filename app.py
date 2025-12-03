@@ -2948,6 +2948,30 @@ def delete_peraturan(id):
     return jsonify({"status": "success", "message": "Peraturan berhasil dihapus!"})
 
 
+@app.route("/api/total_keluarga", methods=["GET"])
+def get_total_keluarga():
+    try:
+        total = db.session.query(Family).count()
+        return jsonify({"total": total})
+    except Exception:
+        return jsonify({"error": "Terjadi kesalahan pada server"}), 500
+
+
+@app.route("/api/total_kepala_keluarga", methods=["GET"])
+def get_total_kepala_keluarga():
+    try:
+        total_kepala = (
+            db.session.query(Family)
+            .filter(func.lower(Family.hubungan_keluarga) == "kepala keluarga")
+            .count()
+        )
+
+        return jsonify({"total_kepala_keluarga": total_kepala})
+
+    except Exception:
+        return jsonify({"error": "Terjadi kesalahan pada server"}), 500
+
+
 # if __name__ == "__main__":
 #     app.run(debug=True)
 if __name__ == "__main__":

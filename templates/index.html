@@ -74,13 +74,15 @@
     <!-- Slide 1: Pembuatan Surat -->
     <div class="caption" id="cap-1">
         
-        <p>Buat berbagai surat keterangan secara otomatis dan efisien melalui platform kami.</p>
+     <p>Informasi berbagai surat keterangan yang tersedia untuk warga.</p>
+
     </div>
 
     <!-- Slide 2: Iuran -->
     <div class="caption" id="cap-2">
         
-        <p>Lihat dan bayar iuran langsung melalui platform digital kami.</p>
+      <p>Informasi iuran bulanan yang tersedia untuk warga.</p>
+
     </div>
 
     <!-- Slide 3: Laporan Keuangan -->
@@ -127,41 +129,117 @@
   </div>
 </section>
 <section id="layanan">
-  <h2>LAYANAN UTAMA WARGA</h2>
-  <div class="card-grid">
+  <h2 style="text-align:center; margin-bottom:30px;">LAYANAN INFORMASI</h2>
+  <div class="card-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
 
-    <div class="card" id="tambahKeluarga">
-      <div class="card-content">
-        <h3><i class="fas fa-user-friends"></i> Kelola Data Keluarga</h3>
-        <p>Input dan perbarui data keluarga Anda dengan mudah. Pastikan informasi selalu terbaru.</p>
+<!-- DATA KELUARGA (DENGAN INFORMASI UPDATE) -->
+<div class="card" id="tambahKeluarga" style="padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); background:#fff; text-align:center;">
+  <div class="card-content">
+    <h3 style="margin-bottom:15px;"><i class="fas fa-user-friends" style="color:#17a2b8;"></i> Data Keluarga</h3>
+    <p style="margin-bottom:20px; color:#555; font-size:14px;">Informasi mengenai anggota keluarga, agar tercatat dan selalu diperbarui.</p>
+
+    <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
+      <div style="background:#e6f2ff; padding:10px 15px; border-radius:8px; font-weight:bold; color:#0176c1; min-width:140px;">
+        <i class="fas fa-info-circle"></i> Jumlah Warga: <span id="total-keluarga">...</span>
       </div>
-      <a href="/input_keluarga" class="card-action">
-        <i class="fas fa-plus-circle" data-color="#ffc107"></i> Tambah / Perbarui Data
-      </a>
+
+      <div style="background:#ffe6e6; padding:10px 15px; border-radius:8px; font-weight:bold; color:#c10000; min-width:140px;">
+        <i class="fas fa-user-tie"></i> Jumlah Keluarga: <span id="total-kepala-keluarga">...</span>
+      </div>
     </div>
 
-    <div class="card" id="catatIuran">
+   <!-- TERAKHIR UPDATE (FIXED) -->
+<div style="
+  margin-top:18px;
+  font-size:13px;
+  color:#777;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  line-height:1;
+  padding-top:4px;
+">
+  <i class="fas fa-clock" style="font-size:14px; margin-top:1px;"></i>
+  <span style="white-space:nowrap;">
+   Diperbarui: <span id="last-update">–</span>
+  </span>
+</div>
+
+  </div>
+</div>
+
+
+
+    <!-- IURAN WARGA (UI BAGUS) -->
+    <div class="card" id="catatIuran" style="padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); background:#fff; text-align:center;">
       <div class="card-content">
-        <h3><i class="fas fa-cash-register"></i> Pembayaran Iuran</h3>
-        <p>Pembayaran iuran bulanan secara transparan dan efisien.</p>
+        <h3 style="margin-bottom:15px;">
+          <i class="fas fa-cash-register" style="color:#ffc107;"></i> Iuran Warga
+        </h3>
+        <p style="margin:10px 0 20px; color:#555; font-size:14px;">
+          Informasi mengenai iuran bulanan warga secara transparan dan mudah dipantau.
+        </p>
+
+        <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+
+          <div style="background:#fff7e6; padding:10px 15px; border-radius:8px; color:#b36b00; font-weight:600; width:85%; text-align:center;">
+            <i class="fas fa-coins"></i> Iuran Kebersihan
+          </div>
+
+          <div style="background:#fff7e6; padding:10px 15px; border-radius:8px; color:#b36b00; font-weight:600; width:85%; text-align:center;">
+            <i class="fas fa-shield-alt"></i> Iuran Keamanan
+          </div>
+
+        </div>
       </div>
-      <a href="/input_iuran" class="card-action">
-        <i class="fas fa-arrow-right" data-color="#ffc107"></i> Bayar Iuran
-      </a>
     </div>
 
-    <div class="card" id="buatSurat">
+
+    <!-- SURAT PENGANTAR (UI BAGUS) -->
+    <div class="card" id="buatSurat" style="padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); background:#fff; text-align:center;">
       <div class="card-content">
-        <h3><i class="fas fa-file-alt"></i> Buat Surat Pengantar</h3>
-        <p>Buat surat pengantar resmi secara cepat tanpa perlu ribet.</p>
+        <h3 style="margin-bottom:15px;">
+          <i class="fas fa-file-alt" style="color:#28a745;"></i> Surat Pengantar
+        </h3>
+        <p style="margin:10px 0 20px; color:#555; font-size:14px;">
+          Informasi tentang jenis surat pengantar yang bisa diajukan warga.
+        </p>
+
+       <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+
+  <div style="background:#e8f8ee; padding:10px 15px; border-radius:8px; color:#1d7b3a; font-weight:600; width:85%; text-align:center;">
+    <i class="fas fa-home"></i> Surat Domisili
+  </div>
+
+  <div style="background:#e8f8ee; padding:10px 15px; border-radius:8px; color:#1d7b3a; font-weight:600; width:85%; text-align:center;">
+    <i class="fas fa-id-badge"></i> Surat Pengantar
+  </div>
+
+  <div style="background:#e8f8ee; padding:10px 15px; border-radius:8px; color:#1d7b3a; font-weight:600; width:85%; text-align:center;">
+    <i class="fas fa-exclamation-circle"></i> Surat Pernyataan Belum Menikah
+  </div>
+
+  <div style="background:#e8f8ee; padding:10px 15px; border-radius:8px; color:#1d7b3a; font-weight:600; width:85%; text-align:center;">
+    <i class="fas fa-hands-helping"></i> Surat Pernyataan Tidak Mampu
+  </div>
+
+</div>
+
+
+        </div>
       </div>
-     <a href="/surat_pengantar"  class="card-action">
-  <i class="fas fa-file-export" data-color="#ffc107"></i> Ajukan Surat Baru
-</a>
     </div>
 
   </div>
 </section>
+
+
+ <!-- <a href="/input_keluarga" class="card-action">
+
+        <i class="fas fa-plus-circle" data-color="#ffc107"></i> Tambah / Perbarui Data
+
+      </a> -->
 
 <section id="laporan">
   <h2>LAPORAN KEUANGAN RT</h2>

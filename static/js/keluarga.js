@@ -165,3 +165,47 @@ $(document).ready(function() {
 });
 
 
+ document.addEventListener("DOMContentLoaded", function() {
+    const btnTambah = document.getElementById("btn-tambah-keluarga");
+    const sectionForm = document.getElementById("input-keluarga");
+
+    btnTambah.addEventListener("click", function(e) {
+      e.preventDefault();
+      
+      // Tampilkan form
+      sectionForm.style.display = "flex";
+      sectionForm.style.opacity = 0;
+
+      setTimeout(() => {
+        sectionForm.style.transition = "opacity 0.4s ease";
+        sectionForm.style.opacity = 1;
+
+        // Auto-scroll ke form
+        sectionForm.scrollIntoView({ behavior: "smooth" });
+      }, 50);
+    });
+ });
+  
+ document.getElementById("family-form").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const data = {
+        nama_keluarga: document.getElementById("nama_keluarga").value,
+        nama: document.getElementById("nama").value,
+        tempat_lahir: document.getElementById("tempat_lahir").value,
+        tanggal_lahir: document.getElementById("tanggal_lahir").value,
+        nomor_keluarga: document.getElementById("nomor_keluarga").value,
+        hubungan_keluarga: document.getElementById("hubungan_keluarga").value
+    };
+
+    fetch("/input", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(res => {
+        alert(res.message);
+        $("#modalTambahKeluarga").modal("hide");
+    });
+});

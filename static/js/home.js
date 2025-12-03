@@ -229,3 +229,33 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 });
+async function loadDataKeluarga() {
+  try {
+    const [responseWarga, responseKepala] = await Promise.all([
+      fetch('/api/total_keluarga'),
+      fetch('/api/total_kepala_keluarga')
+    ]);
+
+    const dataWarga = await responseWarga.json();
+    const dataKepala = await responseKepala.json();
+
+    document.getElementById('total-keluarga').textContent = dataWarga.total;
+    document.getElementById('total-kepala-keluarga').textContent = dataKepala.total_kepala_keluarga;
+
+  } catch (error) {
+    console.error('Error fetching data keluarga:', error);
+    document.getElementById('total-keluarga').textContent = 'gagal dimuat';
+    document.getElementById('total-kepala-keluarga').textContent = 'gagal dimuat';
+  }
+}
+
+window.addEventListener('DOMContentLoaded', loadDataKeluarga);
+
+function setLastUpdate() {
+    const now = new Date().toLocaleString("id-ID", {
+      dateStyle: "long",
+      timeStyle: "short"
+    });
+    document.getElementById("last-update").innerText = now;
+  }
+  setLastUpdate();
