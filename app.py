@@ -347,7 +347,7 @@ def role_required(allowed_roles):
 # Route untuk halaman user
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("login.html")
 
 
 @app.route("/main")
