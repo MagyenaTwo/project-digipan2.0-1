@@ -140,11 +140,11 @@
 
     <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
       <div style="background:#e6f2ff; padding:10px 15px; border-radius:8px; font-weight:bold; color:#0176c1; min-width:140px;">
-        <i class="fas fa-info-circle"></i> Jumlah Warga: <span id="total-keluarga">...</span>
+        <i class="fas fa-info-circle"></i> Jumlah Warga: <span id="total-keluarga">Loading...</span>
       </div>
 
       <div style="background:#ffe6e6; padding:10px 15px; border-radius:8px; font-weight:bold; color:#c10000; min-width:140px;">
-        <i class="fas fa-user-tie"></i> Jumlah Keluarga: <span id="total-kepala-keluarga">...</span>
+        <i class="fas fa-user-tie"></i> Jumlah Keluarga: <span id="total-kepala-keluarga">Loading...</span>
       </div>
     </div>
 
@@ -298,17 +298,10 @@
           Berikut daftar peraturan penting yang berlaku di lingkungan RT 08/01:
         </p>
 
-        <ul class="rules-list">
-          {% if all_rules %}
-            {% for rule in all_rules %}
-              <li>
-                <strong>{{ loop.index }}.</strong> {{ rule.isi_peraturan | safe }}
-              </li>
-            {% endfor %}
-          {% else %}
-            <li><em>Belum ada peraturan yang tercatat.</em></li>
-          {% endif %}
-        </ul>
+       <ul class="rules-list" id="rules-container">
+  <li>Loading...</li>
+</ul>
+
 
         <p class="note">
           Dengan mematuhi tata tertib ini, kita wujudkan lingkungan yang aman, nyaman, dan harmonis. 🌿

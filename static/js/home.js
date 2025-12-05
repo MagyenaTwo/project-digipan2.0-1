@@ -259,3 +259,27 @@ function setLastUpdate() {
     document.getElementById("last-update").innerText = now;
   }
   setLastUpdate();
+
+  document.addEventListener("DOMContentLoaded", function() {
+    fetch("/api/peraturan")
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById("rules-container");
+            container.innerHTML = ""; // clear loading
+
+            if (data.status && data.data.length > 0) {
+                data.data.forEach((rule, index) => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `<strong>${index + 1}.</strong> ${rule.isi_peraturan}`;
+                    container.appendChild(li);
+                });
+            } else {
+                container.innerHTML = "<li><em>Belum ada peraturan yang tercatat.</em></li>";
+            }
+        })
+        .catch(error => {
+            document.getElementById("rules-container").innerHTML =
+                "<li><em>Error mengambil data.</em></li>";
+            console.error(error);
+        });
+});

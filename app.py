@@ -344,10 +344,11 @@ def role_required(allowed_roles):
     return decorator
 
 
-# Route untuk halaman user
 @app.route("/")
 def index():
-    return render_template("index.html")
+    rules = PeraturanRT.query.order_by(PeraturanRT.id.asc()).all()
+
+    return render_template("index.html", all_rules=rules)
 
 
 @app.route("/main")
@@ -2951,6 +2952,35 @@ def delete_peraturan(id):
     db.session.delete(r)
     db.session.commit()
     return jsonify({"status": "success", "message": "Peraturan berhasil dihapus!"})
+
+
+@app.route("/api/peraturan", methods=["GET"])
+def get_peraturan():
+    try:
+        rules = PeraturanRT.query.order_by(PeraturanRT.id.asc()).all()
+
+        data = [
+            {
+                "id": r.id,
+                "isi_peraturan": r.isi_peraturan,
+                "tanggal_update": r.tanggal_update.isoformat(),
+            }
+            for r in rules
+        ]
+
+        return (
+            jsonify(
+                {
+                    "status": True,
+                    "message": "Data peraturan berhasil diambil",
+                    "data": data,
+                }
+            ),
+            200,
+        )
+
+    except Exception as e:
+        return jsonify({"status": False, "message": f"Error: {str(e)}"}), 500
 
 
 @app.route("/api/total_keluarga", methods=["GET"])
