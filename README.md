@@ -1,43 +1,17 @@
-# RuangAdmin
 
-RuangAdmin - Free Admin Control Panel Themes Based on Bootstrap 4
+Smartdelapan
 
--------------------
+Aplikasi web sederhana untuk membantu warga dan pengurus RT/RW dalam mengelola data keluarga, membuat surat, dan mencatat pembayaran iuran.
 
-**RuangAdmin** is responsive admin template. Based on Bootstrap 4 Framework. Highly customizable and easy to use. 
+📌 Repository:
+https://github.com/MagyenaTwo/project-digipan2.0-1
 
-**You can review it on [Digipan]
+⸻
 
-## Contribution 
-
-Here is how : 
-
-- Fork the repository
-- Clone with ```git clone https://github.com/indrijunanda/RuangAdmin.git```
-- Or Download zip
-
-
-## Integrated
-
-- **[CodeIgniter](https://github.com/Codeigniter-Template/Ruang-Admin-Template)** by Codeigniter Template
-- **[Laravel](https://github.com/putralangkat97/ruang-admin-laravel-6)** by putralangkat97
-- **[Laravel Starter Kit](https://github.com/superXdev/QAdmin)** by superXdev
-
-
-## License
-
-RuangAdmin is an open source and licensed under **[MIT](http://opensource.org/licenses/MIT)**
-
-
-
--------------------
-### Cheers Up!
-
-*Happy Developing and Learning* 💪
-
-
-
-Regards 😁😁
-
-
-
+⭐ Fitur Utama
+	•	Data Keluarga — Input & manajemen data keluarga berbasis SQLAlchemy.
+	•	Pembuatan Surat — Membuat surat warga dengan template yang bisa diedit.
+	•	Pembayaran Iuran — Pencatatan iuran bulanan dan riwayat pembayaran.
+	•	Kegiatan Warga — Upload kegiatan lengkap dengan foto dan tanggal (timezone Jakarta).
+	•	Video Panduan — Menu khusus untuk melihat cara penggunaan aplikasi.
+	•	Hubungi Kami — Tampilan modern dengan ikon besar dan terpusat.
