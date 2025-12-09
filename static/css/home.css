@@ -2,7 +2,7 @@
   :root {
    --brand: #34acb0;
    --brands: #ffc107;
-    --brand-light: #34acb0;
+    --brand-light: #fff;
     --brand-dark: #5ce1e6;
     --bg: #f4f8fa;
     --card: #ffffff;
@@ -66,7 +66,21 @@ header.scrolled .hamburger div {
 
 
   .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1300px; margin:auto;}
-  .logo { font-size: 1.8rem; font-weight: 800; color: #fff; letter-spacing: 1px;}
+  .logo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+}
+.logo img {
+  height: 45px;
+  width: auto;
+  display: block;
+  transform: scale(1.6) translateY(4px); /* TURUNKAN 4px */
+  transform-origin: center center;
+}
   nav ul { display: flex; gap: 30px; list-style: none;}
   nav ul li { position: relative; }
   nav ul li a { 
@@ -78,8 +92,11 @@ header.scrolled .hamburger div {
     border-radius: 6px;
     transition: background-color 0.2s, transform 0.2s;
   }
-  nav ul li:hover > a { background: var(--brand-light); transform: translateY(-1px); }
-  
+nav ul li:hover > a {
+  background: none !important;
+  transform: translateY(-1px);
+}
+
   nav ul li ul { 
     display: none; 
     position: absolute; 
@@ -101,22 +118,42 @@ header.scrolled .hamburger div {
   nav ul li ul li a:hover {
     background: var(--brand);
   }
-
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  gap:6px;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+}
+.hamburger div {
+  width: 30px;
+  height:3px;
+  background:white;
+  border-radius:2px;
+  transition: all 0.3s;
+}
+/* HIDE HAMBURGER ON DESKTOP */
+@media (min-width: 900px) {
   .hamburger {
+    display: none !important;
+  }
+}
+
+/* SHOW HAMBURGER ON MOBILE */
+@media (max-width: 899px) {
+  nav ul {
     display: none;
-    flex-direction: column;
-    gap:6px;
-    color: white;
-    cursor: pointer;
-    padding: 8px;
   }
-  .hamburger div {
-    width: 30px;
-    height:3px;
-    background:white;
-    border-radius:2px;
-    transition: all 0.3s;
+  .hamburger {
+    display: flex;
   }
+}
+
 
   main { 
     max-width: 1300px; 
@@ -222,8 +259,8 @@ header.scrolled .hamburger div {
   footer { 
     text-align:center; 
     padding: 40px 20px; 
-    background: var(--brand-light); 
-    color: #ffff; 
+    background: var(--brand); 
+    color: #fff; 
     margin-top: 80px;
     font-size: 1rem;
   }
@@ -657,4 +694,217 @@ header.scrolled .hamburger div {
 
 .card-action-link:hover {
     background-color: rgba(255, 255, 255, 0.4);
+}
+
+
+#kegiatanGrid {
+  display: flex;
+  overflow-x: auto;
+  gap: 15px;
+  padding-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+#kegiatanGrid::-webkit-scrollbar { height:6px; }
+#kegiatanGrid::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius:3px; }
+
+.kegiatan-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s;
+  margin-bottom: 20px;
+  width: 300px; /* default desktop */
+}
+
+.kegiatan-card:hover { transform: translateY(-3px); }
+
+.kegiatan-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.kegiatan-card .card-body {
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.kegiatan-card h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.kegiatan-card p {
+  margin-top: 10px;
+  color: #444;
+  flex-grow: 1;
+}
+
+.kegiatan-card small {
+  color: #666;
+  text-align: center;
+  margin-top: 10px;
+  display: block;
+}
+
+.kegiatan-card .btn-detail {
+  background: #34acb0;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  align-self: center;
+  font-weight: 500;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  #kegiatanGrid {
+    flex-direction: column;
+    overflow-x: hidden;
+    align-items: center;
+  }
+  .kegiatan-card {
+    width:100%; /* lebar hampir penuh layar */
+  }
+}
+
+#bannerSection {
+  padding: 20px 0 8px 0;
+  overflow: hidden;
+}
+
+#bannerCarousel {
+  display: flex;
+  gap: 15px;
+  overflow-x: hidden; /* scroll tidak muncul */
+  max-width: 700px; /* batasi lebar desktop */
+  margin: 0 auto; /* center carousel di layar */
+}
+
+.banner-card {
+  flex: 0 0 220px;
+  border-radius: 12px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.banner-card img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  #bannerCarousel {
+    max-width: 90%; /* desktop kecil/tablet */
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-card {
+    flex: 0 0 180px;
+  }
+}
+
+
+.btn-toggle {
+  padding: 8px 16px;
+  background-color: #fff;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  top: -30px; /* geser tombol ke atas 50px */
+}
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0; top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+  overflow-y: auto; /* tetap bisa scroll vertical jika konten tinggi */
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 50px auto;
+  padding: 20px;
+  max-width: 600px; /* desktop */
+  width: 90%; /* mobile & tablet */
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Container gambar horizontal scroll */
+.modal-images {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.modal-images::-webkit-scrollbar {
+  height: 8px;
+}
+
+.modal-images::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.3);
+  border-radius: 4px;
+}
+
+.modal-images img {
+  flex: 0 0 auto; /* jangan shrink */
+  width: 100%;
+  max-width: 250px; /* ukuran tiap gambar */
+  height: auto;
+  border-radius: 8px;
+}
+
+/* Deskripsi dan tanggal */
+.modal-img {
+  display: none; /* tidak digunakan lagi, karena kita pakai container modal-images */
+}
+
+@media (max-width: 768px) {
+  .modal-content {
+    max-width: 95%;
+    margin: 20px auto;
+    padding: 16px;
+  }
+  .close {
+    font-size: 24px;
+    top: 8px;
+    right: 12px;
+  }
+  .modal-images img {
+    max-width: 180px; /* ukuran gambar di mobile */
+  }
 }

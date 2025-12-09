@@ -1,10 +1,11 @@
 import time
+import cloudinary
 from dotenv import load_dotenv
 from flask import Flask, render_template
 from datetime import date, datetime, timedelta
 from flask_sqlalchemy import SQLAlchemy
 import httpx
-from sqlalchemy import func
+from sqlalchemy import desc, func
 from flask import (
     Flask,
     render_template,
@@ -59,6 +60,7 @@ from flask import session, redirect, url_for, flash, abort
 from collections import Counter
 import random
 import string
+import cloudinary.uploader
 
 # from reportlab.lib.pagesizes import letter
 # from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
@@ -94,6 +96,12 @@ UPLOAD_FOLDER = os.path.join(os.path.abspath(os.path.dirname(__file__)), "upload
 UPLOAD_BUKTI = os.path.join(
     os.path.abspath(os.path.dirname(__file__)), "uploads/uploads"
 )
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+)
 # Enable SQLAlchemy logging
 logging.basicConfig()
 logging.getLogger("sqlalchemy.engine").setLevel(logging.INFO)
@@ -104,9 +112,10 @@ guestbook_data = []
 class Family(db.Model):
     __tablename__ = "family"
     __table_args__ = {"schema": "data_keluarga"}
+
     id = db.Column(db.Integer, primary_key=True)
     nama_keluarga = db.Column(db.String(100), nullable=False)
-    nama = db.Column(db.String(100), nullable=False)  # Field yang diperbarui
+    nama = db.Column(db.String(100), nullable=False)
     tempat_lahir = db.Column(db.String(100), nullable=False)
     tanggal_lahir = db.Column(db.Date, nullable=False)
     nomor_keluarga = db.Column(db.String(20), nullable=False)
@@ -116,6 +125,7 @@ class Family(db.Model):
 class User(db.Model):
     __tablename__ = "user"
     __table_args__ = {"schema": "data_keluarga"}
+
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(150), unique=True, nullable=False)
     password = db.Column(db.String(150), nullable=False)
@@ -125,6 +135,7 @@ class User(db.Model):
 class SchedulerLog(db.Model):
     __tablename__ = "scheduler_log"
     __table_args__ = {"schema": "data_keluarga"}
+
     id = db.Column(db.Integer, primary_key=True)
     execution_time = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(50), nullable=False)
@@ -134,6 +145,7 @@ class SchedulerLog(db.Model):
 class SuratPengantar(db.Model):
     __tablename__ = "surat_pengantar"
     __table_args__ = {"schema": "data_keluarga"}
+
     id = db.Column(db.Integer, primary_key=True)
     nama = db.Column(db.String(50))
     tanggal = db.Column(db.Date)
@@ -146,7 +158,7 @@ class SuratPengantar(db.Model):
     statusperkawinan = db.Column(db.String(255))
     tujuan = db.Column(db.Text)
     jenissurat = db.Column(db.String(255))
-    statussurat = db.Column(db.String(50), nullable=True)
+    statussurat = db.Column(db.String(50))
 
 
 class Iuran(db.Model):
@@ -164,6 +176,7 @@ class Iuran(db.Model):
 class Message(db.Model):
     __tablename__ = "pesan"
     __table_args__ = {"schema": "data_keluarga"}
+
     id = db.Column(db.Integer, primary_key=True)
     user = db.Column(db.String(150), nullable=False)
     nomor_whatsapp = db.Column(db.String(15), nullable=False)
@@ -176,6 +189,7 @@ class Message(db.Model):
 class BukuTamu(db.Model):
     __tablename__ = "buku_tamu"
     __table_args__ = {"schema": "data_keluarga"}
+
     id = db.Column(db.Integer, primary_key=True)
     nama = db.Column(db.String(100), nullable=False)
     alamat = db.Column(db.String(255), nullable=False)
@@ -192,6 +206,7 @@ class BukuTamu(db.Model):
 class Pengeluaran(db.Model):
     __tablename__ = "pengeluaran"
     __table_args__ = {"schema": "data_keluarga"}
+
     id = db.Column(db.Integer, primary_key=True)
     nama_kegiatan = db.Column(db.String(255), nullable=False)
     jenis_pengeluaran = db.Column(db.String(255), nullable=False)
@@ -202,9 +217,10 @@ class Pengeluaran(db.Model):
 class Register(db.Model):
     __tablename__ = "register"
     __table_args__ = {"schema": "data_keluarga"}
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    id = db.Column(db.Integer, primary_key=True)
     nama_lengkap = db.Column(db.String(255), nullable=False)
-    nomor_whatsapp = db.Column(db.String(20), nullable=False, unique=False)
+    nomor_whatsapp = db.Column(db.String(20), nullable=False)
     kata_sandi = db.Column(db.Text, nullable=False)
     tanggal_daftar = db.Column(db.DateTime, default=db.func.current_timestamp())
     status = db.Column(db.String(20), default="Aktif")
@@ -232,95 +248,16 @@ class Activity(db.Model):
 
     user = db.relationship("User", backref=db.backref("activities", lazy=True))
 
-    def __init__(
-        self,
-        nama,
-        tanggal,
-        tempatlahir,
-        jeniskelamin,
-        agama,
-        pekerjaan,
-        ktp,
-        alamatktp,
-        statusperkawinan,
-        tujuan,
-        jenissurat,
-        statussurat=None,
-    ):
-        self.nama = nama
-        self.tanggal = tanggal
-        self.tempatlahir = tempatlahir
-        self.jeniskelamin = jeniskelamin
-        self.agama = agama
-        self.pekerjaan = pekerjaan
-        self.ktp = ktp
-        self.alamatktp = alamatktp
-        self.statusperkawinan = statusperkawinan
-        self.tujuan = tujuan
-        self.jenissurat = jenissurat
-        self.statussurat = statussurat
 
-    def __init__(
-        self,
-        nama_keluarga,
-        jumlah_iuran,
-        bukti_pembayaran=None,
-        status_pembayaran="Menunggu",
-        tanggal=None,
-    ):
-        self.nama_keluarga = nama_keluarga
-        self.jumlah_iuran = jumlah_iuran
-        self.bukti_pembayaran = bukti_pembayaran
-        self.status_pembayaran = status_pembayaran
-        if tanggal is not None:
-            self.tanggal = tanggal
+class Kegiatan(db.Model):
+    __tablename__ = "kegiatan"
+    __table_args__ = {"schema": "data_keluarga"}
 
-    def __init__(
-        self,
-        user,
-        nomor_whatsapp,
-        message,
-        timestamp=None,
-    ):
-        self.user = user
-        self.nomor_whatsapp = nomor_whatsapp
-        self.message = message
-        self.timestamp = (
-            timestamp if timestamp else datetime.now(pytz.timezone("Asia/Jakarta"))
-        )
-
-    def __init__(
-        self,
-        nama,
-        alamat,
-        tujuan,
-        kontak,
-    ):
-        self.nama = nama
-        self.alamat = alamat
-        self.tujuan = tujuan
-        self.kontak = kontak
-
-    def __init__(self, nama_kegiatan, jenis_pengeluaran, jumlah, tanggal):
-        self.nama_kegiatan = nama_kegiatan
-        self.jenis_pengeluaran = jenis_pengeluaran
-        self.jumlah = jumlah
-        self.tanggal = tanggal
-
-    def __init__(self, nama_lengkap, nomor_whatsapp, kata_sandi, tanggal_daftar):
-        self.nama_lengkap = nama_lengkap
-        self.nomor_whatsapp = nomor_whatsapp
-        self.kata_sandi = kata_sandi
-
-    def __init__(self, user_id, action, timestamp=None):
-        self.user_id = user_id
-        self.action = action
-        self.timestamp = timestamp or datetime.utcnow()
-
-
-def __init__(self, username, password):
-    self.username = username
-    self.password = password  # Menyimpan password sebagai plaintext
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    date = db.Column(db.Date, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    image_urls = db.Column(db.ARRAY(db.String), nullable=True)
 
 
 import logging
@@ -362,7 +299,7 @@ def main():
     return render_template("index.html", all_rules=all_rules)
 
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/cms", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form.get("username").strip()
@@ -3005,6 +2942,216 @@ def get_total_kepala_keluarga():
 
     except Exception:
         return jsonify({"error": "Terjadi kesalahan pada server"}), 500
+
+
+@app.route("/kegiatan", methods=["GET", "POST"])
+def kegiatan():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user_role = session.get("role")
+
+    # POST Request (tambah kegiatan) – opsional kalau mau via API
+    if request.method == "POST":
+        title = (request.form.get("title") or "").strip()
+        description = (request.form.get("description") or "").strip()
+        date_str = request.form.get("date")
+
+        if not title or not description or not date_str:
+            return (
+                jsonify({"status": "error", "message": "Semua field wajib diisi."}),
+                400,
+            )
+
+        if user_role == "kader":
+            return (
+                jsonify(
+                    {
+                        "status": "error",
+                        "message": "Fitur ini hanya dapat diakses oleh Admin.",
+                    }
+                ),
+                403,
+            )
+
+        new_event = Kegiatan(
+            title=request.form.get("title"),
+            date=datetime.strptime(request.form.get("date"), "%Y-%m-%d").date(),
+            description=request.form.get("description"),
+            image_urls=request.form.getlist("image_urls"),
+        )
+
+        db.session.add(new_event)
+        db.session.commit()
+
+        return jsonify(
+            {"status": "success", "message": "Kegiatan berhasil ditambahkan!"}
+        )
+
+    # GET Request – tampilkan halaman
+    rows = Kegiatan.query.order_by(Kegiatan.id.desc()).all()
+    all_kegiatan = [
+        {
+            "id": k.id,
+            "title": k.title,
+            "description": k.description,
+            "date": k.date.strftime("%d %B %Y") if k.date else "",
+        }
+        for k in rows
+    ]
+
+    all_messages = Message.query.order_by(Message.timestamp.desc()).limit(3).all()
+    message_list_to_display = [
+        {
+            "message": msg.message,
+            "user": msg.user,
+            "nomor_whatsapp": (
+                "62" + msg.nomor_whatsapp[1:]
+                if msg.nomor_whatsapp.startswith("0")
+                else msg.nomor_whatsapp
+            ),
+            "timestamp": msg.timestamp.astimezone(
+                pytz.timezone("Asia/Jakarta")
+            ).strftime("%d %b %Y · %H:%M"),
+        }
+        for msg in all_messages
+    ]
+
+    all_users = User.query.order_by(User.username.asc()).all()
+
+    return render_template(
+        "kegiatan.html",
+        all_kegiatan=all_kegiatan,
+        messages=message_list_to_display,
+        all_users=all_users,
+    )
+
+
+@app.route("/api/kegiatan", methods=["POST"])
+def create_kegiatan():
+    try:
+        title = request.form.get("title")
+        date_str = request.form.get("date")
+        description = request.form.get("description")
+        images = request.files.getlist("images")
+
+        jakarta_tz = pytz.timezone("Asia/Jakarta")
+        parsed_datetime = datetime.strptime(date_str, "%Y-%m-%d")
+        jakarta_datetime = jakarta_tz.localize(parsed_datetime)
+        tanggal_kegiatan = jakarta_datetime.date()
+
+        image_urls = []
+        for image in images:
+            if image:
+                upload_result = cloudinary.uploader.upload(image)
+                image_urls.append(upload_result["secure_url"])
+
+        new_event = Kegiatan(
+            title=title,
+            date=tanggal_kegiatan,
+            description=description,
+            image_urls=image_urls,
+        )
+
+        db.session.add(new_event)
+        db.session.commit()
+
+        return (
+            jsonify(
+                {
+                    "status": "success",
+                    "message": "Kegiatan berhasil ditambahkan",
+                    "data": {
+                        "title": title,
+                        "date": str(tanggal_kegiatan),
+                        "description": description,
+                        "images": image_urls,
+                    },
+                }
+            ),
+            200,
+        )
+
+    except Exception as e:
+        db.session.rollback()
+        return (
+            jsonify(
+                {"status": "error", "message": f"Gagal menambahkan kegiatan: {str(e)}"}
+            ),
+            500,
+        )
+
+
+@app.route("/api/kegiatan", methods=["GET"])
+def get_all_kegiatan():
+    # Urutkan berdasarkan date terbaru dulu
+    kegiatan_list = Kegiatan.query.order_by(desc(Kegiatan.date)).all()
+    result = []
+    for k in kegiatan_list:
+        result.append(
+            {
+                "id": k.id,
+                "title": k.title,
+                "date": k.date.isoformat(),
+                "description": k.description,
+                "image_urls": k.image_urls,
+            }
+        )
+    return jsonify(result)
+
+
+@app.route("/api/kegiatan/<int:id>", methods=["GET"])
+def get_kegiatan(id):
+    k = Kegiatan.query.get_or_404(id)
+    return jsonify(
+        {
+            "id": k.id,
+            "title": k.title,
+            "date": k.date.isoformat(),
+            "description": k.description,
+            "image_urls": k.image_urls,
+        }
+    )
+
+
+@app.route("/api/kegiatan/<int:id>", methods=["PUT"])
+def update_kegiatan(id):
+    try:
+        data = request.get_json()
+
+        kegiatan = Kegiatan.query.get_or_404(id)
+
+        kegiatan.title = data.get("title", kegiatan.title)
+        kegiatan.date = datetime.fromisoformat(data.get("date")).date()
+        kegiatan.description = data.get("description", kegiatan.description)
+
+        db.session.commit()
+
+        return jsonify({"status": "success", "message": "Kegiatan berhasil diupdate"})
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"status": "error", "message": str(e)})
+
+
+@app.route("/api/kegiatan/<int:id>", methods=["DELETE"])
+def delete_kegiatan(id):
+    try:
+        kegiatan = Kegiatan.query.get(id)
+        if not kegiatan:
+            return jsonify({"status": "error", "message": "Data tidak ditemukan"}), 404
+
+        db.session.delete(kegiatan)
+        db.session.commit()
+
+        return (
+            jsonify({"status": "success", "message": "Kegiatan berhasil dihapus"}),
+            200,
+        )
+
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"status": "error", "message": str(e)}), 500
 
 
 # if __name__ == "__main__":

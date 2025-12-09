@@ -11,9 +11,12 @@
 </head>
 <body>
 <header>
-  <div class="nav-container">
-    <div class="logo">Smartdelapan</div>
-    <nav>
+ <div class="nav-container">
+  <div class="logo">
+    <img src="static/img/logo/4.png" alt="Logo Smartdelapan" >
+  </div>
+  <nav>
+
       <div class="hamburger" onclick="toggleMenu()">
         <div></div>
         <div></div>
@@ -30,7 +33,7 @@
           </ul>
         </li>
          <li><a href="#informasi"><i class="fas fa-info-circle"></i> Informasi</a></li>
-        <li><a href="#tutorial"><i class="fas fa-book"></i> Tutorial</a></li>
+        <li><a href="#kegiatan"><i class="fas fa-book"></i> Kegiatan</a></li>
         <!-- <li><a href="/logoutuser" ><i class="fas fa-sign-out-alt"></i> Keluar</a></li> -->
       </ul>
     </nav>
@@ -98,36 +101,45 @@
 <main>
     <div style="background: var(--bg);"> 
     </div>
-
 <section id="tentang-digipan" class="about-digipan-section">
   <div class="about-card-container">
+
     <div class="about-card primary-bg">
       <i class="fas fa-satellite-dish icon-large"></i>
-      <h3>SMARTDELAPAN: Administrasi RT Digital 08</h3>
-      <p>Platform terpadu untuk efisiensi data warga, transparansi keuangan, dan pelayanan surat menyurat di lingkungan RT 08.</p>
+      <h3>SMARTDELAPAN</h3>
+      <p>Website ini menampilkan informasi dan publikasi mengenai kegiatan lingkungan RT 08 sebagai bentuk transparansi dan kemudahan akses bagi warga.</p>
     </div>
 
     <div class="about-card secondary-bg">
       <div class="feature-item">
         <i class="fas fa-check-circle"></i>
-        <span>Data Warga Aman & Terstruktur</span>
+        <span>Ringkasan Data Warga untuk Keperluan Administratif</span>
       </div>
+
       <div class="feature-item">
         <i class="fas fa-check-circle"></i>
-        <span>Pembuatan Surat Mudah</span>
+        <span>Informasi Prosedur dan Contoh Surat RT</span>
       </div>
-       <div class="feature-item">
+
+      <div class="feature-item">
         <i class="fas fa-check-circle"></i>
-        <span>Laporan Keuangan Transparan</span>
+        <span>Publikasi Ringkas Laporan Keuangan RT</span>
       </div>
-       <div class="feature-item">
+
+      <div class="feature-item">
         <i class="fas fa-check-circle"></i>
-        <span>Iuran Digital Cepat & Mudah</span>
+        <span>Informasi Mekanisme Pembayaran Iuran</span>
       </div>
-      <a href="#tutorial" class="card-action-link"><i class="fas fa-book-open"></i> Lihat Panduan</a>
+
+      <a href="#informasi" class="card-action-link">
+        <i class="fas fa-info-circle"></i>
+        Informasi Lengkap
+      </a>
     </div>
+
   </div>
 </section>
+
 <section id="layanan">
   <h2 style="text-align:center; margin-bottom:30px;">LAYANAN INFORMASI</h2>
   <div class="card-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
@@ -313,28 +325,202 @@
 
 
 </main>
-<section id="tutorial" class="info-panel" style="cursor: pointer;">
-  <div class="info-icon">
-    <i class="fas fa-video" data-color="#ff6b6b"></i>
-  </div>
-  <div class="info-content">
-    <h3>Pusat Bantuan & Tutorial</h3>
-    <p>Klik di sini untuk melihat panduan video penggunaan Portal RT.</p>
-  </div>
-</section>
 
-<!-- Video tutorial (disembunyikan awalnya) -->
-<iframe 
-  id="tutorialIframe" 
-  src="https://www.youtube.com/embed/TYoiellbaE4"
-  frameborder="0"
-  allow="autoplay; fullscreen; picture-in-picture"
-  style="width: 80%; height: 80vh; margin: 20px auto; display: none; border-radius: 12px;"
-  title="Tutorial Formulir">
-</iframe>
+<!-- <section id="bannerSection">
+ <h2 style="margin-bottom: 20px; text-align:center;">KEGIATAN WARGA</h2>
+  <div id="bannerCarousel"></div>
+</section> -->
+
+
+<section id="kegiatan" style="padding: 20px;">
+   <h2 style="margin-bottom: 20px; text-align:center;">KEGIATAN WARGA</h2>
+  <div id="kegiatanGrid"></div>
+  <div id="toggleContainer" style="text-align:center; margin-top:16px;">
+  <button id="toggleBtn" class="btn-toggle">Lihat Semua</button>
+</div>
+</section>
+<div id="detailModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2 id="modalTitle"></h2>
+    <div id="modalImages" class="modal-images"></div>
+    <p id="modalDescription"></p>
+    <small id="modalDate"></small>
+  </div>
+</div>
+
+
+
+
+<section id="bannerSection">
+  <div id="bannerCarousel"></div>
+</section> 
 <footer>
   <p>© <span id="year"></span> SmartDelapan | all right reserved</a>.</p>
 </footer>
+
+<script>async function loadKegiatan() {
+  const container = document.getElementById("kegiatanGrid");
+  const toggleBtn = document.getElementById("toggleBtn");
+
+  container.innerHTML = `<p>Loading...</p>`;
+  const res = await fetch("/api/kegiatan");
+  const data = await res.json();
+  container.innerHTML = "";
+
+  if (data.length === 0) {
+    container.innerHTML = `<p>Tidak ada kegiatan.</p>`;
+    toggleBtn.style.display = "none";
+    return;
+  }
+
+  let showingAll = false;
+
+  // Modal elements
+  const modal = document.getElementById("detailModal");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalImages = document.getElementById("modalImages"); // container untuk semua gambar
+  const modalDescription = document.getElementById("modalDescription");
+  const modalDate = document.getElementById("modalDate");
+  const modalClose = document.querySelector(".close");
+
+  // Event untuk close modal
+  modalClose.addEventListener("click", () => {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  function render(items) {
+    container.innerHTML = "";
+    items.forEach(item => {
+      let images = [];
+      try {
+        if (Array.isArray(item.image_urls)) images = item.image_urls;
+        else images = JSON.parse(item.image_urls);
+      } catch {
+        images = [item.image_urls];
+      }
+      if (!images || images.length === 0) images = ["/static/img/default.jpg"];
+      const firstImage = images[0];
+
+      const dateObj = new Date(item.date);
+      const formattedDate = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+
+      let description = item.description;
+      if (description.length > 100) {
+        description = description.substring(0, 100) + '...';
+      }
+
+      const card = document.createElement("div");
+      card.classList.add("kegiatan-card");
+      card.innerHTML = `
+        <img src="${firstImage}" alt="${item.title}">
+        <div class="card-body">
+          <h3>${item.title}</h3>
+          <p>${description}</p>
+          <button class="btn-detail" data-id="${item.id}">Lihat Detail</button>
+          <small>${formattedDate}</small>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    toggleBtn.textContent = showingAll ? "Lihat Lebih Sedikit" : "Lihat Semua";
+
+    // Event listener tombol detail
+    document.querySelectorAll(".btn-detail").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.id;
+        const res = await fetch(`/api/kegiatan/${id}`);
+        const data = await res.json();
+
+        // Isi modal
+        modalTitle.textContent = data.title;
+        modalDescription.textContent = data.description;
+        modalDate.textContent = new Date(data.date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+
+        // Tampilkan semua gambar
+       modalImages.innerHTML = "";
+const urls = Array.isArray(data.image_urls) ? data.image_urls : [data.image_urls];
+urls.forEach(url => {
+  const img = document.createElement("img");
+  img.src = url || "/static/img/default.jpg";
+  modalImages.appendChild(img);
+});
+
+
+        modal.style.display = "block";
+      });
+    });
+  }
+
+  toggleBtn.addEventListener("click", () => {
+    showingAll = !showingAll;
+    render(showingAll ? data : data.slice(0, 3));
+  });
+
+  render(data.slice(0, 3));
+}
+
+loadKegiatan();
+
+
+
+async function loadBannerCarousel() {
+  const res = await fetch("/api/kegiatan");
+  const data = await res.json();
+  const container = document.getElementById("bannerCarousel");
+
+  data.forEach(item => {
+    let images = [];
+    try {
+      if (Array.isArray(item.image_urls)) images = item.image_urls;
+      else images = JSON.parse(item.image_urls);
+    } catch { images = [item.image_urls]; }
+    if (!images || images.length === 0) images = ["/static/img/default.jpg"];
+    const firstImage = images[0];
+
+    const card = document.createElement("div");
+    card.classList.add("banner-card");
+    card.innerHTML = `<img src="${firstImage}" alt="">`;
+    container.appendChild(card);
+  });
+
+  // Auto-slide
+  const cards = container.querySelectorAll('.banner-card');
+  let index = 0;
+  const total = cards.length;
+  const cardWidth = cards[0]?.offsetWidth + 15 || 235;
+
+  setInterval(() => {
+    index++;
+    if (index >= total) index = 0;
+    container.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+  }, 3000);
+}
+
+loadBannerCarousel();
+
+const modal = document.getElementById("detailModal");
+const modalClose = document.querySelector(".close");
+
+modalClose.addEventListener("click", () => {
+  modal.style.display = "none";
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    modal.style.display = "none";
+  }
+});
+
+
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 <script src="https://kit.fontawesome.com/your-own-kit.js" crossorigin="anonymous" async></script>

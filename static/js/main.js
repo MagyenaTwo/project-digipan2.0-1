@@ -150,3 +150,47 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // Panggil fungsi ini secara berkala (misalnya, setiap 30 detik untuk memeriksa notifikasi baru)
 setInterval(fetchNotificationCount, 30000); // 30 detik
+
+document.getElementById("formkegiatan").addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  const title = document.getElementById("title").value;
+  const date = document.getElementById("date").value;
+  const description = document.getElementById("description").value;
+  const files = document.getElementById("images").files;
+
+  const images_base64 = [];
+
+  for (const file of files) {
+    const reader = new FileReader();
+    const base64 = await new Promise((resolve, reject) => {
+      reader.onload = () => resolve(reader.result.split(",")[1]); // remove prefix
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
+    });
+    images_base64.push(base64);
+  }
+
+  const payload = {
+    title,
+    date,
+    description,
+    images: images_base64
+  };
+
+  const response = await fetch("/api/kegiatan", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const result = await response.json();
+  if(result.status === "success"){
+    alert("Kegiatan berhasil ditambahkan, ID: " + result.id);
+    location.reload();
+  } else {
+    alert("Terjadi error: " + (result.message || "Unknown error"));
+  }
+});

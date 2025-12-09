@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link href="static/img/logo/2.png" rel="icon">
-  <title>Digipan | Peraturan</title>
+  <title>Digipan | kegiatan</title>
   <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="static/css/ruang-admin.min.css" rel="stylesheet">
@@ -74,7 +74,7 @@
           <span>Pendatang</span>
         </a>
       </li>
-      <li class="nav-item">
+     <li class="nav-item">
     <a class="nav-link" href="{{ url_for('lokasi_keluarga') }}">
         <i class="fas fa-fw fa-map-marker-alt fa-lg"></i> <!-- Tambahkan fa-lg -->
         <span>Denah</span>
@@ -234,21 +234,39 @@
        <!-- Container Fluid -->
 <div class="container-fluid" id="container-wrapper">
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Peraturan</h1>
+    <h1 class="h3 mb-0 text-gray-800">kegiatan</h1>
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Peraturan</li>
+      <li class="breadcrumb-item active" aria-current="page">kegiatan</li>
     </ol>
   </div>
+  
+  <h4>Tambahkan Kegiatan Baru</h4>
+<form id="formkegiatan" action="/api/kegiatan" method="POST" enctype="multipart/form-data">
+  <div class="form-group">
+    <label for="title">Judul Kegiatan</label>
+    <input type="text" class="form-control" id="title" name="title" placeholder="Masukkan judul kegiatan" required>
+  </div>
 
-  <h4>Tambahkan Peraturan Baru</h4>
-  <form id="formPeraturan" method="POST" action="/peraturan">
-    <div class="form-group">
-      <label for="isi">Isi Peraturan</label>
-      <textarea class="form-control" id="isi" name="isi" rows="5" placeholder="Tuliskan isi peraturan..." required></textarea>
-    </div>
-    <button type="submit" class="btn btn-primary">Tambah Peraturan</button>
-  </form>
+  <div class="form-group">
+    <label for="date">Tanggal Kegiatan</label>
+    <input type="date" class="form-control" id="date" name="date" required>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Deskripsi Kegiatan</label>
+    <textarea class="form-control" id="description" name="description" rows="5" placeholder="Tuliskan deskripsi kegiatan..." required></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="images">Upload Gambar Kegiatan</label>
+    <input type="file" class="form-control" id="images" name="images" multiple accept="image/*">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Tambah Kegiatan</button>
+</form>
+
+
 
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
@@ -275,14 +293,15 @@
           <td class="py-3">{{ loop.index }}</td>
           <td class="py-3 text-start">{{ rule.isi[:100] }}...</td>
           <td class="py-3">
-            <button class="btn btn-sm btn-outline-primary btn-edit"
-              data-id="{{ rule.id }}"
-              data-isi="{{ rule.isi }}">
-              <i class="fa fa-edit"></i> Edit
-            </button>
-            <button class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ rule.id }}">
-              <i class="fa fa-trash"></i> Hapus
-            </button>
+          <button class="btn btn-sm btn-outline-primary btn-edit"
+        data-id="{{ rule.id }}">
+    <i class="fa fa-edit"></i> Edit
+</button>
+
+           <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${item.id}">
+    <i class="fa fa-trash"></i> Hapus
+</button>
+
           </td>
         </tr>
         {% endfor %}
@@ -294,17 +313,26 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editModalLabel">Edit Peraturan</h5>
+          <h5 class="modal-title" id="editModalLabel">Edit kegiatan</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form id="editRuleForm">
-            <div class="mb-3">
-              <label for="editIsi" class="form-label">Isi</label>
-              <textarea class="form-control" id="editIsi" name="isi" rows="5"></textarea>
-            </div>
-          </form>
-        </div>
+           <div class="mb-3">
+  <label for="editTitle" class="form-label">Judul</label>
+  <input type="text" class="form-control" id="editTitle" name="title">
+</div>
+
+<div class="mb-3">
+  <label for="editDate" class="form-label">Tanggal</label>
+  <input type="date" class="form-control" id="editDate" name="date">
+</div>
+
+<div class="mb-3">
+  <label for="editIsi" class="form-label">Isi</label>
+  <textarea class="form-control" id="editIsi" name="isi" rows="5"></textarea>
+</div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
           <button type="button" class="btn btn-primary" id="saveEditRule">Simpan Perubahan</button>
@@ -349,6 +377,193 @@
 <a class="scroll-to-top rounded" href="#page-top">
   <i class="fas fa-angle-up"></i>
 </a>
+<script>
+const form = document.getElementById('formkegiatan');
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+
+    try {
+        const res = await fetch('/api/kegiatan', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await res.json();
+
+        document.querySelectorAll(".alert").forEach(a => a.remove());
+
+        let type = data.status === "success" ? "success" : "danger";
+
+        const alert = document.createElement("div");
+        alert.className = `alert alert-${type} mt-3`;
+        alert.innerText = data.message ?? "Terjadi kesalahan";
+        form.insertAdjacentElement("afterend", alert);
+
+        // Auto-hide
+        setTimeout(() => {
+            alert.style.transition = "opacity 0.6s";
+            alert.style.opacity = "0";
+            setTimeout(() => alert.remove(), 600);
+        }, 3000);
+
+        if (data.status === "success") {
+            form.reset();
+        }
+
+    } catch (error) {
+        console.error(error);
+
+        const alert = document.createElement("div");
+        alert.className = "alert alert-danger mt-3";
+        alert.innerText = "Gagal koneksi ke server!";
+        form.insertAdjacentElement("afterend", alert);
+
+        setTimeout(() => {
+            alert.style.transition = "opacity 0.6s";
+            alert.style.opacity = "0";
+            setTimeout(() => alert.remove(), 600);
+        }, 3000);
+    }
+});
+async function loadKegiatan() {
+
+    const res = await fetch('/api/kegiatan');
+    const data = await res.json();
+
+    const tbody = document.querySelector("table tbody");
+    tbody.innerHTML = ""; // Bersihkan isi tabel
+
+    data.forEach((item, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+    <td class="py-3">${index + 1}</td>
+    <td class="py-3 text-start">
+        <strong>${item.title}</strong><br>
+        ${item.description.slice(0, 100)}...
+    </td>
+    <td class="py-3">
+        <button class="btn btn-sm btn-outline-primary btn-edit" data-id="${item.id}">
+            <i class="fa fa-edit"></i> Edit
+        </button>
+        <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${item.id}">
+            <i class="fa fa-trash"></i> Hapus
+        </button>
+    </td>
+`;
+        tbody.appendChild(tr);
+    });
+}
+
+loadKegiatan();
+
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".btn-delete");
+    if (!btn) return;
+
+    const id = btn.dataset.id;
+
+    Swal.fire({
+        title: 'Yakin hapus?',
+        text: 'Kegiatan akan dihapus permanen.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, hapus!'
+    }).then(res => {
+        if (!res.isConfirmed) return;
+
+        fetch(`/api/kegiatan/${id}`, { method: "DELETE" })
+            .then(r => r.json())
+            .then(data => {
+                Swal.fire(
+                    data.status === "success" ? "Berhasil!" : "Gagal!",
+                    data.message,
+                    data.status
+                );
+
+                if (data.status === "success") {
+                    loadKegiatan();
+                }
+            });
+    });
+});
+
+
+function showAlert(msg, type = "success") {
+
+    document.querySelectorAll(".alert").forEach(a => a.remove());
+
+    const alert = document.createElement("div");
+    alert.className = `alert alert-${type} mt-3`;
+    alert.innerText = msg;
+
+    document.querySelector("#container-wrapper").insertAdjacentElement("afterbegin", alert);
+
+    setTimeout(() => {
+        alert.style.transition = "opacity 0.6s";
+        alert.style.opacity = "0";
+        setTimeout(() => alert.remove(), 600);
+    }, 3000);
+}
+
+document.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".btn-edit");
+    if (!btn) return;
+
+    const id = btn.dataset.id;
+
+    // Ambil data dari API
+    const res = await fetch(`/api/kegiatan/${id}`);
+    const data = await res.json();
+
+    // Isi modal
+    document.getElementById("editIsi").value = data.description;
+    document.getElementById("editTitle").value = data.title;
+    document.getElementById("editDate").value = data.date;
+
+    // Simpan ID di tombol submit
+    document.getElementById("saveEditRule").dataset.id = id;
+
+    // Tampilkan modal
+    const modal = new bootstrap.Modal(document.getElementById("editModal"));
+    modal.show();
+});
+
+document.getElementById("saveEditRule").addEventListener("click", async (e) => {
+
+    const id = e.target.dataset.id;
+
+    const payload = {
+        title: document.getElementById("editTitle").value,
+        date: document.getElementById("editDate").value,
+        description: document.getElementById("editIsi").value
+    };
+
+    const res = await fetch(`/api/kegiatan/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    Swal.fire(
+        data.status === "success" ? "Berhasil!" : "Gagal!",
+        data.message,
+        data.status
+    );
+
+    if (data.status === "success") {
+        const modal = bootstrap.Modal.getInstance(document.getElementById("editModal"));
+        modal.hide();
+        loadKegiatan();
+    }
+});
+
+</script>
+
 
 <script src="static/vendor/jquery/jquery.min.js"></script>
 <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -360,64 +575,5 @@
 <script src="static/js/main.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-document.getElementById("formPeraturan").addEventListener("submit", async function(e) {
-  e.preventDefault();
-  Swal.fire({ title: 'Menyimpan...', text: 'Harap tunggu.', allowOutsideClick: false, showConfirmButton: false, didOpen: () => Swal.showLoading() });
-  const formData = new FormData(this);
-  const response = await fetch("/peraturan", { method: "POST", body: formData });
-  const result = await response.json();
-  Swal.close();
-  Swal.fire(result.status === "success" ? "Berhasil!" : "Gagal!", result.message, result.status);
-  if (result.status === "success") location.reload();
-});
-
-document.querySelectorAll(".btn-delete").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const id = btn.dataset.id;
-    Swal.fire({
-      title: 'Yakin hapus?',
-      text: 'Peraturan akan dihapus permanen.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Ya, hapus!'
-    }).then(res => {
-      if (res.isConfirmed) {
-        fetch(`/delete_peraturan/${id}`, { method: "POST" })
-          .then(r => r.json()).then(data => {
-            Swal.fire(data.status === "success" ? "Berhasil!" : "Gagal!", data.message, data.status);
-            if (data.status === "success") location.reload();
-          });
-      }
-    });
-  });
-});
-
-let editId = null;
-document.querySelectorAll(".btn-edit").forEach(btn => {
-  btn.addEventListener("click", () => {
-    editId = btn.dataset.id;
-    document.getElementById("editIsi").value = btn.dataset.isi;
-    new bootstrap.Modal(document.getElementById("editModal")).show();
-  });
-});
-
-document.getElementById("saveEditRule").addEventListener("click", async () => {
-  const data = {
-    isi: document.getElementById("editIsi").value
-  };
-  Swal.fire({ title: 'Menyimpan...', allowOutsideClick: false, showConfirmButton: false, didOpen: () => Swal.showLoading() });
-  const response = await fetch(`/edit_peraturan/${editId}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  });
-  const result = await response.json();
-  Swal.close();
-  Swal.fire(result.status === "success" ? "Berhasil!" : "Gagal!", result.message, result.status);
-  if (result.status === "success") location.reload();
-});
-</script>
 </body>
 </html>
