@@ -302,12 +302,10 @@
 <button id="lihat-peraturan-btn" class="btn-pdf">
   <i class="fas fa-file-pdf"></i> Lihat Aturan Lengkap
 </button>
-<div id="peraturan-modal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <iframe id="peraturan-pdf" width="100%" height="600px"></iframe>
-  </div>
-</div>
+
+<!-- Tempat iframe akan muncul -->
+<div id="pdf-container" style="margin-top:20px;"></div>
+
 
         <p class="note">
           Dengan mematuhi tata tertib ini, kita wujudkan lingkungan yang aman, nyaman, dan harmonis. 🌿
@@ -514,39 +512,27 @@ window.addEventListener("click", (e) => {
 });
 
 const btn = document.getElementById("lihat-peraturan-btn");
-const pmodal = document.getElementById("peraturan-modal");
-const close = pmodal.querySelector(".close");
-const iframe = document.getElementById("peraturan-pdf");
+const pdfContainer = document.getElementById("pdf-container");
 
 btn.addEventListener("click", async () => {
   try {
     const res = await fetch("/api/peraturan/pdf");
     const data = await res.json();
+
     if (data.status && data.data.length > 0) {
-      // Langsung tampilkan PDF pertama di iframe
-      iframe.src = `/api/peraturan/pdf/proxy/${data.data[0].id}`;
-      pmodal.style.display = "block";
+      const pdfUrl = `/api/peraturan/pdf/proxy/${data.data[0].id}`;
+
+      pdfContainer.innerHTML = `
+        <iframe src="${pdfUrl}" width="100%" height="600px" style="border:1px solid #ccc;"></iframe>
+      `;
     } else {
-      alert("Tidak ada PDF tersedia.");
+      pdfContainer.innerHTML = `<p>Tidak ada PDF tersedia.</p>`;
     }
   } catch (err) {
     console.error(err);
-    alert("Gagal memuat PDF.");
+    pdfContainer.innerHTML = `<p>Gagal memuat PDF.</p>`;
   }
 });
-
-close.addEventListener("click", () => {
-  pmodal.style.display = "none";
-  iframe.src = "";
-});
-
-window.addEventListener("click", (e) => {
-  if (e.target == pmodal) {
-    pmodal.style.display = "none";
-    iframe.src = "";
-  }
-});
-
 
 
 </script>
