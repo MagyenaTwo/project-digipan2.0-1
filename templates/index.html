@@ -280,6 +280,10 @@
         </div>
         <h4>Rincian Pengeluaran:</h4>
         <ul id="pengeluaran-list" class="data-list"></ul>
+        <div class="lihat-container">
+          <button id="lihat-lebih" class="lihat-btn" style="display:none;">Lihat Lebih Banyak</button>
+          <button id="lihat-sedikit" class="lihat-btn" style="display:none;">Lihat Lebih Sedikit</button>
+        </div>
       </div>
     </div>
 </div>
@@ -524,6 +528,21 @@ btn.addEventListener("click", async () => {
     alert("Gagal memuat PDF.");
   }
 });
+async function loadPengeluaran() {
+    const res = await fetch('/api/pengeluaran');
+    const data = await res.json();
+    const list = document.getElementById('pengeluaran-list');
+    list.innerHTML = '';
+    data.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = `${item.nama}: Rp ${item.nominal}`;
+        list.appendChild(li);
+    });
+
+    const total = data.reduce((sum, item) => sum + item.nominal, 0);
+    document.getElementById('total-pengeluaran').textContent = `Rp ${total}`;
+}
+loadPengeluaran();
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
