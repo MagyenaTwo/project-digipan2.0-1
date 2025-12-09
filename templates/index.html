@@ -302,11 +302,6 @@
 <button id="lihat-peraturan-btn" class="btn-pdf">
   <i class="fas fa-file-pdf"></i> Lihat Aturan Lengkap
 </button>
-
-<!-- Tempat iframe akan muncul -->
-<div id="pdf-container" style="margin-top:20px;"></div>
-
-
         <p class="note">
           Dengan mematuhi tata tertib ini, kita wujudkan lingkungan yang aman, nyaman, dan harmonis. 🌿
         </p>
@@ -512,7 +507,6 @@ window.addEventListener("click", (e) => {
 });
 
 const btn = document.getElementById("lihat-peraturan-btn");
-const pdfContainer = document.getElementById("pdf-container");
 
 btn.addEventListener("click", async () => {
   try {
@@ -521,19 +515,15 @@ btn.addEventListener("click", async () => {
 
     if (data.status && data.data.length > 0) {
       const pdfUrl = `/api/peraturan/pdf/proxy/${data.data[0].id}`;
-
-      pdfContainer.innerHTML = `
-        <iframe src="${pdfUrl}" width="100%" height="600px" style="border:1px solid #ccc;"></iframe>
-      `;
+      window.open(pdfUrl, "_blank"); // langsung render PDF di tab baru
     } else {
-      pdfContainer.innerHTML = `<p>Tidak ada PDF tersedia.</p>`;
+      alert("Tidak ada PDF tersedia.");
     }
   } catch (err) {
     console.error(err);
-    pdfContainer.innerHTML = `<p>Gagal memuat PDF.</p>`;
+    alert("Gagal memuat PDF.");
   }
 });
-
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
