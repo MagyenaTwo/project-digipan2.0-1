@@ -2952,13 +2952,15 @@ def get_peraturan():
 @app.route("/api/peraturan/pdf/proxy/<int:id>")
 def peraturan_pdf_proxy(id):
     peraturan = PeraturanRT.query.get(id)
-    if not peraturan:
+    if not peraturan or not peraturan.pdf_url:
         return "PDF tidak ditemukan", 404
 
+    # Ambil konten PDF dari URL
     r = requests.get(peraturan.pdf_url)
     if r.status_code != 200:
         return "Gagal mengambil PDF", 500
 
+    # Kirim ke browser dengan MIME type PDF
     return Response(r.content, mimetype="application/pdf")
 
 

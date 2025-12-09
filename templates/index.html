@@ -302,14 +302,12 @@
 <button id="lihat-peraturan-btn" class="btn-pdf">
   <i class="fas fa-file-pdf"></i> Lihat Aturan Lengkap
 </button>
-
 <div id="peraturan-modal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
     <iframe id="peraturan-pdf" width="100%" height="600px"></iframe>
   </div>
 </div>
-
 
         <p class="note">
           Dengan mematuhi tata tertib ini, kita wujudkan lingkungan yang aman, nyaman, dan harmonis. 🌿
@@ -525,9 +523,9 @@ btn.addEventListener("click", async () => {
     const res = await fetch("/api/peraturan/pdf");
     const data = await res.json();
     if (data.status && data.data.length > 0) {
-      // Set src langsung ke proxy endpoint
+      // Langsung tampilkan PDF pertama di iframe
       iframe.src = `/api/peraturan/pdf/proxy/${data.data[0].id}`;
-      pmodal.style.display = "block"; // tampilkan modal
+      pmodal.style.display = "block";
     } else {
       alert("Tidak ada PDF tersedia.");
     }
@@ -537,10 +535,9 @@ btn.addEventListener("click", async () => {
   }
 });
 
-
 close.addEventListener("click", () => {
   pmodal.style.display = "none";
-  iframe.src = ""; // reset
+  iframe.src = "";
 });
 
 window.addEventListener("click", (e) => {
