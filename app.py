@@ -1,7 +1,7 @@
 import time
 import cloudinary
 from dotenv import load_dotenv
-from flask import Flask, render_template
+from flask import Flask, Response, render_template
 from datetime import date, datetime, timedelta
 from flask_sqlalchemy import SQLAlchemy
 import httpx
@@ -233,6 +233,7 @@ class PeraturanRT(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     isi_peraturan = db.Column(db.Text, nullable=False)
     tanggal_update = db.Column(db.Date, default=date.today)
+    pdf_url = db.Column(db.String(255), nullable=True)
 
 
 class Activity(db.Model):
@@ -2785,10 +2786,16 @@ def peraturan():
     # ========== POST REQUEST (Tambah Peraturan) ==========
     if request.method == "POST":
         isi = (request.form.get("isi") or "").strip()
+        file = request.files.get("pdf")  # ambil file PDF/DOC
 
-        if not isi:
+        if not isi and (not file or file.filename == ""):
             return (
-                jsonify({"status": "error", "message": "Isi peraturan wajib diisi."}),
+                jsonify(
+                    {
+                        "status": "error",
+                        "message": "Isi peraturan atau upload dokumen wajib diisi.",
+                    }
+                ),
                 400,
             )
 
@@ -2804,7 +2811,22 @@ def peraturan():
                 403,
             )
 
-        new_rule = PeraturanRT(isi_peraturan=isi, tanggal_update=date.today())
+        pdf_url = None
+        if file and file.filename != "":
+            filename = secure_filename(file.filename)
+            # Upload ke Cloudinary
+            res = cloudinary.uploader.upload(
+                file,
+                resource_type="raw",  # wajib untuk PDF/DOC
+                folder="peraturan_rt",  # optional, bisa grup peraturan
+            )
+            pdf_url = res.get("secure_url")  # simpan URL Cloudinary
+
+        new_rule = PeraturanRT(
+            isi_peraturan=isi if isi else None,
+            tanggal_update=date.today(),
+            pdf_url=pdf_url,
+        )
         db.session.add(new_rule)
         db.session.commit()
 
@@ -2818,6 +2840,7 @@ def peraturan():
         {
             "id": r.id,
             "isi": r.isi_peraturan,
+            "pdf_url": r.pdf_url,  # sertakan URL PDF/DOC
             "tanggal_update": (
                 r.tanggal_update.strftime("%d %B %Y") if r.tanggal_update else ""
             ),
@@ -2846,7 +2869,6 @@ def peraturan():
     # Ambil daftar user
     all_users = User.query.order_by(User.username.asc()).all()
 
-    # Render template seperti di route /pendatang
     return render_template(
         "peraturan.html",
         all_rules=all_rules,
@@ -2894,13 +2916,20 @@ def delete_peraturan(id):
 @app.route("/api/peraturan", methods=["GET"])
 def get_peraturan():
     try:
-        rules = PeraturanRT.query.order_by(PeraturanRT.id.asc()).all()
+        # Ambil semua peraturan yang pdf_url = None
+        rules = (
+            PeraturanRT.query.filter(PeraturanRT.pdf_url == None)
+            .order_by(PeraturanRT.id.asc())
+            .all()
+        )
 
         data = [
             {
                 "id": r.id,
                 "isi_peraturan": r.isi_peraturan,
-                "tanggal_update": r.tanggal_update.isoformat(),
+                "tanggal_update": (
+                    r.tanggal_update.isoformat() if r.tanggal_update else None
+                ),
             }
             for r in rules
         ]
@@ -2916,6 +2945,38 @@ def get_peraturan():
             200,
         )
 
+    except Exception as e:
+        return jsonify({"status": False, "message": f"Error: {str(e)}"}), 500
+
+
+@app.route("/api/peraturan/pdf/proxy/<int:id>")
+def peraturan_pdf_proxy(id):
+    peraturan = PeraturanRT.query.get(id)
+    if not peraturan or not peraturan.pdf_url:
+        return "PDF tidak ditemukan", 404
+
+    r = requests.get(peraturan.pdf_url)
+    if r.status_code != 200:
+        return "Gagal mengambil PDF", 500
+
+    return Response(r.content, mimetype="application/pdf")
+
+
+@app.route("/api/peraturan/pdf", methods=["GET"], strict_slashes=False)
+def get_peraturan_pdf():
+    try:
+        rules = (
+            PeraturanRT.query.filter(PeraturanRT.pdf_url != None)
+            .order_by(PeraturanRT.id.asc())
+            .all()
+        )
+        data = [{"id": r.id, "pdf_url": r.pdf_url} for r in rules]
+        return (
+            jsonify(
+                {"status": True, "message": "Data PDF berhasil diambil", "data": data}
+            ),
+            200,
+        )
     except Exception as e:
         return jsonify({"status": False, "message": f"Error: {str(e)}"}), 500
 

@@ -253,27 +253,15 @@
         <i class="fas fa-plus-circle" data-color="#ffc107"></i> Tambah / Perbarui Data
 
       </a> -->
-
 <section id="laporan">
   <h2>LAPORAN KEUANGAN RT</h2>
-
-  <!-- 🔹 Ringkasan Utama (Total Kas & Iuran Bersih) -->
-  <div class="summary-top">
-    <div class="summary-item">
-      <i class="fas fa-wallet icon-green"></i>
-      <div>
-        <p>Total Kas RT</p>
-        <h3 id="total-kas">Rp 0</h3>
-      </div>
-    </div>
-  </div>
 
   <div class="card-grid">
     <!-- Kartu Pemasukan -->
     <div class="card" id="pemasukan">
       <div class="card-content">
         <h3 class="text-green-600"><i class="fas fa-arrow-up"></i> Pemasukan RT</h3>
-     <p class="subtext">Ringkasan jumlah dana yang diterima dari iuran warga serta kontribusi lain.</p>
+        <p class="subtext">Ringkasan jumlah dana yang diterima dari iuran warga serta kontribusi lain.</p>
         <div class="summary-box green">
           <div><strong>Total Pemasukan:</strong> <span id="total-pemasukan">Rp 0</span></div>
         </div>
@@ -288,17 +276,13 @@
         <div class="summary-box red">
           <div><strong>Total Pengeluaran:</strong> <span id="total-pengeluaran">Rp 0</span></div>
         </div>
-
         <h4>Rincian Pengeluaran:</h4>
         <ul id="pengeluaran-list" class="data-list"></ul>
-        <div class="lihat-container">
-          <button id="lihat-lebih" class="lihat-btn" style="display:none;">Lihat Lebih Banyak</button>
-          <button id="lihat-sedikit" class="lihat-btn" style="display:none;">Lihat Lebih Sedikit</button>
-        </div>
       </div>
     </div>
-  </div>
-</section>
+
+   
+
 
 <section id="informasi">
   <h2>INFORMASI</h2>
@@ -313,6 +297,14 @@
        <ul class="rules-list" id="rules-container">
   <li>Loading...</li>
 </ul>
+<button id="lihat-peraturan-btn">Lihat Lengkap Aturan</button>
+
+<div id="peraturan-modal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <iframe id="peraturan-pdf" width="100%" height="600px"></iframe>
+  </div>
+</div>
 
 
         <p class="note">
@@ -518,6 +510,42 @@ window.addEventListener("click", (e) => {
     modal.style.display = "none";
   }
 });
+
+const btn = document.getElementById("lihat-peraturan-btn");
+const pmodal = document.getElementById("peraturan-modal");
+const close = pmodal.querySelector(".close");
+const iframe = document.getElementById("peraturan-pdf");
+
+btn.addEventListener("click", async () => {
+  try {
+    const res = await fetch("/api/peraturan/pdf");
+    const data = await res.json();
+    if (data.status && data.data.length > 0) {
+      // Set src langsung ke proxy endpoint
+      iframe.src = `/api/peraturan/pdf/proxy/${data.data[0].id}`;
+      pmodal.style.display = "block"; // tampilkan modal
+    } else {
+      alert("Tidak ada PDF tersedia.");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Gagal memuat PDF.");
+  }
+});
+
+
+close.addEventListener("click", () => {
+  pmodal.style.display = "none";
+  iframe.src = ""; // reset
+});
+
+window.addEventListener("click", (e) => {
+  if (e.target == pmodal) {
+    pmodal.style.display = "none";
+    iframe.src = "";
+  }
+});
+
 
 
 </script>
