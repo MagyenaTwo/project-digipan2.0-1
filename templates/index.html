@@ -521,36 +521,24 @@ window.addEventListener("click", (e) => {
 const btn = document.getElementById("lihat-peraturan-btn");
 
 btn.addEventListener("click", async () => {
+  const newWindow = window.open("", "_blank"); // buka dulu
   try {
     const res = await fetch("/api/peraturan/pdf");
     const data = await res.json();
 
     if (data.status && data.data.length > 0) {
       const pdfUrl = `/api/peraturan/pdf/proxy/${data.data[0].id}`;
-      window.open(pdfUrl, "_blank"); // langsung render PDF di tab baru
+      newWindow.location.href = pdfUrl; // baru set URL
     } else {
+      newWindow.close();
       alert("Tidak ada PDF tersedia.");
     }
   } catch (err) {
+    newWindow.close();
     console.error(err);
     alert("Gagal memuat PDF.");
   }
 });
-async function loadPengeluaran() {
-    const res = await fetch('/api/pengeluaran');
-    const data = await res.json();
-    const list = document.getElementById('pengeluaran-list');
-    list.innerHTML = '';
-    data.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = `${item.nama}: Rp ${item.nominal}`;
-        list.appendChild(li);
-    });
-
-    const total = data.reduce((sum, item) => sum + item.nominal, 0);
-    document.getElementById('total-pengeluaran').textContent = `Rp ${total}`;
-}
-loadPengeluaran();
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
