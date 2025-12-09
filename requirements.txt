@@ -41,3 +41,4 @@ pandas
 supabase
 requests
 python-dotenv
+cloudinary
