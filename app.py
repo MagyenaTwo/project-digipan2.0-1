@@ -21,6 +21,7 @@ from flask import (
 import traceback
 import requests
 from urllib.parse import unquote
+import urllib
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask import current_app
 
@@ -2949,9 +2950,13 @@ def get_peraturan():
         return jsonify({"status": False, "message": f"Error: {str(e)}"}), 500
 
 
-@app.route("/api/peraturan/pdf/proxy/<int:id>")
-def peraturan_pdf_proxy(id):
-    peraturan = PeraturanRT.query.get(id)
+@app.route("/api/peraturan/pdf/proxy/<path:encoded_isi_peraturan>")
+def peraturan_pdf_proxy(encoded_isi_peraturan):
+    # Decode URL supaya spasi dan karakter khusus kembali normal
+    isi_peraturan = urllib.parse.unquote(encoded_isi_peraturan)
+
+    # Cari peraturan berdasarkan isi_peraturan
+    peraturan = PeraturanRT.query.filter_by(isi_peraturan=isi_peraturan).first()
     if not peraturan or not peraturan.pdf_url:
         return "PDF tidak ditemukan", 404
 
@@ -2960,8 +2965,12 @@ def peraturan_pdf_proxy(id):
     if r.status_code != 200:
         return "Gagal mengambil PDF", 500
 
-    # Kirim ke browser dengan MIME type PDF
-    return Response(r.content, mimetype="application/pdf")
+    # Kirim ke browser sebagai inline PDF
+    headers = {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": f"inline; filename={peraturan.isi_peraturan}.pdf",
+    }
+    return Response(r.content, headers=headers)
 
 
 @app.route("/api/peraturan/pdf", methods=["GET"], strict_slashes=False)
@@ -2972,7 +2981,11 @@ def get_peraturan_pdf():
             .order_by(PeraturanRT.id.asc())
             .all()
         )
-        data = [{"id": r.id, "pdf_url": r.pdf_url} for r in rules]
+        # Sertakan isi_peraturan supaya bisa digunakan di JS
+        data = [
+            {"id": r.id, "pdf_url": r.pdf_url, "isi_peraturan": r.isi_peraturan}
+            for r in rules
+        ]
         return (
             jsonify(
                 {"status": True, "message": "Data PDF berhasil diambil", "data": data}
