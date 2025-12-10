@@ -271,11 +271,14 @@
 
         <!-- LINK LIHAT -->
         <td class="py-3">
-    <a href="#" 
-   class="btn btn-sm btn-outline-success btn-view"
-   data-url="/api/keuangan/pdf/proxy/{{ dok.file_url | urlencode }}">
+<button 
+  class="btn btn-sm btn-outline-success btn-pdf" 
+  id="lihat-keuangan-btn"
+  data-url="/api/keuangan/pdf/proxy/{{ dok.file_url | urlencode }}">
   <i class="fas fa-file-pdf"></i> Lihat
-</a>
+</button>
+
+
 
 
 
@@ -409,14 +412,33 @@ const form = document.getElementById("uploadForm");
   });
 });
 
-document.querySelectorAll(".btn-view").forEach(btn => {
-  btn.addEventListener("click", e => {
-    e.preventDefault();
 
-    let url = btn.dataset.url;
-    window.open(url, "_blank");
-  });
+const btnKeuangan = document.getElementById("lihat-keuangan-btn");
+
+btnKeuangan.addEventListener("click", async () => {
+  const newWindow = window.open("", "_blank");
+
+  try {
+    const res = await fetch("/api/keuangan/pdf");
+    const data = await res.json();
+
+    if (data.status && data.data.length > 0) {
+      const dok = data.data[0];
+
+      // cukup pakai judul, tidak perlu URL
+      newWindow.location.href = `/api/keuangan/pdf/proxy/${encodeURIComponent(dok.judul)}`;
+      
+    } else {
+      newWindow.close();
+      alert("Tidak ada laporan keuangan tersedia.");
+    }
+
+  } catch (err) {
+    newWindow.close();
+    alert("Gagal memuat laporan keuangan.");
+  }
 });
+
 
 
 
