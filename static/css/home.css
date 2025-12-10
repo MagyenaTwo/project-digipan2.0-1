@@ -256,16 +256,133 @@ nav ul li:hover > a {
     font-size: 1.1rem;
   }
 
-  footer { 
-    text-align:center; 
-    padding: 40px 20px; 
-    background: var(--brand); 
-    color: #fff; 
-    margin-top: 80px;
-    font-size: 1rem;
+  footer {
+    margin-top: 50px;
+  background-color: var(--brand);
+  color: #fff;
+  padding: 20px 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.footer-group-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-logo img.footer-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.logo-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.footer-partner img.partner-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  border-radius: 5px;
+}
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s;
+}
+
+.footer-links a:hover {
+  color: #4db8ff;
+}
+
+.footer-copy {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.footer-social {
+  display: flex;
+  gap: 15px;
+}
+
+.footer-social a {
+  color: #fff;
+  font-size: 1.1rem;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.footer-social a:hover {
+  color: #4db8ff;
+  transform: translateY(-3px);
+}
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+  .footer-top {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  footer a { color: var(--text); text-decoration: none; transition: color 0.2s;}
-  footer a:hover { color: #000;}
+
+/* Responsive Mobile */
+@media (max-width: 768px) {
+  .footer-top {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .footer-left {
+    gap: 15px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer-logo img.footer-img,
+  .footer-partner img.partner-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .logo-text {
+    font-size: 1.1rem;
+  }
+
+  .footer-center {
+    gap: 15px;
+  }
+}
+}
 
   /* --- HERO SLIDER: FULL-WIDTH --- */
   .hero-slider {
