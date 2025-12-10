@@ -371,49 +371,41 @@ const form = document.getElementById("uploadForm");
   });
 
    document.querySelectorAll(".btn-delete").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const id = btn.dataset.id;
+  btn.addEventListener("click", async () => {
+  const id = btn.dataset.id;
 
-    Swal.fire({
-      title: 'Yakin hapus?',
-      text: 'Dokumen akan dihapus permanen.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Ya, hapus!',
-      cancelButtonText: 'Batal'
-    }).then(result => {
-      if (result.isConfirmed) {
+  const result = await Swal.fire({
+    title: 'Yakin hapus?',
+    text: 'Dokumen akan dihapus permanen.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Ya, hapus!',
+    cancelButtonText: 'Batal'
+  });
 
-        // Request DELETE
-        fetch(`/delete_dokumen/${id}`, {
-          method: "POST"
-        })
-        .then(r => r.text())
-        .then(res => {
+  if (result.isConfirmed) {
+    try {
+      const res = await fetch(`/delete_dokumen/${id}`, { method: "POST" });
+      if (!res.ok) throw new Error("Gagal di server");
 
-          // Jika berhasil
-          Swal.fire({
-            title: 'Berhasil!',
-            text: 'Dokumen berhasil dihapus.',
-            icon: 'success',
-            confirmButtonText: 'OK'
-          }).then(() => {
-            location.reload();
-          });
+      await Swal.fire({
+        title: 'Berhasil!',
+        text: 'Dokumen berhasil dihapus.',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      });
 
-        })
-        .catch(() => {
+      // Hapus elemen DOM langsung tanpa reload
+      document.querySelector(`.btn-delete[data-id="${id}"]`).closest("tr")?.remove();
 
-          // Jika error
-          Swal.fire({
-            title: 'Gagal!',
-            text: 'Terjadi kesalahan saat menghapus.',
-            icon: 'error'
-          });
-
-        });
-      }
-    });
+    } catch {
+      Swal.fire({
+        title: 'Gagal!',
+        text: 'Terjadi kesalahan saat menghapus.',
+        icon: 'error'
+      });
+    }
+  }
   });
 });
 
