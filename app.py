@@ -2371,9 +2371,13 @@ def file():
     )
 
 
+from urllib.parse import unquote
+
+
 @app.route("/api/keuangan/pdf/proxy/<path:judul>")
 def keuangan_pdf_proxy(judul):
-    dok = DokumenPDF.query.filter_by(judul=judul).first()
+    judul_decoded = unquote(judul)  # decode %20 menjadi spasi
+    dok = DokumenPDF.query.filter_by(judul=judul_decoded).first()
     if not dok:
         return "Dokumen tidak ditemukan", 404
 
