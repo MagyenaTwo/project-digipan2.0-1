@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="static/img/logo/2.png" rel="icon">
+  <title>Digipan | Upload File</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="static/css/ruang-admin.min.css" rel="stylesheet">
+  <link href="static/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+
+<body id="page-top">
+  <div id="wrapper">
+    <!-- Sidebar -->
+    <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/dashboard">
+        <div class="sidebar-brand-icon">
+          <img src="static/img/logo/2.png">
+        </div>
+        <div class="sidebar-brand-text mx-3">Digipan</div>
+      </a>
+      <hr class="sidebar-divider my-0">
+      <li class="nav-item">
+        <a class="nav-link" href="/dashboard">
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+      <hr class="sidebar-divider">
+      <div class="sidebar-heading">
+        Features
+      </div>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('keluarga') }}">
+              <i class="far fa-fw fa-user"></i>
+              <span>Keluarga</span>
+             </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('surat') }}">
+          <i class="fab fa-fw fa-wpforms"></i>
+          <span>Surat</span>
+        </a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable" aria-expanded="true"
+          aria-controls="collapseTable">
+          <i class="fas fa-fw fa-table"></i>
+          <span>Iuran</span>
+        </a>
+        <div id="collapseTable" class="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Iuran</h6>
+            <a class="collapse-item" href="/verifikasi-iuran">Verifikasi Iuran</a>
+            <a class="collapse-item" href="/statistik-iuran">Statistik Iuran</a>
+            <a class="collapse-item" href="/manual_iuran">Iuran Manual</a>
+            <a class="collapse-item" href="/pengeluaran">Pengeluaran</a>
+            <a class="collapse-item" href="/upload_file">Upload File</a>
+          </div>
+        </div>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('laporan') }}">
+          <i class="fab fa-fw fa-wpforms"></i>
+          <span>Laporan</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('daftar_buku_tamu') }}">
+          <i class="fab fa-fw fa-wpforms"></i>
+          <span>Pendatang</span>
+        </a>
+      </li>
+      <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('lokasi_keluarga') }}">
+        <i class="fas fa-fw fa-map-marker-alt fa-lg"></i> <!-- Tambahkan fa-lg -->
+        <span>Denah</span>
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for('peraturan') }}">
+    <i class="fas fa-gavel fa-lg"></i>
+    <span>Peraturan</span>
+</a>
+
+</li>
+      <hr class="sidebar-divider">
+      <div class="sidebar-heading">
+        Examples
+      </div>
+     <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('pengguna') }}">
+          <i class="fab fa-fw fa-wpforms"></i>
+          <span>Pengguna</span>
+        </a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('aktivasi') }}">
+          <i class="fas fa-fw fa-user-circle"></i>
+          <span>Aktivasi Akun</span>
+        </a>
+      </li>
+     
+      <hr class="sidebar-divider">
+      <div class="version" id="version-ruangadmin"></div>
+    </ul>
+    <!-- Sidebar -->
+    <div id="content-wrapper" class="d-flex flex-column">
+      <div id="content">
+        <!-- TopBar -->
+        <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top">
+          <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search fa-fw"></i>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                aria-labelledby="searchDropdown">
+                <form class="navbar-search">
+                  <div class="input-group">
+                    <input type="text" class="form-control bg-light border-1 small" placeholder="What do you want to look for?"
+                      aria-label="Search" aria-describedby="basic-addon2" style="border-color: #3f51b5;">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </li>
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false" onclick="fetchNotifications()">
+                  <i class="fas fa-bell fa-fw"></i>
+                  <span class="badge badge-danger badge-counter" id="notification-count">0</span>
+              </a>
+              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown" id="notification-list">
+                  <h6 class="dropdown-header">Pusat Notifikasi</h6>
+                  <div id="notification-items"></div>
+                  <a class="dropdown-item text-center small text-gray-500" href="/verifikasi-iuran">Tampilkan Semua Notifikasi</a>
+              </div>
+          </li>
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-envelope fa-fw"></i>
+                <span class="badge badge-warning badge-counter">3</span>
+              </a>
+             <!-- Pesan Terbaru Dropdown -->
+            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+              aria-labelledby="messagesDropdown">
+              <h6 class="dropdown-header">
+                  Pesan Terbaru
+              </h6>
+
+              <!-- Loop melalui pesan yang dikirim dari backend -->
+              {% for msg in messages %}
+              <a class="dropdown-item d-flex align-items-center" href="https://wa.me/{{ msg.nomor_whatsapp }}" target="_blank">
+                  <div class="dropdown-list-image mr-3">
+                      <img class="rounded-circle" src="{{ url_for('static', filename='img/man.png') }}" style="max-width: 60px" alt="User Image">
+                      <div class="status-indicator bg-success"></div>
+                  </div>
+                  <div class="font-weight-bold">
+                      <div class="text-truncate">{{ msg.message }}</div>
+                      <div class="small text-gray-500">{{ msg.user }} · {{ msg.timestamp }}</div>
+                  </div>
+              </a>
+              {% endfor %}
+
+            <!-- Link untuk lebih banyak pesan -->
+              <a id="read-more-messages" class="dropdown-item text-center small text-gray-500" href="#">Baca lebih banyak</a>
+          </div>
+
+            </li>
+            <div class="topbar-divider d-none d-sm-block"></div>
+            <li class="nav-item dropdown no-arrow">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                <img class="img-profile rounded-circle" src="static/img/boy.png" style="max-width: 60px">
+               <span class="ml-2 d-none d-lg-inline text-white small">
+              {% if 'username' in session %}
+                {{ session['username'] }}
+              {% else %}
+                Guest
+              {% endif %}
+            </span>
+              </a>
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <a class="dropdown-item" href="javascript:void(0);" data-toggle="modal" data-target="#logoutModal">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Keluar
+                </a>
+              </div>
+            </li>
+          </ul>
+        </nav>
+        <!-- Topbar -->
+       <!-- Container Fluid-->
+<div class="container-fluid" id="container-wrapper">
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Upload Dokumen Keuangan</h1>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Upload Dokumen</li>
+    </ol>
+  </div>
+
+  <div class="container">
+    <!-- Flash Message -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}" role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+   <h2>Upload Dokumen Keuangan</h2>
+
+<form id="uploadForm" action="/upload_keuangan" method="POST" enctype="multipart/form-data">
+
+  <div class="form-group">
+    <label for="judul">Judul Dokumen</label>
+    <input type="text" id="judul" name="judul" class="form-control" required placeholder="Contoh: Laporan Keuangan Bulan Desember" />
+  </div>
+
+  <div class="form-group">
+    <label for="file">Upload File (PDF / DOC)</label>
+    <input type="file" id="file" name="file" class="form-control-file" accept=".pdf,.doc,.docx" required />
+  </div>
+
+  <button type="submit" id="btnUpload" class="btn btn-primary btn-block">
+    Upload Dokumen
+  </button>
+
+<div class="table-responsive mt-4">
+  <table class="table text-center" style="border: none; background-color: #ffffff;">
+    <thead>
+      <tr style="background-color: #f8f8f8;">
+        <th class="py-3">No</th>
+        <th class="py-3">Judul</th>
+        <th class="py-3">File</th>
+        <th class="py-3">Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for dok in all_docs %}
+      <tr style="background-color: #ffffff; border-bottom: 1px solid #ddd;">
+        
+        <!-- Number -->
+        <td class="py-3">{{ loop.index }}</td>
+
+        <!-- JUDUL -->
+        <td class="py-3 text-start">
+          {{ dok.judul }}
+        </td>
+
+        <!-- LINK LIHAT -->
+        <td class="py-3">
+    <a href="#" 
+   class="btn btn-sm btn-outline-success btn-view"
+   data-url="/api/keuangan/pdf/proxy/{{ dok.file_url | urlencode }}">
+  <i class="fas fa-file-pdf"></i> Lihat
+</a>
+
+
+
+        </td>
+
+        <!-- AKSI -->
+        <td class="py-3">
+          <button type="button" class="btn btn-sm btn-outline-danger btn-delete" data-id="{{ dok.id }}">
+            <i class="fa fa-trash"></i> Hapus
+          </button>
+        </td>
+
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+    </form>
+  </div>
+</div>
+
+
+         </div>
+
+          <!-- Modal Logout -->
+          <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabelLogout">Ohh No!</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p>Yakin ingin keluar?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Batal</button>
+                  <a href="/logout" class="btn btn-primary">Keluar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!---Container Fluid-->
+      </div>
+
+     <!-- Footer -->
+      <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - developed by Digipan 1.0
+              <!-- <b><a href="https://indrijunanda.gitlab.io/" target="_blank">indrijunanda</a></b> -->
+            </span>
+          </div>
+        </div>
+      </footer>
+      <!-- Footer -->
+    </div>
+  </div>
+
+  <!-- Scroll to top -->
+  <a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+  </a>
+
+  <script src="static/vendor/jquery/jquery.min.js"></script>
+  <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="static/vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="static/js/ruang-admin.min.js"></script>
+  <script src="static/js/iuran.js"></script>
+  <!-- Page level plugins -->
+  <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  <script src="static/js/main.js"></script> <!-- File JavaScript yang baru -->  
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+ 
+const form = document.getElementById("uploadForm");
+  const btn = document.getElementById("btnUpload");
+
+  form.addEventListener("submit", () => {
+    btn.disabled = true;
+    btn.innerHTML = `
+      <span class="spinner-border spinner-border-sm"></span>
+      Uploading...
+    `;
+  });
+
+   document.querySelectorAll(".btn-delete").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const id = btn.dataset.id;
+
+    Swal.fire({
+      title: 'Yakin hapus?',
+      text: 'Dokumen akan dihapus permanen.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, hapus!',
+      cancelButtonText: 'Batal'
+    }).then(result => {
+      if (result.isConfirmed) {
+
+        // Request DELETE
+        fetch(`/delete_dokumen/${id}`, {
+          method: "POST"
+        })
+        .then(r => r.text())
+        .then(res => {
+
+          // Jika berhasil
+          Swal.fire({
+            title: 'Berhasil!',
+            text: 'Dokumen berhasil dihapus.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          }).then(() => {
+            location.reload();
+          });
+
+        })
+        .catch(() => {
+
+          // Jika error
+          Swal.fire({
+            title: 'Gagal!',
+            text: 'Terjadi kesalahan saat menghapus.',
+            icon: 'error'
+          });
+
+        });
+      }
+    });
+  });
+});
+
+document.querySelectorAll(".btn-view").forEach(btn => {
+  btn.addEventListener("click", e => {
+    e.preventDefault();
+
+    let url = btn.dataset.url;
+    window.open(url, "_blank");
+  });
+});
+
+
+
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const alerts = document.querySelectorAll(".alert");
+  alerts.forEach(alert => {
+    setTimeout(() => {
+      alert.style.transition = "opacity 0.5s";
+      alert.style.opacity = "0";
+      setTimeout(() => alert.remove(), 500);
+    }, 3000);
+  });
+});
+
+  </script>
+
+</body>
+
+</html>

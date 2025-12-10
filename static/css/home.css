@@ -588,6 +588,7 @@ nav ul li:hover > a {
   border-radius: 8px;
   margin-bottom: 6px;
   display: flex;
+  font-size: 14px;
   justify-content: space-between;
 }
 .lihat-container {
@@ -921,6 +922,8 @@ nav ul li:hover > a {
   display: inline-flex;
   align-items: center;
   gap: 10px;
+  margin-top: 10px;
+  margin-bottom: 5px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   transition: all 0.3s ease;
 }

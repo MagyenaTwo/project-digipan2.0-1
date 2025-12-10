@@ -262,6 +262,16 @@ class Kegiatan(db.Model):
     image_urls = db.Column(db.ARRAY(db.String), nullable=True)
 
 
+class DokumenPDF(db.Model):
+    __tablename__ = "dokumen_pdf"
+    __table_args__ = {"schema": "data_keluarga"}
+
+    id = db.Column(db.Integer, primary_key=True)
+    judul = db.Column(db.String(255), nullable=False)
+    file_url = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
 import logging
 
 
@@ -2326,6 +2336,106 @@ def pengeluaran():
         username=username,
         all_pengeluaran=all_pengeluaran,
     )
+
+
+@app.route("/upload_file", methods=["GET"])
+def file():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    all_messages = Message.query.order_by(Message.timestamp.desc()).all()
+    messages_to_display = all_messages[:3]
+    all_docs = DokumenPDF.query.order_by(DokumenPDF.created_at.desc()).all()
+    # Format pesan untuk template
+    message_list_to_display = [
+        {
+            "message": msg.message,
+            "user": msg.user,
+            # Ganti awalan '0' dengan '62' untuk nomor Indonesia
+            "nomor_whatsapp": (
+                "62" + msg.nomor_whatsapp[1:]
+                if msg.nomor_whatsapp.startswith("0")
+                else msg.nomor_whatsapp
+            ),
+            "timestamp": msg.timestamp.astimezone(
+                pytz.timezone("Asia/Jakarta")
+            ).strftime("%d %b %Y · %H:%M"),
+        }
+        for msg in messages_to_display
+    ]
+    username = session.get("username")
+    return render_template(
+        "iuran/pengeluaran_pdf.html",
+        messages=message_list_to_display,
+        username=username,
+        all_docs=all_docs,
+    )
+
+
+@app.route("/api/keuangan/pdf/proxy/<path:judul>")
+def keuangan_pdf_proxy(judul):
+    dok = DokumenPDF.query.filter_by(judul=judul).first()
+    if not dok:
+        return "Dokumen tidak ditemukan", 404
+
+    r = requests.get(dok.file_url)
+    if r.status_code != 200:
+        return "Gagal ambil PDF", 500
+
+    headers = {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": f"inline; filename={dok.judul}.pdf",
+    }
+    return Response(r.content, headers=headers)
+
+
+@app.route("/api/keuangan/pdf", methods=["GET"])
+def list_keuangan_pdf():
+    dok = DokumenPDF.query.order_by(DokumenPDF.id.desc()).all()
+
+    data = [{"id": d.id, "judul": d.judul, "file_url": d.file_url} for d in dok]
+
+    return (
+        jsonify({"status": True, "message": "Data PDF berhasil diambil", "data": data}),
+        200,
+    )
+
+
+@app.route("/upload_keuangan", methods=["POST"])
+def upload_keuangan():
+    judul = request.form.get("judul")
+    file = request.files.get("file")
+
+    if not file:
+        flash("File tidak boleh kosong", "danger")
+        return redirect(request.referrer)
+
+    # Upload ke Cloudinary
+
+    upload = cloudinary.uploader.upload(
+        file, folder="dokumen_keuangan", resource_type="raw"
+    )
+
+    file_url = upload["secure_url"]
+
+    # Simpan ke database
+    dok = DokumenPDF(judul=judul, file_url=file_url)
+    db.session.add(dok)
+    db.session.commit()
+
+    flash("Dokumen berhasil diupload!", "success")
+    return redirect("/upload_file")
+
+
+@app.route("/delete_dokumen/<int:id>", methods=["POST"])
+def delete_dokumen(id):
+    dok = DokumenPDF.query.get(id)
+
+    if not dok:
+        return "", 404
+
+    db.session.delete(dok)
+    db.session.commit()
+    return "ok"
 
 
 @app.route("/pengeluaran", methods=["POST"])

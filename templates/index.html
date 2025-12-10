@@ -295,8 +295,10 @@
       </div>
     </div>
 </div>
-   
-
+  
+<button id="lihat-keuangan-btn" class="btn-pdf">
+  <i class="fas fa-file-pdf"></i> Laporan Keuangan Lengkap
+</button>
 
 <section id="informasi">
   <h2>INFORMASI</h2>
@@ -517,17 +519,16 @@ window.addEventListener("click", (e) => {
     modal.style.display = "none";
   }
 });
+// Tombol peraturan
+const btnPeraturan = document.getElementById("lihat-peraturan-btn");
 
-const btn = document.getElementById("lihat-peraturan-btn");
-
-btn.addEventListener("click", async () => {
-  const newWindow = window.open("", "_blank"); // buka dulu
+btnPeraturan.addEventListener("click", async () => {
+  const newWindow = window.open("", "_blank");
   try {
     const res = await fetch("/api/peraturan/pdf");
     const data = await res.json();
 
     if (data.status && data.data.length > 0) {
-      // encode judul supaya spasi dan karakter khusus aman di URL
       const pdfUrl = `/api/peraturan/pdf/proxy/${encodeURIComponent(data.data[0].isi_peraturan)}`;
       newWindow.location.href = pdfUrl;
     } else {
@@ -540,6 +541,34 @@ btn.addEventListener("click", async () => {
     alert("Gagal memuat PDF.");
   }
 });
+
+
+const btnKeuangan = document.getElementById("lihat-keuangan-btn");
+
+btnKeuangan.addEventListener("click", async () => {
+  const newWindow = window.open("", "_blank");
+
+  try {
+    const res = await fetch("/api/keuangan/pdf");
+    const data = await res.json();
+
+    if (data.status && data.data.length > 0) {
+      const dok = data.data[0];
+
+      // cukup pakai judul, tidak perlu URL
+      newWindow.location.href = `/api/keuangan/pdf/proxy/${encodeURIComponent(dok.judul)}`;
+      
+    } else {
+      newWindow.close();
+      alert("Tidak ada laporan keuangan tersedia.");
+    }
+
+  } catch (err) {
+    newWindow.close();
+    alert("Gagal memuat laporan keuangan.");
+  }
+});
+
 
 
 </script>
