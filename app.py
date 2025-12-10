@@ -2318,12 +2318,13 @@ def pengeluaran():
         }
         for msg in messages_to_display
     ]
-
+    all_pengeluaran = Pengeluaran.query.order_by(Pengeluaran.tanggal.desc()).all()
     username = session.get("username")
     return render_template(
         "iuran/pengeluaran.html",
         messages=message_list_to_display,
         username=username,
+        all_pengeluaran=all_pengeluaran,
     )
 
 
@@ -2487,6 +2488,42 @@ def get_pengeluaran():
     except Exception as e:
         traceback.print_exc()
         return jsonify({"message": "Error retrieving data", "error": str(e)}), 500
+
+
+@app.post("/pengeluaran/<int:id>/delete")
+def delete_pengeluaran(id):
+    data = Pengeluaran.query.get(id)
+    if not data:
+        return {"status": False}
+
+    db.session.delete(data)
+    db.session.commit()
+    return {"status": True}
+
+
+@app.get("/pengeluaran/<int:id>")
+def get_single_pengeluaran(id):
+    d = Pengeluaran.query.get(id)
+    return {
+        "nama_kegiatan": d.nama_kegiatan,
+        "jenis_pengeluaran": d.jenis_pengeluaran,
+        "jumlah": d.jumlah,
+        "tanggal": d.tanggal.strftime("%Y-%m-%d"),
+    }
+
+
+@app.post("/pengeluaran/<int:id>/update")
+def update_pengeluaran(id):
+    data = Pengeluaran.query.get(id)
+    body = request.json
+
+    data.nama_kegiatan = body["nama_kegiatan"]
+    data.jenis_pengeluaran = body["jenis_pengeluaran"]
+    data.jumlah = body["jumlah"]
+    data.tanggal = datetime.strptime(body["tanggal"], "%Y-%m-%d")
+
+    db.session.commit()
+    return {"status": True}
 
 
 @app.route("/api/pemasukan", methods=["GET"])

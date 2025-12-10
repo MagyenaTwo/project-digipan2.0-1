@@ -254,11 +254,72 @@
         </div>
          <button type="submit" id="btnSimpan" class="btn btn-primary btn-block">Simpan</button>
       </form>
+      <table class="table mt-4">
+  <thead>
+    <tr>
+      <th>No</th>
+      <th>Nama</th>
+      <th>Jenis</th>
+      <th>Jumlah</th>
+      <th>Tanggal</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in all_pengeluaran %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ p.nama_kegiatan }}</td>
+      <td>{{ p.jenis_pengeluaran }}</td>
+      <td>{{ "{:,.0f}".format(p.jumlah) }}</td>
+      <td>{{ p.tanggal.strftime("%d %B %Y") }}</td>
+      <td>
+        <button class="btn btn-sm btn-outline-primary" onclick="editPengeluaran('{{ p.id }}')">Edit</button>
+
+        <button class="btn btn-sm btn-outline-danger" onclick="hapusPengeluaran('{{ p.id }}')">Hapus</button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
     </div>
   </div>
 </div>
 </div>
 </div>
+<div class="modal fade" id="modalEdit" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content p-3">
+      <h5>Edit Pengeluaran</h5>
+
+      <input type="hidden" id="editId">
+
+      <div class="form-group">
+        <label>Nama Kegiatan</label>
+        <input id="editNama" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>Jenis Pengeluaran</label>
+        <input id="editJenis" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>Jumlah</label>
+        <input id="editJumlah" class="form-control">
+      </div>
+
+      <div class="form-group">
+        <label>Tanggal</label>
+        <input type="date" id="editTanggal" class="form-control">
+      </div>
+
+      <button class="btn btn-primary btn-block mt-3" onclick="updatePengeluaran()">Simpan</button>
+    </div>
+  </div>
+</div>
+
 
           <!-- Modal Logout -->
           <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
@@ -424,7 +485,74 @@
       });
   }, 5000); // Delay 3000 ms = 3 detik
 });
+function hapusPengeluaran(id) {
+  Swal.fire({
+    title: 'Yakin hapus?',
+    text: 'Data pengeluaran akan dihapus permanen.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Ya, hapus!',
+    cancelButtonText: 'Batal'
+  }).then(result => {
+    if (result.isConfirmed) {
 
+      fetch(`/pengeluaran/${id}/delete`, { method: "POST" })
+        .then(res => res.json())
+        .then(data => {
+
+          Swal.fire(
+            data.status ? 'Berhasil!' : 'Gagal!',
+            data.message || '',
+            data.status ? 'success' : 'error'
+          );
+
+          if (data.status) {
+            setTimeout(() => location.reload(), 800);
+          }
+        });
+    }
+  });
+}
+
+
+function updatePengeluaran() {
+  let body = {
+    nama_kegiatan: document.getElementById("editNama").value,
+    jenis_pengeluaran: document.getElementById("editJenis").value,
+    jumlah: document.getElementById("editJumlah").value,
+    tanggal: document.getElementById("editTanggal").value
+  };
+
+  const id = document.getElementById("editId").value;
+
+  fetch(`/pengeluaran/${id}/update`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  })
+    .then(res => res.json())
+    .then(result => {
+      if (result.status) {
+        $('#modalEdit').modal('hide');
+        location.reload();
+      } else {
+        alert("Gagal update data");
+      }
+    });
+}
+function editPengeluaran(id) {
+  fetch(`/pengeluaran/${id}`)
+    .then(res => res.json())
+    .then(d => {
+      document.getElementById("editId").value = id;
+      document.getElementById("editNama").value = d.nama_kegiatan;
+      document.getElementById("editJenis").value = d.jenis_pengeluaran;
+      document.getElementById("editJumlah").value = d.jumlah;
+      document.getElementById("editTanggal").value = d.tanggal;
+
+      $('#modalEdit').modal('show');
+    });
+}
   </script>
 
 </body>
