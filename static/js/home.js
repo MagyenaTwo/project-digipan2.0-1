@@ -68,6 +68,8 @@ const totalSlides = slides.length;
 const arrowLeft = document.querySelector('.arrow-left');
 const arrowRight = document.querySelector('.arrow-right');
 
+let slideWidth = slides[0].clientWidth; // ⭐ PERBAIKAN
+
 function generateDots() {
   for (let i = 0; i < totalSlides; i++) {
     const dot = document.createElement('span');
@@ -82,7 +84,7 @@ generateDots();
 const dots = document.querySelectorAll('.dot');
 
 function showSlide(index) {
-  slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+  slidesContainer.style.transform = `translateX(-${index * slideWidth}px)`; // ⭐ FIX
 
   captions.forEach(c => c.classList.remove('active'));
   captions[index].classList.add('active');
@@ -106,21 +108,21 @@ function goToSlide(index) {
   showSlide(currentSlide);
 }
 
-// ⏩ Event tombol panah
-arrowRight.addEventListener('click', () => {
-  nextSlide();
+// Panah
+arrowRight.addEventListener('click', nextSlide);
+arrowLeft.addEventListener('click', prevSlide);
+
+// Resize fix (⭐ sangat penting di mobile)
+window.addEventListener("resize", () => {
+  slideWidth = slides[0].clientWidth;
+  showSlide(currentSlide);
 });
 
-arrowLeft.addEventListener('click', () => {
-  prevSlide();
-});
-
-// Tampilkan slide pertama
+// Tampilkan pertama
 showSlide(currentSlide);
 
-// ⏱️ Auto-slide setiap 5 detik
+// Auto-slide
 setInterval(nextSlide, 5000);
-
 
 async function getLaporan() {
   try {
