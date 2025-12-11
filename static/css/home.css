@@ -397,12 +397,16 @@ nav ul li:hover > a {
     height: 350px;
     transition: transform 0.8s ease-in-out;
 }
-
 .slide {
-    min-width: 100%;
-    height: 100%;
-    flex-shrink: 0;
+  min-width: 100%;
+  height: 100%;
+  background-image: var(--bg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #FDEFCC;
 }
+
 
 .slide.active {
     opacity: 1;
@@ -415,9 +419,9 @@ nav ul li:hover > a {
     background: #FDEFCC;
 }
 @media (max-width: 600px) {
-  .slide img {
-    object-fit: contain;
-    background-color: #000; /* biar rapi kalau ada space */
+  
+  .slides {
+    height: 360px;
   }
 }
 
