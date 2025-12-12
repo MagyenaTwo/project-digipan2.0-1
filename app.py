@@ -179,11 +179,13 @@ class Message(db.Model):
     __table_args__ = {"schema": "data_keluarga"}
 
     id = db.Column(db.Integer, primary_key=True)
-    user = db.Column(db.String(150), nullable=False)
-    nomor_whatsapp = db.Column(db.String(15), nullable=False)
+    user = db.Column(db.String(150), nullable=False, default="")
+    nomor_whatsapp = db.Column(db.String(15), nullable=False, default="")
     message = db.Column(db.Text, nullable=False)
+
     timestamp = db.Column(
-        db.DateTime, default=lambda: datetime.now(pytz.timezone("Asia/Jakarta"))
+        db.DateTime(timezone=True),
+        default=lambda: datetime.now(pytz.timezone("Asia/Jakarta")),
     )
 
 
@@ -1073,22 +1075,23 @@ def message_center():
 @app.route("/api/pesan", methods=["POST"])
 def api_pesan():
     data = request.get_json()
-
-    # Ambil message saja
     message = data.get("message", "").strip()
 
     if not message:
         return jsonify({"status": False, "msg": "Message tidak boleh kosong"}), 400
 
-    # Buat pesan baru, user & nomor dikosongkan
+    tz = pytz.timezone("Asia/Jakarta")
+    now_jakarta = datetime.now(tz).replace(tzinfo=None)
+
     new_message = Message(
-        user="",
-        nomor_whatsapp="",
-        message=message,
+        user="", nomor_whatsapp="", message=message, timestamp=now_jakarta
     )
 
     db.session.add(new_message)
     db.session.commit()
+
+    # Ambil timestamp dari DB (sudah naive, tidak digeser)
+    ts = new_message.timestamp
 
     return (
         jsonify(
@@ -1098,7 +1101,7 @@ def api_pesan():
                 "data": {
                     "id": new_message.id,
                     "message": new_message.message,
-                    "timestamp": new_message.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+                    "timestamp": ts.strftime("%Y-%m-%d %H:%M:%S"),
                 },
             }
         ),
