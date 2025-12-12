@@ -194,15 +194,38 @@
           Informasi mengenai iuran bulanan warga secara transparan dan mudah dipantau.
         </p>
 
-        <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+   <div class="iuran-container">
 
-          <div style="background:#fff7e6; padding:10px 15px; border-radius:8px; color:#b36b00; font-weight:600; width:85%; text-align:center;">
-            <i class="fas fa-coins"></i> Iuran Kebersihan
-          </div>
+  <div class="iuran-item">
+    <div class="iuran-header">
+      <div><i class="fas fa-coins"></i> Iuran Kebersihan</div>
+      <i class="fas fa-chevron-right iuran-arrow"></i>
+    </div>
+    <div class="iuran-content">
+      <p>Iuran ini digunakan untuk biaya kebersihan lingkungan seperti pengangkutan sampah dan perawatan area umum.</p>
+      <b>Rata-rata iuran bulanan:</b>
+      <ul>
+        <!-- <li>Rp 20.000 - Rp 30.000 per KK</li> -->
+      </ul>
+    </div>
+  </div>
 
-          <div style="background:#fff7e6; padding:10px 15px; border-radius:8px; color:#b36b00; font-weight:600; width:85%; text-align:center;">
-            <i class="fas fa-shield-alt"></i> Iuran Keamanan
-          </div>
+  <div class="iuran-item">
+    <div class="iuran-header">
+      <div><i class="fas fa-shield-alt"></i> Iuran Keamanan</div>
+      <i class="fas fa-chevron-right iuran-arrow"></i>
+    </div>
+    <div class="iuran-content">
+      <p>Iuran ini digunakan untuk operasional keamanan lingkungan seperti ronda dan fasilitas keamanan lainnya.</p>
+      <b>Rata-rata iuran bulanan:</b>
+      <ul>
+        <!-- <li>Rp 10.000 - Rp 20.000 per KK</li> -->
+      </ul>
+    </div>
+  
+
+</div>
+
 
         </div>
       </div>
@@ -220,26 +243,71 @@
 </p>
 
 
-       <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+     <div class="surat-container">
 
-  <div style="background:#e8f8ee; padding:10px 15px; border-radius:8px; color:#1d7b3a; font-weight:600; width:85%; text-align:center;">
-    <i class="fas fa-home"></i> Surat Domisili
+  <div class="surat-item">
+    <div class="surat-header">
+      <div><i class="fas fa-home"></i> Surat Domisili</div>
+      <i class="fas fa-chevron-right arrow"></i>
+    </div>
+    <div class="surat-content">
+      <p>Surat ini digunakan untuk keperluan administrasi seperti sekolah, pekerjaan, atau pindah alamat.</p>
+      <b>Dokumen dibutuhkan:</b>
+      <ul>
+        <li>KTP</li>
+        <li>KK</li>
+      </ul>
+    </div>
   </div>
 
-  <div style="background:#e8f8ee; padding:10px 15px; border-radius:8px; color:#1d7b3a; font-weight:600; width:85%; text-align:center;">
-    <i class="fas fa-id-badge"></i> Surat Pengantar
+  <div class="surat-item">
+    <div class="surat-header">
+      <div><i class="fas fa-id-badge"></i> Surat Pengantar</div>
+      <i class="fas fa-chevron-right arrow"></i>
+    </div>
+    <div class="surat-content">
+      <p>Digunakan untuk membuat surat di kelurahan/kecamatan seperti SKCK, usaha, domisili, dll.</p>
+      <b>Dokumen dibutuhkan:</b>
+      <ul>
+        <li>KTP</li>
+        <li>KK</li>
+      </ul>
+    </div>
   </div>
 
-  <div style="background:#e8f8ee; padding:10px 15px; border-radius:8px; color:#1d7b3a; font-weight:600; width:85%; text-align:center;">
-    <i class="fas fa-exclamation-circle"></i> Surat Pernyataan Belum Menikah
+  <div class="surat-item">
+    <div class="surat-header">
+      <div><i class="fas fa-exclamation-circle"></i> Surat Belum Menikah</div>
+      <i class="fas fa-chevron-right arrow"></i>
+    </div>
+    <div class="surat-content">
+      <p>Diperlukan untuk keperluan pekerjaan, beasiswa, atau administrasi pernikahan.</p>
+      <b>Dokumen dibutuhkan:</b>
+      <ul>
+        <li>KTP</li>
+        <li>KK</li>
+        <li>Surat pernyataan</li>
+      </ul>
+    </div>
   </div>
 
-  <div style="background:#e8f8ee; padding:10px 15px; border-radius:8px; color:#1d7b3a; font-weight:600; width:85%; text-align:center;">
-    <i class="fas fa-hands-helping"></i> Surat Pernyataan Tidak Mampu
+  <div class="surat-item">
+    <div class="surat-header">
+      <div><i class="fas fa-hands-helping"></i> Surat Tidak Mampu</div>
+      <i class="fas fa-chevron-right arrow"></i>
+    </div>
+    <div class="surat-content">
+      <p>Digunakan untuk bantuan sosial, pendidikan, atau kesehatan.</p>
+      <b>Dokumen dibutuhkan:</b>
+      <ul>
+        <li>KTP</li>
+        <li>KK</li>
+        <li>Surat permohonan</li>
+      </ul>
+    </div>
   </div>
 
 </div>
-
 
         </div>
       </div>
@@ -592,7 +660,24 @@ btnKeuangan.addEventListener("click", async () => {
 });
 
 
+document.querySelectorAll(".surat-item").forEach(item => {
+  item.addEventListener("click", () => {
 
+    const isOpen = item.classList.contains("active");
+
+    document.querySelectorAll(".surat-item").forEach(i => i.classList.remove("active"));
+
+    if (!isOpen) item.classList.add("active");
+  });
+});
+
+document.querySelectorAll(".iuran-item").forEach(item => {
+  item.addEventListener("click", () => {
+    const isOpen = item.classList.contains("active");
+    document.querySelectorAll(".iuran-item").forEach(i => i.classList.remove("active"));
+    if (!isOpen) item.classList.add("active");
+  });
+});
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/home.js') }}"></script>
