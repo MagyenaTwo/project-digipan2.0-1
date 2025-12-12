@@ -351,3 +351,18 @@ window.addEventListener('scroll', () => {
     logo.classList.remove('scrolled');
   }
 });
+
+
+async function fetchVisitCount() {
+  try {
+    const res = await fetch('/api/visit/count');
+    if (!res.ok) throw new Error('Gagal mengambil data');
+    const data = await res.json();
+    document.getElementById('visit-count').textContent = data.total;
+  } catch (err) {
+    console.error(err);
+    document.getElementById('visit-count').textContent = '-';
+  }
+}
+
+fetchVisitCount();

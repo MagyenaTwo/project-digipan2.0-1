@@ -18,6 +18,8 @@ from flask import (
     send_file,
     make_response,
 )
+from sqlalchemy import text
+
 import traceback
 import requests
 from urllib.parse import unquote
@@ -272,6 +274,14 @@ class DokumenPDF(db.Model):
     judul = db.Column(db.String(255), nullable=False)
     file_url = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class Visitor(db.Model):
+    __tablename__ = "visitor"
+    __table_args__ = {"schema": "data_keluarga"}
+
+    id = db.Column(db.Integer, primary_key=True)
+    timestamp = db.Column(db.DateTime, default=db.func.now())
 
 
 import logging
@@ -3418,6 +3428,23 @@ def delete_kegiatan(id):
     except Exception as e:
         db.session.rollback()
         return jsonify({"status": "error", "message": str(e)}), 500
+
+
+@app.route("/api/visit", methods=["POST"])
+def track_visit():
+    print("Visitor masuk:", datetime.now())
+
+    db.session.execute(text("INSERT INTO data_keluarga.visitor DEFAULT VALUES"))
+    db.session.commit()
+
+    return jsonify({"status": True})
+
+
+@app.route("/api/visit/count", methods=["GET"])
+def get_visit_count():
+    result = db.session.execute(text("SELECT COUNT(*) FROM data_keluarga.visitor"))
+    total = result.scalar()
+    return jsonify({"total": total})
 
 
 # if __name__ == "__main__":

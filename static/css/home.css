@@ -1533,3 +1533,49 @@ nav ul li:hover > a {
   border-radius: 8px;
   border-left: 4px solid #4CAF50;
 }
+.center-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   margin-top: 50px;
+  }
+
+  .visitor-badge {
+    display: inline-flex; /* pas konten */
+    align-items: center;
+    background: var(--brand);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+
+  .visitor-badge svg {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    fill: #fff;
+  }
+
+  .visitor-badge .count {
+    font-weight: 700;
+    margin-left: 4px;
+  }
+
+  @media (max-width: 480px) {
+    .visitor-badge {
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+
+    .visitor-badge svg {
+      width: 14px;
+      height: 14px;
+      margin-right: 4px;
+    }
+
+    .visitor-badge .count {
+      margin-left: 2px;
+    }
+  }
