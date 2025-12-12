@@ -351,8 +351,6 @@ window.addEventListener('scroll', () => {
     logo.classList.remove('scrolled');
   }
 });
-
-
 async function fetchVisitCount() {
   try {
     const res = await fetch('/api/visit/count');
@@ -365,4 +363,8 @@ async function fetchVisitCount() {
   }
 }
 
+// Panggil pertama kali
 fetchVisitCount();
+
+// Refresh otomatis setiap 5 detik
+setInterval(fetchVisitCount, 3600000);
