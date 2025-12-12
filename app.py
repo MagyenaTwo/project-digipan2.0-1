@@ -1070,6 +1070,42 @@ def message_center():
     return render_template("tentang.html")
 
 
+@app.route("/api/pesan", methods=["POST"])
+def api_pesan():
+    data = request.get_json()
+
+    # Ambil message saja
+    message = data.get("message", "").strip()
+
+    if not message:
+        return jsonify({"status": False, "msg": "Message tidak boleh kosong"}), 400
+
+    # Buat pesan baru, user & nomor dikosongkan
+    new_message = Message(
+        user="",
+        nomor_whatsapp="",
+        message=message,
+    )
+
+    db.session.add(new_message)
+    db.session.commit()
+
+    return (
+        jsonify(
+            {
+                "status": True,
+                "msg": "Pesan berhasil dikirim",
+                "data": {
+                    "id": new_message.id,
+                    "message": new_message.message,
+                    "timestamp": new_message.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+                },
+            }
+        ),
+        201,
+    )
+
+
 @app.route("/keluarga")
 def keluarga():
     if "username" not in session:

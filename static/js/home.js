@@ -284,4 +284,60 @@ function setLastUpdate() {
                 "<li><em>Error mengambil data.</em></li>";
             console.error(error);
         });
-});
+  });
+const openBtn = document.getElementById("openSuggestion");
+const closeBtn = document.getElementById("closeSuggestion");
+const modals = document.getElementById("suggestionModal");
+const textarea = document.getElementById("saranInput");
+const sendBtn = document.getElementById("kirimSaran");
+const toast = document.getElementById("toast");
+
+openBtn.onclick = () => modals.style.display = "block";
+closeBtn.onclick = () => modals.style.display = "none";
+modals.onclick = e => { if (e.target === modals) modals.style.display = "none"; };
+function showToast(type, text) {
+  toast.className = "toast " + type;
+  toast.innerHTML = `<i class="fas ${type === "success" ? "fa-check-circle" : "fa-times-circle"}"></i> ${text}`;
+  
+  toast.style.display = "block";
+  setTimeout(() => toast.classList.add("show"), 10);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.style.display = "none", 200);
+  }, 2500);
+}
+
+
+sendBtn.onclick = async () => {
+  const isi = textarea.value.trim();
+  if (!isi) { showToast("error", "Saran tidak boleh kosong"); return; }
+
+  const original = sendBtn.innerHTML;
+  sendBtn.innerHTML = `<div class="spinner"></div>`;
+  sendBtn.disabled = true;
+
+  setTimeout(async () => {
+    try {
+      const res = await fetch("/api/pesan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: isi })
+      });
+
+      const data = await res.json();
+      if (data.status) {
+        textarea.value = "";
+        modals.style.display = "none";
+        showToast("success", "Saran berhasil dikirim");
+      } else {
+        showToast("error", "Gagal mengirim saran");
+      }
+    } catch {
+      showToast("error", "Terjadi kesalahan server");
+    }
+
+    sendBtn.innerHTML = original;
+    sendBtn.disabled = false;
+  }, 3000);
+};

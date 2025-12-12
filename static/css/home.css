@@ -15,6 +15,11 @@
     --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.12);
   }
 
+  * {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
   * { box-sizing: border-box; margin:0; padding:0; }
   body { 
     background: var(--bg); 
@@ -1246,3 +1251,250 @@ nav ul li:hover > a {
     font-size: 14px;
   }
 }
+
+/* Tombol bulat pojok kanan bawah */
+.suggestion-btn {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  width: 55px;
+  height: 55px;
+  background: var(--brand);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 26px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  z-index: 99999;
+  transition: 0.2s;
+}
+
+.suggestion-btn:hover {
+  transform: scale(1.08);
+}
+
+/* Background blur */
+.suggestion-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(3px);
+  z-index: 999999;
+}
+
+/* Kotak popup */
+.suggestion-box {
+  background: #fff;
+  max-width: 380px;
+  width: 90%;
+  margin: 100px auto;
+  padding: 22px;
+  border-radius: 16px;
+  position: relative;
+  animation: popIn 0.25s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Tombol close */
+.close-suggestion {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 26px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #555;
+}
+
+.close-suggestion:hover {
+  color: #000;
+}
+
+/* Textarea */
+.suggestion-box textarea {
+  width: 100%;
+  height: 120px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 12px;
+  resize: none;
+  font-size: 15px;
+  outline: none;
+}
+
+.suggestion-box textarea:focus {
+  border-color: var(--brand);
+}
+
+/* Tombol kirim */
+.send-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px;
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+/* Tombol bulat pojok kanan bawah */
+.suggestion-btn {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  width: 55px;
+  height: 55px;
+  background: var(--brand);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  font-size: 26px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  z-index: 99999;
+  transition: 0.2s;
+}
+
+.suggestion-btn:hover {
+  transform: scale(1.08);
+}
+
+/* Background blur */
+.suggestion-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(3px);
+  z-index: 999999;
+}
+
+/* Kotak popup */
+.suggestion-box {
+  background: #fff;
+  max-width: 380px;
+  width: 90%;
+  margin: 100px auto;
+  padding: 22px;
+  border-radius: 16px;
+  position: relative;
+  animation: popIn 0.25s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* Tombol close */
+.close-suggestion {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 26px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: #555;
+}
+
+.close-suggestion:hover {
+  color: #000;
+}
+
+/* Textarea */
+.suggestion-box textarea {
+  width: 100%;
+  height: 120px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  padding: 12px;
+  resize: none;
+  font-size: 15px;
+  outline: none;
+}
+
+.suggestion-box textarea:focus {
+  border-color: var(--brand);
+}
+
+/* Tombol kirim */
+.send-btn {
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px;
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+/* SPINNER KHUSUS TOMBOL */
+.btn-loading {
+  position: relative;
+  pointer-events: none;
+  color: transparent !important;
+}
+
+.btn-loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: spinButton .8s linear infinite;
+}
+
+@keyframes spinButton {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 14px 22px;
+  border-radius: 10px;
+  font-size: 16px;
+  color: #fff;
+  display: none;
+  z-index: 20000 !important;
+}
+.toast.success { background: #28a745; }
+.toast.error { background: #dc3545; }
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid #fff;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }

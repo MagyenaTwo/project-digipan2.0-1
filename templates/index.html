@@ -417,6 +417,28 @@
   </div>
 </div>
 
+<!-- Tombol Kotak Saran -->
+<div class="suggestion-btn" id="openSuggestion">
+  <i class="fas fa-comment-dots"></i>
+</div>
+
+<!-- Modal Kotak Saran -->
+<div class="suggestion-modal" id="suggestionModal">
+  <div class="suggestion-box">
+    
+    <button class="close-suggestion" id="closeSuggestion">
+      &times;
+    </button>
+
+    <h3>Kotak Saran Warga</h3>
+
+    <textarea id="saranInput" placeholder="Tulis saran Anda..."></textarea>
+
+    <button class="send-btn" id="kirimSaran">Kirim</button>
+
+  </div>
+</div>
+<div id="toast" class="toast"></div>
 
 
 
@@ -443,6 +465,7 @@
       </div>
     </div>
 
+    
     <div class="footer-copy">
       © <span id="year"></span> SmartDelapan | All rights reserved
     </div>
@@ -677,6 +700,8 @@ document.querySelectorAll(".iuran-item").forEach(item => {
     if (!isOpen) item.classList.add("active");
   });
 });
+
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/home.js') }}"></script>
