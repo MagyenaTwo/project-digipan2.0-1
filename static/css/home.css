@@ -1101,10 +1101,9 @@ nav ul li:hover > a {
   transform: translateY(0);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
-
 .surat-container {
   width: 100%;
-  max-width: 500px; /* biar tidak melebar di desktop */
+  max-width: 500px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -1112,76 +1111,72 @@ nav ul li:hover > a {
   gap: 14px;
 }
 
-/* Card */
+/* card */
 .surat-item {
   width: 100%;
-  background: #f5fdf7;
-  padding: 14px 16px;
+  background: #f0fff4; /* hijau muda */
+  padding: 14px 18px;
   border-radius: 12px;
+  color: #1d7b3a; /* hijau tua untuk teks */
+  font-weight: 600;
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   cursor: pointer;
-  transition: 0.25s ease;
   box-sizing: border-box;
+  transition: 0.25s ease;
 }
 
 .surat-item:hover {
-  background: #eefaf2;
+  background: #e6f9ed; /* hover */
 }
 
-/* Header surat */
+/* Header */
 .surat-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: 700;
-  color: #1d7b3a;
   font-size: 15px;
 }
 
-/* Icon panah */
+/* arrow */
 .arrow {
-  transition: transform 0.3s;
+  transition: 0.3s;
   font-size: 14px;
+  color: #1d7b3a !important;
 }
 
-/* Konten */
+/* content */
 .surat-content {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.35s ease;
-  color: #444;
+  color: #3d704c; /* hijau gelap untuk isi */
   margin-top: 8px;
+  transition: max-height 0.35s ease;
+  font-weight: normal;
 }
 
+.surat-content ul {
+  margin-top: 6px;
+  padding-left: 20px;
+}
+
+/* opened */
 .surat-item.active .surat-content {
-  max-height: 400px;
+  max-height: 300px;
 }
 
 .surat-item.active .arrow {
   transform: rotate(90deg);
 }
 
-/* List styling */
-.surat-content ul {
-  margin-top: 6px;
-  padding-left: 20px;
-}
-
-/* MOBILE FIX */
+/* MOBILE */
 @media (max-width: 480px) {
 
   .surat-item {
+    width: 92%;
     padding: 12px 14px;
-    width: 92%;       /* biar tidak nempel kiri kanan */
-    margin: 0 auto;
   }
 
   .surat-header {
-    font-size: 14px;
-    gap: 8px;
-  }
-
-  .surat-header i {
     font-size: 14px;
   }
 
@@ -1192,6 +1187,8 @@ nav ul li:hover > a {
   .surat-content {
     font-size: 14px;
   }
+
+  
 }
 .iuran-container {
   width: 100%;
