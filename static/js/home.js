@@ -341,3 +341,13 @@ sendBtn.onclick = async () => {
     sendBtn.disabled = false;
   }, 3000);
 };
+
+const logo = document.querySelector('.logo');
+
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) { // ganti 50 sesuai kebutuhan
+    logo.classList.add('scrolled');
+  } else {
+    logo.classList.remove('scrolled');
+  }
+});

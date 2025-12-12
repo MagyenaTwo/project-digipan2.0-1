@@ -79,6 +79,34 @@ header.scrolled .hamburger div {
   display: flex;
   align-items: center;
 }
+.logo {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  --line-color: #fff; /* warna default garis */
+}
+
+.logo::after {
+  content: '';
+  position: absolute;
+  right: -20px;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--line-color); /* gunakan variable */
+  transform: skewY(-20deg);
+  transition: background 0.3s ease;
+}
+
+.logo.scrolled {
+  --line-color: var(--brand); /* warna garis saat discroll */
+}
+
+
 .logo img {
   height: 45px;
   width: auto;
@@ -1474,7 +1502,7 @@ nav ul li:hover > a {
 
 .toast {
   position: fixed;
-  top: 50%;
+  top:60%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 14px 22px;
@@ -1482,7 +1510,7 @@ nav ul li:hover > a {
   font-size: 16px;
   color: #fff;
   display: none;
-  z-index: 20000 !important;
+  z-index: 999999 !important;
 }
 .toast.success { background: #28a745; }
 .toast.error { background: #dc3545; }
