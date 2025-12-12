@@ -1498,3 +1498,13 @@ nav ul li:hover > a {
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+.info-saran {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  background: #f7f7f7;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border-left: 4px solid #4CAF50;
+}
