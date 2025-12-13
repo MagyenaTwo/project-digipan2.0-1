@@ -5,7 +5,7 @@
     --brand-light: #fff;
     --brand-dark: #5ce1e6;
     --bg: #f4f8fa;
-    --card: #ffffff;
+    --card: #ffffff; 
     --text: #1a202c;
     --muted: #4a5568;
     --accent: #0000;
@@ -1300,8 +1300,7 @@ nav ul li:hover > a {
 .suggestion-btn:hover {
   transform: scale(1.08);
 }
-
-/* Background blur */
+/* BACKGROUND BLUR */
 .suggestion-modal {
   display: none;
   position: fixed;
@@ -1312,7 +1311,7 @@ nav ul li:hover > a {
   z-index: 999999;
 }
 
-/* Kotak popup */
+/* KOTAK POPUP */
 .suggestion-box {
   background: #fff;
   max-width: 380px;
@@ -1330,7 +1329,7 @@ nav ul li:hover > a {
   to   { opacity: 1; transform: scale(1); }
 }
 
-/* Tombol close */
+/* TOMBOL CLOSE */
 .close-suggestion {
   position: absolute;
   top: 8px;
@@ -1341,12 +1340,28 @@ nav ul li:hover > a {
   cursor: pointer;
   color: #555;
 }
-
 .close-suggestion:hover {
   color: #000;
 }
 
-/* Textarea */
+/* INPUT USER */
+.input-user {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+  transition: all 0.2s ease;
+}
+.input-user:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+  outline: none;
+}
+
+/* TEXTAREA */
 .suggestion-box textarea {
   width: 100%;
   height: 120px;
@@ -1357,12 +1372,11 @@ nav ul li:hover > a {
   font-size: 15px;
   outline: none;
 }
-
 .suggestion-box textarea:focus {
   border-color: var(--brand);
 }
 
-/* Tombol kirim */
+/* TOMBOL KIRIM */
 .send-btn {
   width: 100%;
   margin-top: 14px;
@@ -1374,7 +1388,8 @@ nav ul li:hover > a {
   font-size: 16px;
   cursor: pointer;
 }
-/* Tombol bulat pojok kanan bawah */
+
+/* TOMBOL BUNDAR POJOK BAWAH */
 .suggestion-btn {
   position: fixed;
   bottom: 22px;
@@ -1393,70 +1408,8 @@ nav ul li:hover > a {
   z-index: 99999;
   transition: 0.2s;
 }
-
 .suggestion-btn:hover {
   transform: scale(1.08);
-}
-
-/* Background blur */
-.suggestion-modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0,0,0,0.45);
-  backdrop-filter: blur(3px);
-  z-index: 999999;
-}
-
-/* Kotak popup */
-.suggestion-box {
-  background: #fff;
-  max-width: 380px;
-  width: 90%;
-  margin: 100px auto;
-  padding: 22px;
-  border-radius: 16px;
-  position: relative;
-  animation: popIn 0.25s ease;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-}
-
-@keyframes popIn {
-  from { opacity: 0; transform: scale(0.85); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-/* Tombol close */
-.close-suggestion {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  font-size: 26px;
-  border: none;
-  background: none;
-  cursor: pointer;
-  color: #555;
-}
-
-.close-suggestion:hover {
-  color: #000;
-}
-
-/* Textarea */
-.suggestion-box textarea {
-  width: 100%;
-  height: 120px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  padding: 12px;
-  resize: none;
-  font-size: 15px;
-  outline: none;
-}
-
-.suggestion-box textarea:focus {
-  border-color: var(--brand);
 }
 
 /* Tombol kirim */

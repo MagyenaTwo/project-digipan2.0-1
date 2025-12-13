@@ -1085,8 +1085,13 @@ def message_center():
 @app.route("/api/pesan", methods=["POST"])
 def api_pesan():
     data = request.get_json()
+    
+    user = data.get("user", "").strip()
     message = data.get("message", "").strip()
 
+    if not user:
+        return jsonify({"status": False, "msg": "User tidak boleh kosong"}), 400
+    
     if not message:
         return jsonify({"status": False, "msg": "Message tidak boleh kosong"}), 400
 
@@ -1094,13 +1099,14 @@ def api_pesan():
     now_jakarta = datetime.now(tz).replace(tzinfo=None)
 
     new_message = Message(
-        user="", nomor_whatsapp="", message=message, timestamp=now_jakarta
+        user=user,
+        nomor_whatsapp="",
+        message=message,
+        timestamp=now_jakarta
     )
-
     db.session.add(new_message)
     db.session.commit()
 
-    # Ambil timestamp dari DB (sudah naive, tidak digeser)
     ts = new_message.timestamp
 
     return (
@@ -1110,6 +1116,7 @@ def api_pesan():
                 "msg": "Pesan berhasil dikirim",
                 "data": {
                     "id": new_message.id,
+                    "user": new_message.user,
                     "message": new_message.message,
                     "timestamp": ts.strftime("%Y-%m-%d %H:%M:%S"),
                 },
