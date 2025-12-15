@@ -792,14 +792,24 @@ def surat_pengantar():
 @app.route("/tentang")
 def tentang():
     # Periksa apakah session user_id ada
-    if "user_id" not in session:
-        flash("Anda harus login terlebih dahulu.", "warning")
-        return redirect(
-            url_for("index")
-        )  # Redirect ke halaman login jika session tidak ada
-
     return render_template(
         "tentang.html"
+    )  # Tampilkan halaman tentang jika login berhasil
+
+
+@app.route("/privasi")
+def privasi():
+    # Periksa apakah session user_id ada
+    return render_template(
+        "privasi.html"
+    )  # Tampilkan halaman tentang jika login berhasil
+
+
+@app.route("/SyaratDanKetentuan")
+def SyaratDanKetentuan():
+    # Periksa apakah session user_id ada
+    return render_template(
+        "terms.html"
     )  # Tampilkan halaman tentang jika login berhasil
 
 
@@ -1085,13 +1095,13 @@ def message_center():
 @app.route("/api/pesan", methods=["POST"])
 def api_pesan():
     data = request.get_json()
-    
+
     user = data.get("user", "").strip()
     message = data.get("message", "").strip()
 
     if not user:
         return jsonify({"status": False, "msg": "User tidak boleh kosong"}), 400
-    
+
     if not message:
         return jsonify({"status": False, "msg": "Message tidak boleh kosong"}), 400
 
@@ -1099,10 +1109,7 @@ def api_pesan():
     now_jakarta = datetime.now(tz).replace(tzinfo=None)
 
     new_message = Message(
-        user=user,
-        nomor_whatsapp="",
-        message=message,
-        timestamp=now_jakarta
+        user=user, nomor_whatsapp="", message=message, timestamp=now_jakarta
     )
     db.session.add(new_message)
     db.session.commit()
@@ -3437,21 +3444,21 @@ def delete_kegiatan(id):
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
-@app.route("/api/visit", methods=["POST"])
-def track_visit():
-    print("Visitor masuk:", datetime.now())
+# @app.route("/api/visit", methods=["POST"])
+# def track_visit():
+#     print("Visitor masuk:", datetime.now())
 
-    db.session.execute(text("INSERT INTO data_keluarga.visitor DEFAULT VALUES"))
-    db.session.commit()
+#     db.session.execute(text("INSERT INTO data_keluarga.visitor DEFAULT VALUES"))
+#     db.session.commit()
 
-    return jsonify({"status": True})
+#     return jsonify({"status": True})
 
 
-@app.route("/api/visit/count", methods=["GET"])
-def get_visit_count():
-    result = db.session.execute(text("SELECT COUNT(*) FROM data_keluarga.visitor"))
-    total = result.scalar()
-    return jsonify({"total": total})
+# @app.route("/api/visit/count", methods=["GET"])
+# def get_visit_count():
+#     result = db.session.execute(text("SELECT COUNT(*) FROM data_keluarga.visitor"))
+#     total = result.scalar()
+#     return jsonify({"total": total})
 
 
 # if __name__ == "__main__":
