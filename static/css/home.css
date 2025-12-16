@@ -808,6 +808,7 @@ header.scrolled .logo .logo-text {
     box-shadow: var(--card-shadow);
     color: var(--text-light); /* Default text color putih */
     min-width: 300px;
+    
 }
 
 .about-card.primary-bg {
@@ -1543,3 +1544,5 @@ header.scrolled .logo .logo-text {
       margin-left: 2px;
     }
   }
+
+  

@@ -8,6 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
 <body>
 <header>
@@ -105,29 +106,32 @@
 <section id="tentang-digipan" class="about-digipan-section">
   <div class="about-card-container">
 
-    <div class="about-card primary-bg">
-      <i class="fas fa-satellite-dish icon-large"></i>
-      <h3>SMARTDELAPAN</h3>
-      <p>Website ini menampilkan informasi dan publikasi mengenai kegiatan lingkungan RT 08 sebagai bentuk transparansi dan kemudahan akses bagi warga.</p>
-    </div>
+   <div class="about-card primary-bg" data-aos="zoom-in" data-aos-duration="1000" >
+  <i class="fas fa-satellite-dish icon-large"></i>
+  <h3 data-aos="fade-right">SMARTDELAPAN</h3>
+  <p data-aos="fade-right">
+    Website ini menampilkan informasi dan publikasi mengenai kegiatan lingkungan RT 08 sebagai bentuk transparansi dan kemudahan akses bagi warga.
+  </p>
+</div>
 
-    <div class="about-card secondary-bg">
-      <div class="feature-item">
+
+    <div class="about-card secondary-bg"data-aos="zoom-in" data-aos-duration="1000" >
+      <div class="feature-item"data-aos="fade-left">
         <i class="fas fa-check-circle"></i>
         <span>Ringkasan Data Warga untuk Keperluan Administratif</span>
       </div>
 
-      <div class="feature-item">
+      <div class="feature-item"data-aos="fade-left">
         <i class="fas fa-check-circle"></i>
         <span>Informasi Prosedur dan Contoh Surat RT</span>
       </div>
 
-      <div class="feature-item">
+      <div class="feature-item"data-aos="fade-left">
         <i class="fas fa-check-circle"></i>
         <span>Publikasi Ringkas Laporan Keuangan RT</span>
       </div>
 
-      <div class="feature-item">
+      <div class="feature-item"data-aos="fade-left">
         <i class="fas fa-check-circle"></i>
         <span>Informasi Mekanisme Pembayaran Iuran</span>
       </div>
@@ -141,17 +145,16 @@
   </div>
 </section>
 
-<section id="layanan">
-  <h2 style="text-align:center; margin-bottom:30px;">LAYANAN INFORMASI</h2>
-  <div class="card-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
-
+<section id="layanan" >
+  <h2 style="text-align:center; margin-bottom:30px;" data-aos="flip-left">LAYANAN INFORMASI</h2>
+  <div class="card-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;" >
 <!-- DATA KELUARGA (DENGAN INFORMASI UPDATE) -->
-<div class="card" id="tambahKeluarga" style="padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); background:#fff; text-align:center;">
+<div class="card" id="tambahKeluarga" style="padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); background:#fff; text-align:center;" data-aos="fade-up">
   <div class="card-content">
     <h3 style="margin-bottom:15px;"><i class="fas fa-user-friends" style="color:#17a2b8;"></i> Data Keluarga</h3>
-    <p class="subtext">Informasi mengenai anggota keluarga, agar tercatat dan selalu diperbarui.</p>
+    <p class="subtext" data-aos="flip-left">Informasi mengenai anggota keluarga, agar tercatat dan selalu diperbarui.</p>
 
-    <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;">
+    <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;"data-aos="flip-left">
       <div style="background:#e6f2ff; padding:10px 15px; border-radius:8px; font-weight:bold; color:#0176c1; min-width:140px;">
         <i class="fas fa-info-circle"></i> Jumlah Warga: <span id="total-keluarga">Loading...</span>
       </div>
@@ -185,18 +188,18 @@
 
 
     <!-- IURAN WARGA (UI BAGUS) -->
-    <div class="card" id="catatIuran" style="padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); background:#fff; text-align:center;">
+    <div class="card" id="catatIuran" style="padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); background:#fff; text-align:center;" data-aos="fade-up" >
       <div class="card-content">
         <h3 style="margin-bottom:15px;">
           <i class="fas fa-cash-register" style="color:#ffc107;"></i> Iuran Warga
         </h3>
-       <p class="subtext">
+       <p class="subtext" data-aos="flip-left">
           Informasi mengenai iuran bulanan warga secara transparan dan mudah dipantau.
         </p>
 
-   <div class="iuran-container">
+   <div class="iuran-container"data-aos="flip-left">
 
-  <div class="iuran-item">
+  <div class="iuran-item" >
     <div class="iuran-header">
       <div><i class="fas fa-coins"></i> Iuran Kebersihan</div>
       <i class="fas fa-chevron-right iuran-arrow"></i>
@@ -233,17 +236,17 @@
 
 
     <!-- SURAT PENGANTAR (UI BAGUS) -->
-    <div class="card" id="buatSurat" style="padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); background:#fff; text-align:center;">
+    <div class="card" id="buatSurat" style="padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); background:#fff; text-align:center;" data-aos="fade-up">
       <div class="card-content">
         <h3 style="margin-bottom:15px;">
           <i class="fas fa-file-alt" style="color:#28a745;"></i> Surat Pengantar
         </h3>
-       <p class="subtext">
+       <p class="subtext"data-aos="flip-left">
   Informasi tentang jenis surat pengantar yang bisa diajukan warga.
 </p>
 
 
-     <div class="surat-container">
+     <div class="surat-container"data-aos="flip-left">
 
   <div class="surat-item">
     <div class="surat-header">
@@ -324,7 +327,7 @@
       </a> -->
       
 <section id="laporan">
-  <h2>LAPORAN KEUANGAN RT</h2>
+  <h2 data-aos="flip-left">LAPORAN KEUANGAN RT</h2>
  <div class="summary-top">
     <div class="summary-item">
       <i class="fas fa-wallet icon-green"></i>
@@ -336,7 +339,7 @@
   </div>
   <div class="card-grid">
     <!-- Kartu Pemasukan -->
-    <div class="card" id="pemasukan">
+    <div class="card" id="pemasukan" data-aos="fade-down">
       <div class="card-content">
         <h3 class="text-green-600"><i class="fas fa-arrow-up"></i> Pemasukan RT</h3>
         <p class="subtext">Ringkasan jumlah dana yang diterima dari iuran warga serta kontribusi lain.</p>
@@ -347,7 +350,7 @@
     </div>
 
     <!-- Kartu Pengeluaran -->
-    <div class="card" id="pengeluaran">
+    <div class="card" id="pengeluaran" data-aos="fade-up">
       <div class="card-content">
         <h3><i class="fas fa-arrow-down" style="color: red;"></i> Pengeluaran RT</h3>
         <p class="subtext">Daftar pengeluaran kegiatan atau kebutuhan warga RT 08.</p>
@@ -369,16 +372,16 @@
 </button>
 
 <section id="informasi">
-  <h2>INFORMASI</h2>
+  <h2 data-aos="flip-left">INFORMASI</h2>
   <div class="card-grid single-card">
-    <div class="card" id="peraturan-warga">
+    <div class="card" id="peraturan-warga" data-aos="zoom-in">
       <div class="card-content">
         <h3><i class="fas fa-scroll" data-color="#34acb0"></i> Tata Tertib Warga RT 08/01</h3>
-        <p class="intro-text">
+        <p class="intro-text" data-aos="flip-left">
           Berikut daftar peraturan penting yang berlaku di lingkungan RT 08/01:
         </p>
 
-       <ul class="rules-list" id="rules-container">
+       <ul class="rules-list" id="rules-container" data-aos="flip-left">
   <li>Loading...</li>
 </ul>
 <button id="lihat-peraturan-btn" class="btn-pdf">
@@ -402,7 +405,7 @@
 
 
 <section id="kegiatan" style="padding: 20px;">
-   <h2 style="margin-bottom: 20px; text-align:center;">KEGIATAN WARGA</h2>
+   <h2 style="margin-bottom: 20px; text-align:center;" data-aos="flip-left">KEGIATAN WARGA</h2>
   <div id="kegiatanGrid"></div>
   <div id="toggleContainer" style="text-align:center; margin-top:16px;">
   <button id="toggleBtn" class="btn-toggle">Lihat Semua</button>
@@ -482,8 +485,16 @@
     </div>
   </div>
 </footer>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+ AOS.init({
+    duration: 900,
+    easing: 'ease-out-cubic',
+    offset: 120,
+    once: false
+  });
 
-<script>async function loadKegiatan() {
+async function loadKegiatan() {
   const container = document.getElementById("kegiatanGrid");
   const toggleBtn = document.getElementById("toggleBtn");
 
@@ -721,9 +732,11 @@ window.addEventListener("scroll", () => {
     header.classList.remove("scrolled");
   }
 });
+ 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 <script src="https://kit.fontawesome.com/your-own-kit.js" crossorigin="anonymous" async></script>
+
 </body>
 </html>
