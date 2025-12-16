@@ -69,6 +69,9 @@ header.scrolled .hamburger div {
   background: var(--brand);
 }
 
+header.scrolled .logo .logo-text {
+  color: var(--brand) !important;
+}
 
   .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1300px; margin:auto;}
   .logo {
@@ -89,7 +92,7 @@ header.scrolled .hamburger div {
   position: relative;
   --line-color: #fff; /* warna default garis */
 }
-
+/* 
 .logo::after {
   content: '';
   position: absolute;
@@ -97,10 +100,10 @@ header.scrolled .hamburger div {
   top: 0;
   width: 3px;
   height: 100%;
-  background: var(--line-color); /* gunakan variable */
+  background: var(--line-color);
   transform: skewY(-20deg);
   transition: background 0.3s ease;
-}
+} */
 
 .logo.scrolled {
   --line-color: var(--brand); /* warna garis saat discroll */
@@ -329,8 +332,13 @@ nav ul li:hover > a {
 }
 
 .logo-text {
-  font-size: 1.2rem;
-  font-weight: bold;
+  margin-left: 4px;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fff;
+  transition: color 0.3s ease;
+  white-space: nowrap;
 }
 
 .footer-partner img.partner-img {
@@ -408,7 +416,8 @@ nav ul li:hover > a {
   }
 
   .logo-text {
-    font-size: 1.1rem;
+    font-size: 12px;
+    margin-top: 5px;
   }
 
   .footer-center {
@@ -623,9 +632,11 @@ nav ul li:hover > a {
   }
   header.scrolled nav ul li a i {
     color: white !important;
-    
+}
+header.scrolled .logo .logo-text {
+  color: var(--brand) !important;
+}
 
-  }
   }
   /* Tombol panah slider (versi clean) */
 .slider-arrows {

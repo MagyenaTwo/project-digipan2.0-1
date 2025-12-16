@@ -13,10 +13,11 @@
 <header>
  <div class="nav-container">
   <div class="logo">
-    <img src="static/img/logo/4.png" alt="Logo Smartdelapan" >
-  </div>
-  <nav>
+  <img src="static/img/logo/heading.png" alt="Logo Smartdelapan">
+  <span class="logo-text">SMARTDELAPAN</span>
+</div>
 
+  <nav>
       <div class="hamburger" onclick="toggleMenu()">
         <div></div>
         <div></div>
@@ -711,7 +712,15 @@ document.querySelectorAll(".iuran-item").forEach(item => {
   });
 });
 fetch("/api/visit", { method: "POST" });
+const header = document.querySelector("header");
 
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 20) {
+    header.classList.add("scrolled");
+  } else {
+    header.classList.remove("scrolled");
+  }
+});
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/home.js') }}"></script>
