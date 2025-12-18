@@ -249,9 +249,13 @@
         <!-- DataTables with Buku Tamu List -->
 <div class="col-lg-12">
   <div class="card mb-4">
-    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-      <h6 class="m-0 font-weight-bold text-primary">Daftar Pendatang</h6>
-    </div>
+   <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+  <h6 class="m-0 font-weight-bold text-primary">Daftar Pendatang</h6>
+  <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalBukuTamu">
+    <i class="fas fa-plus"></i> Tambah Pendatang
+  </button>
+</div>
+
     <div class="table-responsive p-3">
       <table class="table align-items-center table-flush table-hover" id="dataTableHover">
         <thead class="thead-light">
@@ -331,6 +335,64 @@
       </div>
     
 </div>
+<div class="modal fade" id="modalBukuTamu" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+      <form id="guestbook-form">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Formulir Buku Tamu</h5>
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-body">
+
+          <p class="text-muted">
+            Jika Anda seorang tamu atau pendatang, silakan isi detail Anda di bawah ini:
+          </p>
+
+          <div class="form-group">
+            <label>Nama Lengkap</label>
+            <input type="text" name="nama" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label>Alamat</label>
+            <input type="text" name="alamat" class="form-control" required>
+          </div>
+
+          <div class="form-group">
+            <label>Tujuan Kunjungan</label>
+            <select name="tujuan" class="form-control" required>
+              <option value="" disabled selected>Pilih tujuan</option>
+              <option value="Menetap">Menetap</option>
+              <option value="Sementara">Sementara</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Nomor Kontak</label>
+            <input type="tel" name="kontak" class="form-control"
+                   pattern="[0-9]+" required placeholder="Contoh: 08123456789">
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary">Kirim</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>
+
           <!-- Modal Logout -->
           <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout"
             aria-hidden="true">
@@ -385,6 +447,7 @@
   <!-- Page level plugins -->
   <script src="static/vendor/datatables/jquery.dataTables.min.js"></script>
   <script src="static/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="static/js/main.js"></script> <!-- File JavaScript yang baru -->
   <!-- Page level custom scripts -->
   <script>
@@ -392,6 +455,80 @@
       $('#dataTable').DataTable(); // ID From dataTable 
       $('#dataTableHover').DataTable(); // ID From dataTable with Hover
     });
+
+   document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("guestbook-form");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        Swal.fire({
+            title: 'Memproses...',
+            text: 'Harap tunggu, data sedang dikirim.',
+            icon: 'info',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        setTimeout(() => {
+
+            const data = {
+                nama: form.nama.value,
+                alamat: form.alamat.value,
+                tujuan: form.tujuan.value,
+                kontak: form.kontak.value
+            };
+
+            fetch("/tambah_buku_tamu", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(result => {
+                        const errorTitle =
+                            response.status === 400 ? 'Gagal' :
+                            response.status === 403 ? 'Akses Ditolak' :
+                            'Error';
+
+                        throw {
+                            title: errorTitle,
+                            message: result.error || "Terjadi kesalahan."
+                        };
+                    });
+                }
+                return response.json();
+            })
+            .then(result => {
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: result.message || 'Data berhasil dikirim.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    form.reset();
+                    $('#modalBukuTamu').modal('hide');
+                    window.location.reload();
+                });
+            })
+            .catch(error => {
+                Swal.fire({
+                    title: error.title || 'Error',
+                    text: error.message || 'Terjadi kesalahan saat memproses data.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+
+        }, 1500); // delay biar UX terasa "diproses"
+    });
+});
   </script>
 
 </body>
