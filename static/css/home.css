@@ -434,6 +434,13 @@ nav ul li:hover > a {
     overflow: hidden;
     box-shadow: var(--shadow-hover);
 }
+.slider-container {
+    max-width: 1300px;   /* ubah sesuai kebutuhan: 900px / 1200px */
+    margin: 0 auto;      /* center */
+    padding: 20px;
+}
+
+
 .slides {
     display: flex;
     width: 100%;
@@ -462,9 +469,12 @@ nav ul li:hover > a {
     background: #FDEFCC;
 }
 @media (max-width: 600px) {
-  
   .slides {
-    height: 360px;
+    height:50vw !important; 
+    background: transparent !important;
+  }
+  .slider-container{
+    padding: 10px;
   }
 }
 

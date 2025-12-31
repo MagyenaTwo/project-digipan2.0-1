@@ -44,59 +44,48 @@
 </header>
 
 <div style="background: var(--bg);"> 
-    <section class="hero-slider">
-        <div class="slides">
-          
-            <div class="slide active">
-                <img src="{{ url_for('static', filename='img/logo/page-1.png') }}" alt="Banner 1">
+    <div class="slider-container">
+
+        <section class="hero-slider">
+            <div class="slides">
+                <div class="slide active">
+                    <img src="{{ url_for('static', filename='img/logo/6.png') }}" alt="Banner 1">
+                </div>
+                <div class="slide">
+                    <img src="{{ url_for('static', filename='img/logo/page-5.png') }}" alt="Banner 2">
+                </div>
+                <div class="slide">
+                    <img src="{{ url_for('static', filename='img/logo/page-6.png') }}" alt="Banner 3">
+                </div>
+                <div class="slide">
+                    <img src="{{ url_for('static', filename='img/logo/page-7.png') }}" alt="Banner 4">
+                </div>
             </div>
-            <div class="slide">
-                <img src="{{ url_for('static', filename='img/logo/page-2.png') }}" alt="Banner 2">
+
+            <div class="slider-arrows">
+                <div class="arrow arrow-left">&#10094;</div>
+                <div class="arrow arrow-right">&#10095;</div>
             </div>
-            <div class="slide">
-                <img src="{{ url_for('static', filename='img/logo/page-3.png') }}" alt="Banner 3">
+        </section>
+
+        <div class="slider-dots"></div>
+
+        <div class="slider-captions">
+            <div class="caption active" id="cap-0">
+                <p>Informasi jumlah keluarga yang terdata secara lengkap dan akurat.</p>
             </div>
-            <div class="slide">
-                <img src="{{ url_for('static', filename='img/logo/page-4.png') }}" alt="Banner 4">
+            <div class="caption" id="cap-1">
+                <p>Transparansi laporan keuangan RT dengan lebih mudah dan cepat.</p>
+            </div>
+            <div class="caption" id="cap-2">
+                <p>Informasi berbagai surat keterangan yang tersedia untuk warga.</p>
+            </div>
+            <div class="caption" id="cap-3">
+                <p>Informasi kegiatan lingkungan terdokumentasi dengan jelas.</p>
             </div>
         </div>
-         <div class="slider-arrows">
-        <div class="arrow arrow-left">&#10094;</div>
-        <div class="arrow arrow-right">&#10095;</div>
-    </div>
-        
-        
-    </section>
-    
-<div class="slider-dots">
-            </div>
- <div class="slider-captions">
-    <!-- Slide 0: Data Keluarga -->
-    <div class="caption active" id="cap-0">
-        
-      <p>Informasi jumlah keluarga yang terdata secara lengkap dan akurat.</p>
-    </div>
-
-    <!-- Slide 1: Pembuatan Surat -->
-    <div class="caption" id="cap-1">
-           <p>Transparansi laporan keuangan RT dengan lebih mudah dan cepat.</p>
 
     </div>
-
-    <!-- Slide 2: Iuran -->
-    <div class="caption" id="cap-2">
-        
-     <p>Informasi berbagai surat keterangan yang tersedia untuk warga.</p>
-
-    </div>
-
-    <!-- Slide 3: Laporan Keuangan -->
-    <div class="caption" id="cap-3">
-        
-        <p>Informasi kegiatan lingkungan terdokumentasi dengan jelas.</p>
-    </div>
-</div>
-
 </div>
 
 
