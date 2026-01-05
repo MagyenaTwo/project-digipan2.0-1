@@ -12,6 +12,7 @@
 <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
 <body>
+  
 <header>
  <div class="nav-container">
   <div class="logo">
@@ -392,15 +393,22 @@
  <h2 style="margin-bottom: 20px; text-align:center;">KEGIATAN WARGA</h2>
   <div id="bannerCarousel"></div>
 </section> -->
+<section id="kegiatan">
+  <div class="kegiatan-container">
+    <h2 data-aos="flip-left">KEGIATAN WARGA</h2>
+  
 
 
-<section id="kegiatan" style="padding: 20px;">
-   <h2 style="margin-bottom: 20px; text-align:center;" data-aos="flip-left">KEGIATAN WARGA</h2>
+  <!-- WADAH DINAMIS -->
   <div id="kegiatanGrid"></div>
-  <div id="toggleContainer" style="text-align:center; margin-top:16px;">
-  <button id="toggleBtn" class="btn-toggle">Lihat Semua</button>
 </div>
+
+  <div style="text-align:center;margin-top:16px;">
+    <button id="toggleBtn" class="btn-toggle">Lihat Semua</button>
+  </div>
 </section>
+
+
 <div id="detailModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
@@ -482,9 +490,7 @@
     easing: 'ease-out-cubic',
     offset: 120,
     once: false
-  });
-
-async function loadKegiatan() {
+  });async function loadKegiatan() {
   const container = document.getElementById("kegiatanGrid");
   const toggleBtn = document.getElementById("toggleBtn");
 
@@ -501,99 +507,182 @@ async function loadKegiatan() {
 
   let showingAll = false;
 
-  // Modal elements
   const modal = document.getElementById("detailModal");
   const modalTitle = document.getElementById("modalTitle");
-  const modalImages = document.getElementById("modalImages"); // container untuk semua gambar
+  const modalImages = document.getElementById("modalImages");
   const modalDescription = document.getElementById("modalDescription");
   const modalDate = document.getElementById("modalDate");
   const modalClose = document.querySelector(".close");
 
-  // Event untuk close modal
-  modalClose.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
+  modalClose.onclick = () => modal.style.display = "none";
+  window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
 
-  window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.style.display = "none";
+  function getImage(item) {
+    try {
+      const imgs = Array.isArray(item.image_urls)
+        ? item.image_urls
+        : JSON.parse(item.image_urls);
+      return imgs[0] || "/static/img/default.jpg";
+    } catch {
+      return item.image_urls || "/static/img/default.jpg";
     }
-  });
+  }
 
-  function render(items) {
-    container.innerHTML = "";
-    items.forEach(item => {
-      let images = [];
-      try {
-        if (Array.isArray(item.image_urls)) images = item.image_urls;
-        else images = JSON.parse(item.image_urls);
-      } catch {
-        images = [item.image_urls];
-      }
-      if (!images || images.length === 0) images = ["/static/img/default.jpg"];
-      const firstImage = images[0];
-
-      const dateObj = new Date(item.date);
-      const formattedDate = dateObj.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-
-      let description = item.description;
-      if (description.length > 100) {
-        description = description.substring(0, 100) + '...';
-      }
-
-      const card = document.createElement("div");
-      card.classList.add("kegiatan-card");
-      card.innerHTML = `
-        <img src="${firstImage}" alt="${item.title}">
-        <div class="card-body">
-          <h3>${item.title}</h3>
-          <p>${description}</p>
-          <button class="btn-detail" data-id="${item.id}">Lihat Detail</button>
-          <small>${formattedDate}</small>
-        </div>
-      `;
-      container.appendChild(card);
-    });
-
-    toggleBtn.textContent = showingAll ? "Lihat Lebih Sedikit" : "Lihat Semua";
-
-    // Event listener tombol detail
-    document.querySelectorAll(".btn-detail").forEach(btn => {
-      btn.addEventListener("click", async () => {
-        const id = btn.dataset.id;
-        const res = await fetch(`/api/kegiatan/${id}`);
-        const data = await res.json();
-
-        // Isi modal
-        modalTitle.textContent = data.title;
-        modalDescription.textContent = data.description;
-        modalDate.textContent = new Date(data.date).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
-
-        // Tampilkan semua gambar
-       modalImages.innerHTML = "";
-const urls = Array.isArray(data.image_urls) ? data.image_urls : [data.image_urls];
-urls.forEach(url => {
-  const img = document.createElement("img");
-  img.src = url || "/static/img/default.jpg";
-  modalImages.appendChild(img);
-});
-
-
-        modal.style.display = "block";
-      });
+  function formatDate(date) {
+    return new Date(date).toLocaleDateString("id-ID", {
+      day: "numeric", month: "long", year: "numeric"
     });
   }
 
-  toggleBtn.addEventListener("click", () => {
-    showingAll = !showingAll;
-    render(showingAll ? data : data.slice(0, 3));
-  });
+  function renderHighlight(items) {
+    container.innerHTML = `
+      <div class="kegiatan-layout">
+        <div class="kegiatan-main"></div>
+        <div class="kegiatan-side"></div>
+      </div>
+    `;
 
-  render(data.slice(0, 3));
+    const main = container.querySelector(".kegiatan-main");
+    const side = container.querySelector(".kegiatan-side");
+
+    items.slice(0, 4).forEach((item, index) => {
+      const card = document.createElement("div");
+      const img = getImage(item);
+      const date = formatDate(item.date);
+      const admin = item.admin || "Admin RT";
+      const kategori = item.category || "Kegiatan";
+
+      if (index === 0) {
+        card.className = "kegiatan-card large";
+        card.innerHTML = `
+          <img src="${img}">
+          <div class="card-body">
+            <span class="kegiatan-badge">${kategori}</span>
+            <h3>${item.title}</h3>
+            <p>${item.description.substring(0,120)}...</p>
+            <div class="kegiatan-meta">
+              <span class="kegiatan-admin">👤 ${admin}</span>
+              <span>📅 ${date}</span>
+            </div>
+            <button class="btn-detail" data-id="${item.id}">Lihat Detail</button>
+          </div>
+        `;
+        main.appendChild(card);
+      } else {
+        card.className = "kegiatan-card small";
+        card.innerHTML = `
+          <img src="${img}">
+          <div class="card-body">
+            <span class="kegiatan-badge">${kategori}</span>
+            <h3>${item.title}</h3>
+            <div class="kegiatan-meta">
+              <span class="kegiatan-admin">👤 ${admin}</span>
+              <span>📅 ${date}</span>
+            </div>
+            <button class="btn-detail" data-id="${item.id}">Lihat Detail</button>
+          </div>
+        `;
+        side.appendChild(card);
+      }
+    });
+
+    document.querySelectorAll(".btn-detail").forEach(btn => {
+      btn.onclick = () => openModal(btn.dataset.id);
+    });
+  }
+
+  /* ===========================
+     🔥 FUNGSI BARU: RENDER ALL
+     =========================== */
+  function renderAll(items) {
+    container.innerHTML = `
+      <div class="kegiatan-layout">
+        <div class="kegiatan-main"></div>
+        <div class="kegiatan-side"></div>
+      </div>
+    `;
+
+    const main = container.querySelector(".kegiatan-main");
+    const side = container.querySelector(".kegiatan-side");
+
+    items.forEach((item, index) => {
+      const card = document.createElement("div");
+      const img = getImage(item);
+      const date = formatDate(item.date);
+      const admin = item.admin || "Admin RT";
+      const kategori = item.category || "Kegiatan";
+
+      if (index === 0) {
+        card.className = "kegiatan-card large";
+        card.innerHTML = `
+          <img src="${img}">
+          <div class="card-body">
+            <span class="kegiatan-badge">${kategori}</span>
+            <h3>${item.title}</h3>
+            <p>${item.description.substring(0,120)}...</p>
+            <div class="kegiatan-meta">
+              <span class="kegiatan-admin">👤 ${admin}</span>
+              <span>📅 ${date}</span>
+            </div>
+            <button class="btn-detail" data-id="${item.id}">Lihat Detail</button>
+          </div>
+        `;
+        main.appendChild(card);
+      } else {
+        card.className = "kegiatan-card small";
+        card.innerHTML = `
+          <img src="${img}">
+          <div class="card-body">
+            <span class="kegiatan-badge">${kategori}</span>
+            <h3>${item.title}</h3>
+            <div class="kegiatan-meta">
+              <span class="kegiatan-admin">👤 ${admin}</span>
+              <span>📅 ${date}</span>
+            </div>
+            <button class="btn-detail" data-id="${item.id}">Lihat Detail</button>
+          </div>
+        `;
+        side.appendChild(card);
+      }
+    });
+
+    document.querySelectorAll(".btn-detail").forEach(btn => {
+      btn.onclick = () => openModal(btn.dataset.id);
+    });
+  }
+
+  async function openModal(id) {
+    const res = await fetch(`/api/kegiatan/${id}`);
+    const data = await res.json();
+
+    modalTitle.textContent = data.title;
+    modalDescription.textContent = data.description;
+    modalDate.textContent = formatDate(data.date);
+
+    modalImages.innerHTML = "";
+    const imgs = Array.isArray(data.image_urls) ? data.image_urls : [data.image_urls];
+    imgs.forEach(url => {
+      const img = document.createElement("img");
+      img.src = url || "/static/img/default.jpg";
+      modalImages.appendChild(img);
+    });
+
+    modal.style.display = "block";
+  }
+
+  toggleBtn.onclick = () => {
+    showingAll = !showingAll;
+    toggleBtn.textContent = showingAll
+      ? "Lihat Lebih Sedikit"
+      : "Lihat Semua";
+
+    showingAll ? renderAll(data) : renderHighlight(data);
+  };
+
+  renderHighlight(data);
 }
 
 loadKegiatan();
-
 
 
 async function loadBannerCarousel() {
