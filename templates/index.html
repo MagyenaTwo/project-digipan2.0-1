@@ -140,174 +140,173 @@
   <h2 style="text-align:center; margin-bottom:30px;" data-aos="flip-left">LAYANAN INFORMASI</h2>
   <div class="card-grid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:20px;" >
 <!-- DATA KELUARGA (DENGAN INFORMASI UPDATE) -->
-<div class="card" id="tambahKeluarga" style="padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); background:#fff; text-align:center;" data-aos="fade-up">
-  <div class="card-content">
-    <h3 style="margin-bottom:15px;"><i class="fas fa-user-friends" style="color:#17a2b8;"></i> Data Keluarga</h3>
-    <p class="subtext" data-aos="flip-left">Informasi mengenai anggota keluarga, agar tercatat dan selalu diperbarui.</p>
+<div class="family-panel vertical" id="tambahKeluarga" data-aos="fade-up">
 
-    <div style="display:flex; justify-content:center; gap:15px; flex-wrap:wrap;"data-aos="flip-left">
-      <div style="background:#e6f2ff; padding:10px 15px; border-radius:8px; font-weight:bold; color:#0176c1; min-width:140px;">
-        <i class="fas fa-info-circle"></i> Jumlah Warga: <span id="total-keluarga">Loading...</span>
-      </div>
+  <div class="panel-top">
+    <div class="panel-icon">
+      <i class="fas fa-user-friends"></i>
+    </div>
+    <div class="panel-text">
+      <h3>Data Keluarga</h3>
+      <p>Statistik kependudukan warga yang terdaftar</p>
+    </div>
+  </div>
 
-      <div style="background:#ffe6e6; padding:10px 15px; border-radius:8px; font-weight:bold; color:#c10000; min-width:140px;">
-        <i class="fas fa-user-tie"></i> Jumlah Keluarga: <span id="total-kepala-keluarga">Loading...</span>
-      </div>
+  <div class="panel-bottom">
+
+    <div class="panel-stat">
+      <i class="fas fa-user stat-icon blue"></i>
+      <span class="label">Jumlah Warga</span>
+      <span class="number" id="total-keluarga">–</span>
     </div>
 
-   <!-- TERAKHIR UPDATE (FIXED) -->
-<div style="
-  margin-top:18px;
-  font-size:13px;
-  color:#777;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  line-height:1;
-  padding-top:4px;
-">
-  <i class="fas fa-clock" style="font-size:14px; margin-top:1px;"></i>
-  <span style="white-space:nowrap;">
-   Diperbarui: <span id="last-update">–</span>
-  </span>
-</div>
+    <div class="panel-stat">
+      <i class="fas fa-home stat-icon red"></i>
+      <span class="label">Jumlah Keluarga</span>
+      <span class="number red" id="total-kepala-keluarga">–</span>
+    </div>
+
+    <div class="panel-stat">
+      <i class="fas fa-user-plus stat-icon orange"></i>
+      <span class="label">Pendatang</span>
+      <span class="number orange" id="total-pendatang">–</span>
+    </div>
+
+    <div class="panel-stat">
+      <i class="fas fa-check-circle stat-icon green"></i>
+      <span class="label">Status Sistem</span>
+      <span class="number green">Aktif</span>
+    </div>
+
+    <div class="panel-divider"></div>
+
+    <div class="panel-update">
+      <i class="fas fa-clock"></i>
+      <span>Diperbarui <strong id="last-update">–</strong></span>
+    </div>
 
   </div>
 </div>
 
+<div class="family-panel vertical" id="panel-surat" data-aos="fade-up">
 
-
-    <!-- IURAN WARGA (UI BAGUS) -->
-    <div class="card" id="catatIuran" style="padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); background:#fff; text-align:center;" data-aos="fade-up" >
-      <div class="card-content">
-        <h3 style="margin-bottom:15px;">
-          <i class="fas fa-cash-register" style="color:#ffc107;"></i> Iuran Warga
-        </h3>
-       <p class="subtext" data-aos="flip-left">
-          Informasi mengenai iuran bulanan warga secara transparan dan mudah dipantau.
-        </p>
-
-   <div class="iuran-container"data-aos="flip-left">
-
-  <div class="iuran-item" >
-    <div class="iuran-header">
-      <div><i class="fas fa-coins"></i> Iuran Kebersihan</div>
-      <i class="fas fa-chevron-right iuran-arrow"></i>
+  <div class="panel-top">
+    <div class="panel-icon">
+      <i class="fas fa-wallet"></i>
     </div>
-    <div class="iuran-content">
-      <p>Iuran ini digunakan untuk biaya kebersihan lingkungan seperti pengangkutan sampah dan perawatan area umum.</p>
-      <b>Rata-rata iuran bulanan:</b>
-      <ul>
-        <!-- <li>Rp 20.000 - Rp 30.000 per KK</li> -->
-      </ul>
+    <div class="panel-text">
+      <h3>Iuran Warga</h3>
+      <p>Informasi tentang jenis iuran warga yang dikelola secara transparan.</p>
     </div>
   </div>
 
-  <div class="iuran-item">
-    <div class="iuran-header">
-      <div><i class="fas fa-shield-alt"></i> Iuran Keamanan</div>
-      <i class="fas fa-chevron-right iuran-arrow"></i>
-    </div>
-    <div class="iuran-content">
-      <p>Iuran ini digunakan untuk operasional keamanan lingkungan seperti ronda dan fasilitas keamanan lainnya.</p>
-      <b>Rata-rata iuran bulanan:</b>
-      <ul>
-        <!-- <li>Rp 10.000 - Rp 20.000 per KK</li> -->
-      </ul>
-    </div>
-  
+  <div class="panel-bottom">
 
-</div>
-
-
-        </div>
+    <div class="surat-item">
+      <div class="surat-header">
+        <div><i class="fas fa-broom"></i> Iuran Kebersihan</div>
+        <i class="fas fa-chevron-right arrow"></i>
+      </div>
+      <div class="surat-content">
+        <p>Digunakan untuk biaya kebersihan lingkungan, pengangkutan sampah, dan perawatan area umum RT 08.</p>
       </div>
     </div>
 
-
-    <!-- SURAT PENGANTAR (UI BAGUS) -->
-    <div class="card" id="buatSurat" style="padding:25px; border-radius:12px; box-shadow:0 6px 15px rgba(0,0,0,0.1); background:#fff; text-align:center;" data-aos="fade-up">
-      <div class="card-content">
-        <h3 style="margin-bottom:15px;">
-          <i class="fas fa-file-alt" style="color:#28a745;"></i> Surat Pengantar
-        </h3>
-       <p class="subtext"data-aos="flip-left">
-  Informasi tentang jenis surat pengantar yang bisa diajukan warga.
-</p>
-
-
-     <div class="surat-container"data-aos="flip-left">
-
-  <div class="surat-item">
-    <div class="surat-header">
-      <div><i class="fas fa-home"></i> Surat Domisili</div>
-      <i class="fas fa-chevron-right arrow"></i>
-    </div>
-    <div class="surat-content">
-      <p>Surat ini digunakan untuk keperluan administrasi seperti sekolah, pekerjaan, atau pindah alamat.</p>
-      <b>Dokumen dibutuhkan:</b>
-      <ul>
-        <li>KTP</li>
-        <li>KK</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="surat-item">
-    <div class="surat-header">
-      <div><i class="fas fa-id-badge"></i> Surat Pengantar</div>
-      <i class="fas fa-chevron-right arrow"></i>
-    </div>
-    <div class="surat-content">
-      <p>Digunakan untuk membuat surat di kelurahan/kecamatan seperti SKCK, usaha, domisili, dll.</p>
-      <b>Dokumen dibutuhkan:</b>
-      <ul>
-        <li>KTP</li>
-        <li>KK</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="surat-item">
-    <div class="surat-header">
-      <div><i class="fas fa-exclamation-circle"></i> Surat Belum Menikah</div>
-      <i class="fas fa-chevron-right arrow"></i>
-    </div>
-    <div class="surat-content">
-      <p>Diperlukan untuk keperluan pekerjaan, beasiswa, atau administrasi pernikahan.</p>
-      <b>Dokumen dibutuhkan:</b>
-      <ul>
-        <li>KTP</li>
-        <li>KK</li>
-        <li>Surat pernyataan</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="surat-item">
-    <div class="surat-header">
-      <div><i class="fas fa-hands-helping"></i> Surat Tidak Mampu</div>
-      <i class="fas fa-chevron-right arrow"></i>
-    </div>
-    <div class="surat-content">
-      <p>Digunakan untuk bantuan sosial, pendidikan, atau kesehatan.</p>
-      <b>Dokumen dibutuhkan:</b>
-      <ul>
-        <li>KTP</li>
-        <li>KK</li>
-        <li>Surat permohonan</li>
-      </ul>
-    </div>
-  </div>
-
-</div>
-
-        </div>
+    <div class="surat-item">
+      <div class="surat-header">
+        <div><i class="fas fa-shield-alt"></i> Iuran Keamanan</div>
+        <i class="fas fa-chevron-right arrow"></i>
+      </div>
+      <div class="surat-content">
+        <p>Digunakan untuk menunjang operasional keamanan lingkungan, termasuk ronda malam, pemeliharaan portal, dan CCTV.</p>
       </div>
     </div>
 
   </div>
+</div>
+
+
+
+
+<div class="family-panel vertical" id="panel-surat" data-aos="fade-up">
+
+  <div class="panel-top">
+    <div class="panel-icon">
+      <i class="fas fa-file-alt"></i>
+    </div>
+    <div class="panel-text">
+      <h3>Surat Pengantar</h3>
+      <p>Informasi tentang jenis surat pengantar yang bisa diajukan warga.</p>
+    </div>
+  </div>
+
+  <div class="panel-bottom">
+
+    <div class="surat-item">
+      <div class="surat-header">
+        <div><i class="fas fa-home"></i> Surat Domisili</div>
+        <i class="fas fa-chevron-right arrow"></i>
+      </div>
+      <div class="surat-content">
+        <p>Surat ini digunakan untuk keperluan administrasi seperti sekolah, pekerjaan, atau pindah alamat.</p>
+        <b>Dokumen dibutuhkan:</b>
+        <ul>
+          <li>KTP</li>
+          <li>KK</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="surat-item">
+      <div class="surat-header">
+        <div><i class="fas fa-id-badge"></i> Surat Pengantar</div>
+        <i class="fas fa-chevron-right arrow"></i>
+      </div>
+      <div class="surat-content">
+        <p>Digunakan untuk membuat surat di kelurahan/kecamatan seperti SKCK, usaha, domisili, dll.</p>
+        <b>Dokumen dibutuhkan:</b>
+        <ul>
+          <li>KTP</li>
+          <li>KK</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="surat-item">
+      <div class="surat-header">
+        <div><i class="fas fa-exclamation-circle"></i> Surat Belum Menikah</div>
+        <i class="fas fa-chevron-right arrow"></i>
+      </div>
+      <div class="surat-content">
+        <p>Diperlukan untuk keperluan pekerjaan, beasiswa, atau administrasi pernikahan.</p>
+        <b>Dokumen dibutuhkan:</b>
+        <ul>
+          <li>KTP</li>
+          <li>KK</li>
+          <li>Surat pernyataan</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="surat-item">
+      <div class="surat-header">
+        <div><i class="fas fa-hands-helping"></i> Surat Tidak Mampu</div>
+        <i class="fas fa-chevron-right arrow"></i>
+      </div>
+      <div class="surat-content">
+        <p>Digunakan untuk bantuan sosial, pendidikan, atau kesehatan.</p>
+        <b>Dokumen dibutuhkan:</b>
+        <ul>
+          <li>KTP</li>
+          <li>KK</li>
+          <li>Surat permohonan</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 </section>
 
 
@@ -418,10 +417,9 @@
     <small id="modalDate"></small>
   </div>
 </div>
-
-<!-- Tombol Kotak Saran -->
 <div class="suggestion-btn" id="openSuggestion">
   <i class="fas fa-comment-dots"></i>
+  <span class="tooltip">Lapor Saran</span>
 </div>
 
 <!-- Modal Kotak Saran -->

@@ -3234,6 +3234,18 @@ def get_total_kepala_keluarga():
         return jsonify({"error": "Terjadi kesalahan pada server"}), 500
 
 
+@app.route("/api/total_pendatang", methods=["GET"])
+def get_total_pendatang():
+    try:
+        total_pendatang = db.session.query(func.count(BukuTamu.id)).scalar()
+
+        return jsonify({"total_pendatang": total_pendatang})
+
+    except Exception as e:
+
+        return jsonify({"error": "Terjadi kesalahan pada server"}), 500
+
+
 @app.route("/kegiatan", methods=["GET", "POST"])
 def kegiatan():
     if "user_id" not in session:

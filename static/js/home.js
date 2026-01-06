@@ -233,25 +233,32 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 async function loadDataKeluarga() {
   try {
-    const [responseWarga, responseKepala] = await Promise.all([
+    const [responseWarga, responseKepala, responsePendatang] = await Promise.all([
       fetch('/api/total_keluarga'),
-      fetch('/api/total_kepala_keluarga')
+      fetch('/api/total_kepala_keluarga'),
+      fetch('/api/total_pendatang')
     ]);
 
     const dataWarga = await responseWarga.json();
     const dataKepala = await responseKepala.json();
+    const dataPendatang = await responsePendatang.json();
 
     document.getElementById('total-keluarga').textContent = dataWarga.total;
-    document.getElementById('total-kepala-keluarga').textContent = dataKepala.total_kepala_keluarga;
+    document.getElementById('total-kepala-keluarga').textContent =
+      dataKepala.total_kepala_keluarga;
+    document.getElementById('total-pendatang').textContent =
+      dataPendatang.total_pendatang;
 
   } catch (error) {
     console.error('Error fetching data keluarga:', error);
     document.getElementById('total-keluarga').textContent = 'gagal dimuat';
     document.getElementById('total-kepala-keluarga').textContent = 'gagal dimuat';
+    document.getElementById('total-pendatang').textContent = 'gagal dimuat';
   }
 }
 
 window.addEventListener('DOMContentLoaded', loadDataKeluarga);
+
 
 function setLastUpdate() {
     const now = new Date().toLocaleString("id-ID", {
@@ -378,3 +385,4 @@ fetchVisitCount();
 
 // Refresh otomatis setiap 5 detik
 setInterval(fetchVisitCount, 3600000);
+
