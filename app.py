@@ -3456,8 +3456,8 @@ def delete_kegiatan(id):
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
- @app.route("/api/visit", methods=["POST"])
- def track_visit():
+@app.route("/api/visit", methods=["POST"])
+def track_visit():
      print("Visitor masuk:", datetime.now())
 
      db.session.execute(text("INSERT INTO data_keluarga.visitor DEFAULT VALUES"))
@@ -3465,15 +3465,14 @@ def delete_kegiatan(id):
 
      return jsonify({"status": True})
 
-
- @app.route("/api/visit/count", methods=["GET"])
- def get_visit_count():
+@app.route("/api/visit/count", methods=["GET"])
+def get_visit_count():
      result = db.session.execute(text("SELECT COUNT(*) FROM data_keluarga.visitor"))
      total = result.scalar()
      return jsonify({"total": total})
 
 
- if __name__ == "__main__":
+if __name__ == "__main__":
      app.run(debug=False)
 #if __name__ == "__main__":
  #   app.run(host="0.0.0.0", port=5000, debug=True)
