@@ -316,50 +316,70 @@
 
       </a> -->
       
-<section id="laporan">
+<section id="laporan" class="laporan-section">
   <h2 data-aos="flip-left">LAPORAN KEUANGAN RT</h2>
- <div class="summary-top">
-    <div class="summary-item">
-      <i class="fas fa-wallet icon-green"></i>
-      <div>
-        <p>Total Kas RT</p>
-        <h3 id="total-kas">Rp 0</h3>
+
+  <!-- SUMMARY -->
+  <div class="summary-wrap">
+    <div class="summary-card">
+      <div class="summary-icon bg-green">
+        <i class="fas fa-wallet"></i>
+      </div>
+      <div class="summary-text">
+        <span>Total Kas RT</span>
+        <strong id="total-kas">Rp 0</strong>
       </div>
     </div>
   </div>
-  <div class="card-grid">
-    <!-- Kartu Pemasukan -->
-    <div class="card" id="pemasukan" data-aos="fade-down">
-      <div class="card-content">
-        <h3 class="text-green-600"><i class="fas fa-arrow-up"></i> Pemasukan RT</h3>
-        <p class="subtext">Ringkasan jumlah dana yang diterima dari iuran warga serta kontribusi lain.</p>
-        <div class="summary-box green">
-          <div><strong>Total Pemasukan:</strong> <span id="total-pemasukan">Rp 0</span></div>
-        </div>
+
+  <!-- GRID -->
+  <div class="finance-grid">
+    <!-- PEMASUKAN -->
+    <div class="finance-card income" id="pemasukan" data-aos="fade-down">
+      <header>
+        <i class="fas fa-arrow-up"></i>
+        <h3>Pemasukan RT</h3>
+      </header>
+
+      <p class="desc">
+        Ringkasan dana masuk dari iuran warga dan sumber lain.
+      </p>
+
+      <div class="amount green">
+        <span>Total Pemasukan</span>
+        <strong id="total-pemasukan">Rp 0</strong>
       </div>
     </div>
 
-    <!-- Kartu Pengeluaran -->
-    <div class="card" id="pengeluaran" data-aos="fade-up">
-      <div class="card-content">
-        <h3><i class="fas fa-arrow-down" style="color: red;"></i> Pengeluaran RT</h3>
-        <p class="subtext">Daftar pengeluaran kegiatan atau kebutuhan warga RT 08.</p>
-        <div class="summary-box red">
-          <div><strong>Total Pengeluaran:</strong> <span id="total-pengeluaran">Rp 0</span></div>
-        </div>
-        <h4>Rincian Pengeluaran:</h4>
-        <ul id="pengeluaran-list" class="data-list"></ul>
-        <div class="lihat-container">
-          <button id="lihat-lebih" class="lihat-btn" style="display:none;">Lihat Lebih Banyak</button>
-          <button id="lihat-sedikit" class="lihat-btn" style="display:none;">Lihat Lebih Sedikit</button>
-        </div>
+    <!-- PENGELUARAN -->
+    <div class="finance-card expense" id="pengeluaran" data-aos="fade-up">
+      <header>
+        <i class="fas fa-arrow-down"></i>
+        <h3>Pengeluaran RT</h3>
+      </header>
+
+      <p class="desc">
+        Pengeluaran untuk kegiatan dan kebutuhan warga RT.
+      </p>
+
+      <div class="amount red">
+        <span>Total Pengeluaran</span>
+        <strong id="total-pengeluaran">Rp 0</strong>
+      </div>
+      <H4>Rincian Pengeluaran </H4>
+      <ul id="pengeluaran-list" class="expense-list"></ul>
+
+      <div class="toggle-area">
+        <button id="lihat-lebih" class="toggle-btn" style="display:none;">Lihat Lebih</button>
+        <button id="lihat-sedikit" class="toggle-btn" style="display:none;">Tutup</button>
       </div>
     </div>
-</div>
-  
-<button id="lihat-keuangan-btn" class="btn-pdf">
-  <i class="fas fa-file-pdf"></i> Laporan Keuangan Lengkap
-</button>
+  </div>
+
+  <button id="lihat-keuangan-btn" class="btn-pdf">
+    <i class="fas fa-file-pdf"></i> Laporan Keuangan Lengkap
+  </button>
+
 
 <section id="informasi">
   <h2 data-aos="flip-left">INFORMASI</h2>
