@@ -437,6 +437,11 @@
     <small id="modalDate"></small>
   </div>
 </div>
+<!-- MODAL PREVIEW GAMBAR -->
+<div id="imagePreview" class="image-preview">
+  <span class="close-preview">&times;</span>
+  <img id="previewImg">
+</div>
 <div class="suggestion-btn" id="openSuggestion">
   <i class="fas fa-comment-dots"></i>
   <span class="tooltip">Lapor Saran</span>
@@ -669,25 +674,42 @@
     });
   }
 
-  async function openModal(id) {
-    const res = await fetch(`/api/kegiatan/${id}`);
-    const data = await res.json();
+async function openModal(id) {
+  const res = await fetch(`/api/kegiatan/${id}`);
+  const data = await res.json();
 
-    modalTitle.textContent = data.title;
-    modalDescription.textContent = data.description;
-    modalDate.textContent = formatDate(data.date);
+  modalTitle.textContent = data.title;
+  modalDescription.textContent = data.description;
+  modalDate.textContent = formatDate(data.date);
+  modalImages.innerHTML = "";
 
-    modalImages.innerHTML = "";
-    const imgs = Array.isArray(data.image_urls) ? data.image_urls : [data.image_urls];
-    imgs.forEach(url => {
-      const img = document.createElement("img");
-      img.src = url || "/static/img/default.jpg";
-      modalImages.appendChild(img);
-    });
+  const preview = document.getElementById("imagePreview");
+  const previewImg = document.getElementById("previewImg");
+  const closePreview = document.querySelector(".close-preview");
 
-    modal.style.display = "block";
-  }
+  closePreview.onclick = () => preview.style.display = "none";
+  preview.onclick = e => {
+    if (e.target === preview) preview.style.display = "none";
+  };
 
+  const imgs = Array.isArray(data.image_urls)
+    ? data.image_urls
+    : [data.image_urls];
+
+  imgs.forEach(url => {
+    const img = document.createElement("img");
+    img.src = url || "/static/img/default.jpg";
+
+    img.onclick = () => {
+      previewImg.src = img.src;
+      preview.style.display = "flex";
+    };
+
+    modalImages.appendChild(img);
+  });
+
+  modal.style.display = "block";
+}
   toggleBtn.onclick = () => {
     showingAll = !showingAll;
     toggleBtn.textContent = showingAll
