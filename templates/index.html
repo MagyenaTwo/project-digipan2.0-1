@@ -426,18 +426,37 @@
     <button id="toggleBtn" class="btn-toggle">Lihat Semua</button>
   </div>
 </section>
-
-
 <div id="detailModal" class="modal">
   <div class="modal-content">
+
+    <!-- CLOSE -->
     <span class="close">&times;</span>
-    <h2 id="modalTitle"></h2>
-    <div id="modalImages" class="modal-images"></div>
-    <p id="modalDescription"></p>
-    <small id="modalDate"></small>
+
+    <!-- HEADER / HERO -->
+    <div class="modal-header">
+      <h2 id="modalTitle"></h2>
+
+      <!-- META FLOAT (BADGE + TANGGAL) -->
+      <div class="modal-meta-box">
+        <span class="badge">Kegiatan Warga</span>
+        <span class="date">
+          📅 <span id="modalDate"></span>
+        </span>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="modal-body">
+      <div id="imageCount" class="image-count"></div>
+
+      <div id="modalImages" class="modal-images"></div>
+
+      <p id="modalDescription"></p>
+    </div>
+
   </div>
 </div>
-<!-- MODAL PREVIEW GAMBAR -->
+<!-- PREVIEW GAMBAR FULLSCREEN -->
 <div id="imagePreview" class="image-preview">
   <span class="close-preview">&times;</span>
   <img id="previewImg">
@@ -513,16 +532,52 @@
     easing: 'ease-out-cubic',
     offset: 120,
     once: false
-  });async function loadKegiatan() {
+  });
+  /* ================= GLOBAL ================= */
+let kegiatanCache = [];
+
+const modal = document.getElementById("detailModal");
+const modalTitle = document.getElementById("modalTitle");
+const modalImages = document.getElementById("modalImages");
+const modalDescription = document.getElementById("modalDescription");
+const modalDate = document.getElementById("modalDate");
+const modalClose = document.querySelector(".close");
+
+const preview = document.getElementById("imagePreview");
+const previewImg = document.getElementById("previewImg");
+const closePreview = document.querySelector(".close-preview");
+
+/* ================= UTIL ================= */
+function formatDate(date) {
+  return new Date(date).toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+}
+
+function getImage(item) {
+  try {
+    const imgs = Array.isArray(item.image_urls)
+      ? item.image_urls
+      : JSON.parse(item.image_urls);
+    return imgs[0] || "/static/img/default.jpg";
+  } catch {
+    return item.image_urls || "/static/img/default.jpg";
+  }
+}
+
+/* ================= LOAD KEGIATAN ================= */
+async function loadKegiatan() {
   const container = document.getElementById("kegiatanGrid");
   const toggleBtn = document.getElementById("toggleBtn");
 
   container.innerHTML = `<p>Loading...</p>`;
-  const res = await fetch("/api/kegiatan");
-  const data = await res.json();
-  container.innerHTML = "";
 
-  if (data.length === 0) {
+  const res = await fetch("/api/kegiatan");
+  kegiatanCache = await res.json();
+
+  if (!kegiatanCache.length) {
     container.innerHTML = `<p>Tidak ada kegiatan.</p>`;
     toggleBtn.style.display = "none";
     return;
@@ -530,143 +585,43 @@
 
   let showingAll = false;
 
-  const modal = document.getElementById("detailModal");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalImages = document.getElementById("modalImages");
-  const modalDescription = document.getElementById("modalDescription");
-  const modalDate = document.getElementById("modalDate");
-  const modalClose = document.querySelector(".close");
-
-  modalClose.onclick = () => modal.style.display = "none";
-  window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
-
-  function getImage(item) {
-    try {
-      const imgs = Array.isArray(item.image_urls)
-        ? item.image_urls
-        : JSON.parse(item.image_urls);
-      return imgs[0] || "/static/img/default.jpg";
-    } catch {
-      return item.image_urls || "/static/img/default.jpg";
-    }
-  }
-
-  function formatDate(date) {
-    return new Date(date).toLocaleDateString("id-ID", {
-      day: "numeric", month: "long", year: "numeric"
-    });
-  }
-
-  function renderHighlight(items) {
+  function renderLayout() {
     container.innerHTML = `
       <div class="kegiatan-layout">
         <div class="kegiatan-main"></div>
         <div class="kegiatan-side"></div>
       </div>
     `;
-
-    const main = container.querySelector(".kegiatan-main");
-    const side = container.querySelector(".kegiatan-side");
-
-    items.slice(0, 4).forEach((item, index) => {
-      const card = document.createElement("div");
-      const img = getImage(item);
-      const date = formatDate(item.date);
-      const admin = item.admin || "Admin RT";
-      const kategori = item.category || "Kegiatan";
-
-      if (index === 0) {
-        card.className = "kegiatan-card large";
-        card.innerHTML = `
-          <img src="${img}">
-          <div class="card-body">
-            <span class="kegiatan-badge">${kategori}</span>
-            <h3>${item.title}</h3>
-            <p>${item.description.substring(0,120)}...</p>
-            <div class="kegiatan-meta">
-              <span class="kegiatan-admin">👤 ${admin}</span>
-              <span>📅 ${date}</span>
-            </div>
-            <button class="btn-detail" data-id="${item.id}">Lihat Detail</button>
-          </div>
-        `;
-        main.appendChild(card);
-      } else {
-        card.className = "kegiatan-card small";
-        card.innerHTML = `
-          <img src="${img}">
-          <div class="card-body">
-            <span class="kegiatan-badge">${kategori}</span>
-            <h3>${item.title}</h3>
-            <div class="kegiatan-meta">
-              <span class="kegiatan-admin">👤 ${admin}</span>
-              <span>📅 ${date}</span>
-            </div>
-            <button class="btn-detail" data-id="${item.id}">Lihat Detail</button>
-          </div>
-        `;
-        side.appendChild(card);
-      }
-    });
-
-    document.querySelectorAll(".btn-detail").forEach(btn => {
-      btn.onclick = () => openModal(btn.dataset.id);
-    });
+    return {
+      main: container.querySelector(".kegiatan-main"),
+      side: container.querySelector(".kegiatan-side")
+    };
   }
 
-  /* ===========================
-     🔥 FUNGSI BARU: RENDER ALL
-     =========================== */
-  function renderAll(items) {
-    container.innerHTML = `
-      <div class="kegiatan-layout">
-        <div class="kegiatan-main"></div>
-        <div class="kegiatan-side"></div>
-      </div>
-    `;
-
-    const main = container.querySelector(".kegiatan-main");
-    const side = container.querySelector(".kegiatan-side");
+  function renderItems(items) {
+    const { main, side } = renderLayout();
 
     items.forEach((item, index) => {
       const card = document.createElement("div");
-      const img = getImage(item);
-      const date = formatDate(item.date);
-      const admin = item.admin || "Admin RT";
-      const kategori = item.category || "Kegiatan";
+      card.className = `kegiatan-card ${index === 0 ? "large" : "small"}`;
 
-      if (index === 0) {
-        card.className = "kegiatan-card large";
-        card.innerHTML = `
-          <img src="${img}">
-          <div class="card-body">
-            <span class="kegiatan-badge">${kategori}</span>
-            <h3>${item.title}</h3>
-            <p>${item.description.substring(0,120)}...</p>
-            <div class="kegiatan-meta">
-              <span class="kegiatan-admin">👤 ${admin}</span>
-              <span>📅 ${date}</span>
-            </div>
-            <button class="btn-detail" data-id="${item.id}">Lihat Detail</button>
+      card.innerHTML = `
+        <img src="${getImage(item)}">
+        <div class="card-body">
+          <span class="kegiatan-badge">${item.category || "Kegiatan"}</span>
+          <h3>${item.title}</h3>
+          ${index === 0 ? `<p>${item.description.substring(0,120)}...</p>` : ""}
+          <div class="kegiatan-meta">
+            <span>👤 ${item.admin || "Admin RT"}</span>
+            <span>📅 ${formatDate(item.date)}</span>
           </div>
-        `;
-        main.appendChild(card);
-      } else {
-        card.className = "kegiatan-card small";
-        card.innerHTML = `
-          <img src="${img}">
-          <div class="card-body">
-            <span class="kegiatan-badge">${kategori}</span>
-            <h3>${item.title}</h3>
-            <div class="kegiatan-meta">
-              <span class="kegiatan-admin">👤 ${admin}</span>
-              <span>📅 ${date}</span>
-            </div>
-            <button class="btn-detail" data-id="${item.id}">Lihat Detail</button>
-          </div>
-        `;
-        side.appendChild(card);
-      }
+          <button class="btn-detail" data-id="${item.id}">
+            Lihat Detail
+          </button>
+        </div>
+      `;
+
+      index === 0 ? main.appendChild(card) : side.appendChild(card);
     });
 
     document.querySelectorAll(".btn-detail").forEach(btn => {
@@ -674,23 +629,24 @@
     });
   }
 
-async function openModal(id) {
-  const res = await fetch(`/api/kegiatan/${id}`);
-  const data = await res.json();
+  renderItems(kegiatanCache.slice(0, 4));
+
+  toggleBtn.onclick = () => {
+    showingAll = !showingAll;
+    toggleBtn.textContent = showingAll ? "Lihat Lebih Sedikit" : "Lihat Semua";
+    renderItems(showingAll ? kegiatanCache : kegiatanCache.slice(0, 4));
+  };
+}
+
+/* ================= MODAL DETAIL ================= */
+function openModal(id) {
+  const data = kegiatanCache.find(item => item.id == id);
+  if (!data) return;
 
   modalTitle.textContent = data.title;
   modalDescription.textContent = data.description;
   modalDate.textContent = formatDate(data.date);
   modalImages.innerHTML = "";
-
-  const preview = document.getElementById("imagePreview");
-  const previewImg = document.getElementById("previewImg");
-  const closePreview = document.querySelector(".close-preview");
-
-  closePreview.onclick = () => preview.style.display = "none";
-  preview.onclick = e => {
-    if (e.target === preview) preview.style.display = "none";
-  };
 
   const imgs = Array.isArray(data.image_urls)
     ? data.image_urls
@@ -703,6 +659,7 @@ async function openModal(id) {
     img.onclick = () => {
       previewImg.src = img.src;
       preview.style.display = "flex";
+      document.body.style.overflow = "hidden";
     };
 
     modalImages.appendChild(img);
@@ -710,20 +667,25 @@ async function openModal(id) {
 
   modal.style.display = "block";
 }
-  toggleBtn.onclick = () => {
-    showingAll = !showingAll;
-    toggleBtn.textContent = showingAll
-      ? "Lihat Lebih Sedikit"
-      : "Lihat Semua";
 
-    showingAll ? renderAll(data) : renderHighlight(data);
-  };
+/* ================= CLOSE HANDLER ================= */
+modalClose.onclick = () => modal.style.display = "none";
+window.onclick = e => { if (e.target === modal) modal.style.display = "none"; };
 
-  renderHighlight(data);
-}
+closePreview.onclick = () => {
+  preview.style.display = "none";
+  document.body.style.overflow = "";
+};
 
+preview.onclick = e => {
+  if (e.target === preview) {
+    preview.style.display = "none";
+    document.body.style.overflow = "";
+  }
+};
+
+/* ================= INIT ================= */
 loadKegiatan();
-
 
 async function loadBannerCarousel() {
   const res = await fetch("/api/kegiatan");
@@ -760,18 +722,7 @@ async function loadBannerCarousel() {
 
 loadBannerCarousel();
 
-const modal = document.getElementById("detailModal");
-const modalClose = document.querySelector(".close");
 
-modalClose.addEventListener("click", () => {
-  modal.style.display = "none";
-});
-
-window.addEventListener("click", (e) => {
-  if (e.target === modal) {
-    modal.style.display = "none";
-  }
-});
 // Tombol peraturan
 const btnPeraturan = document.getElementById("lihat-peraturan-btn");
 
