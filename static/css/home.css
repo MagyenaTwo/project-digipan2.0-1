@@ -1589,8 +1589,18 @@ header.scrolled .logo .logo-text {
     font-size: 19px;
   }
   .modal-meta-box {
-    bottom: -26px;
-    padding: 8px 14px;
+    width: max-content;
+    max-width: calc(100% - 24px);
+    flex-wrap: nowrap;
+  }
+
+  .modal-meta-box .badge {
+    white-space: nowrap;
+  }
+
+  .modal-meta-box .date {
+    white-space: nowrap;
+    font-size: 11.5px;
   }
   .modal-images img {
     width: 190px;
