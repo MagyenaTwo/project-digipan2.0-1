@@ -58,71 +58,71 @@ document.addEventListener('click', function(e) {
 document.querySelectorAll('i[data-color]').forEach(icon => {
   icon.style.color = icon.dataset.color;
 });
-let currentSlide = 0;
-const slidesContainer = document.querySelector('.hero-slider .slides');
-const slides = document.querySelectorAll('.hero-slider .slide');
-const captions = document.querySelectorAll('.slider-captions .caption');
-const dotsContainer = document.querySelector('.slider-dots');
-const totalSlides = slides.length;
+// let currentSlide = 0;
+// const slidesContainer = document.querySelector('.hero-slider .slides');
+// const slides = document.querySelectorAll('.hero-slider .slide');
+// const captions = document.querySelectorAll('.slider-captions .caption');
+// const dotsContainer = document.querySelector('.slider-dots');
+// const totalSlides = slides.length;
 
-const arrowLeft = document.querySelector('.arrow-left');
-const arrowRight = document.querySelector('.arrow-right');
+// const arrowLeft = document.querySelector('.arrow-left');
+// const arrowRight = document.querySelector('.arrow-right');
 
-let slideWidth = slides[0].clientWidth; // ⭐ PERBAIKAN
+// let slideWidth = slides[0].clientWidth; // ⭐ PERBAIKAN
 
-function generateDots() {
-  for (let i = 0; i < totalSlides; i++) {
-    const dot = document.createElement('span');
-    dot.classList.add('dot');
-    dot.dataset.slideIndex = i;
-    dot.onclick = () => goToSlide(i);
-    dotsContainer.appendChild(dot);
-  }
-}
+// function generateDots() {
+//   for (let i = 0; i < totalSlides; i++) {
+//     const dot = document.createElement('span');
+//     dot.classList.add('dot');
+//     dot.dataset.slideIndex = i;
+//     dot.onclick = () => goToSlide(i);
+//     dotsContainer.appendChild(dot);
+//   }
+// }
 
-generateDots();
-const dots = document.querySelectorAll('.dot');
+// generateDots();
+// const dots = document.querySelectorAll('.dot');
 
-function showSlide(index) {
-  slidesContainer.style.transform = `translateX(-${index * slideWidth}px)`; // ⭐ FIX
+// function showSlide(index) {
+//   slidesContainer.style.transform = `translateX(-${index * slideWidth}px)`; // ⭐ FIX
 
-  captions.forEach(c => c.classList.remove('active'));
-  captions[index].classList.add('active');
+//   captions.forEach(c => c.classList.remove('active'));
+//   captions[index].classList.add('active');
 
-  dots.forEach(dot => dot.classList.remove('active'));
-  dots[index].classList.add('active');
-}
+//   dots.forEach(dot => dot.classList.remove('active'));
+//   dots[index].classList.add('active');
+// }
 
-function nextSlide() {
-  currentSlide = (currentSlide + 1) % totalSlides;
-  showSlide(currentSlide);
-}
+// function nextSlide() {
+//   currentSlide = (currentSlide + 1) % totalSlides;
+//   showSlide(currentSlide);
+// }
 
-function prevSlide() {
-  currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-  showSlide(currentSlide);
-}
+// function prevSlide() {
+//   currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+//   showSlide(currentSlide);
+// }
 
-function goToSlide(index) {
-  currentSlide = index;
-  showSlide(currentSlide);
-}
+// function goToSlide(index) {
+//   currentSlide = index;
+//   showSlide(currentSlide);
+// }
 
-// Panah
-arrowRight.addEventListener('click', nextSlide);
-arrowLeft.addEventListener('click', prevSlide);
+// // Panah
+// arrowRight.addEventListener('click', nextSlide);
+// arrowLeft.addEventListener('click', prevSlide);
 
-// Resize fix (⭐ sangat penting di mobile)
-window.addEventListener("resize", () => {
-  slideWidth = slides[0].clientWidth;
-  showSlide(currentSlide);
-});
+// // Resize fix (⭐ sangat penting di mobile)
+// window.addEventListener("resize", () => {
+//   slideWidth = slides[0].clientWidth;
+//   showSlide(currentSlide);
+// });
 
-// Tampilkan pertama
-showSlide(currentSlide);
+// // Tampilkan pertama
+// showSlide(currentSlide);
 
-// Auto-slide
-setInterval(nextSlide, 5000);
+// // Auto-slide
+// setInterval(nextSlide, 5000);
 
 async function getLaporan() {
   try {

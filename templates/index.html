@@ -43,52 +43,40 @@
     </nav>
   </div>
 </header>
+<div style="background: var(--bg);">
+  <!-- HERO BANNER -->
+ <section class="hero-banner"
+  style="--bg:url('{{ url_for('static', filename='img/logo/kampung.png') }}');">
 
-<div style="background: var(--bg);"> 
-    <div class="slider-container">
+  <div class="hero-overlay"></div>
+<div class="hero-content">
+  <span class="hero-badge">
+    <img src="{{ url_for('static', filename='img/logo/2.png') }}" alt="Smartdelapan">
+    Platform Digital Lingkungan
+  </span>
 
-        <section class="hero-slider">
-            <div class="slides">
-                <div class="slide active">
-                    <img src="{{ url_for('static', filename='img/logo/6.png') }}" alt="Banner 1">
-                </div>
-                <div class="slide">
-                    <img src="{{ url_for('static', filename='img/logo/page-5.png') }}" alt="Banner 2">
-                </div>
-                <div class="slide">
-                    <img src="{{ url_for('static', filename='img/logo/page-6.png') }}" alt="Banner 3">
-                </div>
-                <div class="slide">
-                    <img src="{{ url_for('static', filename='img/logo/page-7.png') }}" alt="Banner 4">
-                </div>
-            </div>
+    <h1>
+      <span class="brand">smart</span>delapan
+    </h1>
 
-            <div class="slider-arrows">
-                <div class="arrow arrow-left">&#10094;</div>
-                <div class="arrow arrow-right">&#10095;</div>
-            </div>
-        </section>
+    <p>
+      Platform digital terpadu untuk data warga, layanan administrasi,
+      dan transparansi kegiatan lingkungan — cepat, rapi, dan modern.
+    </p>
 
-        <div class="slider-dots"></div>
-
-        <div class="slider-captions">
-            <div class="caption active" id="cap-0">
-                <p>Informasi jumlah keluarga yang terdata secara lengkap dan akurat.</p>
-            </div>
-            <div class="caption" id="cap-1">
-                <p>Transparansi laporan keuangan RT dengan lebih mudah dan cepat.</p>
-            </div>
-            <div class="caption" id="cap-2">
-                <p>Informasi berbagai surat keterangan yang tersedia untuk warga.</p>
-            </div>
-            <div class="caption" id="cap-3">
-                <p>Informasi kegiatan lingkungan terdokumentasi dengan jelas.</p>
-            </div>
-        </div>
-
+    <div class="hero-actions">
+      <a href="#layanan" class="btn primary">Lihat Data</a>
+      <a href="#kegiatan" class="btn secondary">Kegiatan</a>
     </div>
+  </div>
+<div class="hero-powered">
+  <span>Powered By</span>
+  <img src="{{ url_for('static', filename='/img/logo/logodepok.png') }}" alt="Logo Dinas">
 </div>
 
+</section>
+
+</div>
 
 
 <main>
