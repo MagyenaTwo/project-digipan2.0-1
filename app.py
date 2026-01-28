@@ -64,6 +64,8 @@ from collections import Counter
 import random
 import string
 import cloudinary.uploader
+import logging
+
 
 # from reportlab.lib.pagesizes import letter
 # from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
@@ -284,7 +286,21 @@ class Visitor(db.Model):
     timestamp = db.Column(db.DateTime, default=db.func.now())
 
 
-import logging
+class KegiatanVideo(db.Model):
+    __tablename__ = "kegiatan_video"
+    __table_args__ = {"schema": "data_keluarga"}
+
+    id = db.Column(db.Integer, primary_key=True)
+    kegiatan_id = db.Column(
+        db.Integer,
+        db.ForeignKey("data_keluarga.kegiatan.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+
+    video_title = db.Column(db.String(255), nullable=False)
+    video_url = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
 
 
 def role_required(allowed_roles):
@@ -3331,6 +3347,25 @@ def kegiatan():
 
 @app.route("/api/kegiatan", methods=["POST"])
 def create_kegiatan():
+    # ===================== CEK SESSION & ROLE =====================
+    if "user_id" not in session:
+        return (
+            jsonify({"status": "error", "message": "Silahkan login terlebih dahulu."}),
+            401,
+        )
+
+    user_role = session.get("role")
+    if user_role == "kader":
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Fitur ini hanya dapat diakses oleh Admin.",
+                }
+            ),
+            403,
+        )
+
     try:
         title = request.form.get("title")
         date_str = request.form.get("date")
@@ -3418,6 +3453,25 @@ def get_kegiatan(id):
 
 @app.route("/api/kegiatan/<int:id>", methods=["PUT"])
 def update_kegiatan(id):
+    # ===================== CEK SESSION & ROLE =====================
+    if "user_id" not in session:
+        return (
+            jsonify({"status": "error", "message": "Silahkan login terlebih dahulu."}),
+            401,
+        )
+
+    user_role = session.get("role")
+    if user_role == "kader":
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Fitur ini hanya dapat diakses oleh Admin.",
+                }
+            ),
+            403,
+        )
+
     try:
         data = request.get_json()
 
@@ -3438,6 +3492,25 @@ def update_kegiatan(id):
 
 @app.route("/api/kegiatan/<int:id>", methods=["DELETE"])
 def delete_kegiatan(id):
+    # ===================== CEK SESSION & ROLE =====================
+    if "user_id" not in session:
+        return (
+            jsonify({"status": "error", "message": "Silahkan login terlebih dahulu."}),
+            401,
+        )
+
+    user_role = session.get("role")
+    if user_role == "kader":
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Fitur ini hanya dapat diakses oleh Admin.",
+                }
+            ),
+            403,
+        )
+
     try:
         kegiatan = Kegiatan.query.get(id)
         if not kegiatan:
@@ -3456,23 +3529,276 @@ def delete_kegiatan(id):
         return jsonify({"status": "error", "message": str(e)}), 500
 
 
+@app.route("/video-kegiatan", methods=["GET", "POST"])
+def video_kegiatan():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user_role = session.get("role")
+
+    # POST Request (tambah kegiatan) – opsional kalau mau via API
+    if request.method == "POST":
+        title = (request.form.get("title") or "").strip()
+        description = (request.form.get("description") or "").strip()
+        date_str = request.form.get("date")
+
+        if not title or not description or not date_str:
+            return (
+                jsonify({"status": "error", "message": "Semua field wajib diisi."}),
+                400,
+            )
+
+        if user_role == "kader":
+            return (
+                jsonify(
+                    {
+                        "status": "error",
+                        "message": "Fitur ini hanya dapat diakses oleh Admin.",
+                    }
+                ),
+                403,
+            )
+
+        new_event = Kegiatan(
+            title=request.form.get("title"),
+            date=datetime.strptime(request.form.get("date"), "%Y-%m-%d").date(),
+            description=request.form.get("description"),
+            image_urls=request.form.getlist("image_urls"),
+        )
+
+        db.session.add(new_event)
+        db.session.commit()
+
+        return jsonify(
+            {"status": "success", "message": "Kegiatan berhasil ditambahkan!"}
+        )
+
+    # GET Request – tampilkan halaman
+    rows = Kegiatan.query.order_by(Kegiatan.id.desc()).all()
+    all_kegiatan = [
+        {
+            "id": k.id,
+            "title": k.title,
+            "description": k.description,
+            "date": k.date.strftime("%d %B %Y") if k.date else "",
+        }
+        for k in rows
+    ]
+
+    all_videos = KegiatanVideo.query.order_by(KegiatanVideo.id.desc()).all()
+    videos = [
+        {
+            "id": v.id,
+            "video_title": v.video_title,
+            "description": v.description,
+            "video_url": v.video_url,
+            "created_at": v.created_at,
+            "kegiatan_id": v.kegiatan_id,
+        }
+        for v in all_videos
+    ]
+
+    all_messages = Message.query.order_by(Message.timestamp.desc()).limit(3).all()
+    message_list_to_display = [
+        {
+            "message": msg.message,
+            "user": msg.user,
+            "nomor_whatsapp": (
+                "62" + msg.nomor_whatsapp[1:]
+                if msg.nomor_whatsapp.startswith("0")
+                else msg.nomor_whatsapp
+            ),
+            "timestamp": msg.timestamp.astimezone(
+                pytz.timezone("Asia/Jakarta")
+            ).strftime("%d %b %Y · %H:%M"),
+        }
+        for msg in all_messages
+    ]
+
+    all_users = User.query.order_by(User.username.asc()).all()
+    return render_template(
+        "video_kegiatan.html",
+        all_kegiatan=all_kegiatan,
+        videos=videos,  # <-- ini penting
+        messages=message_list_to_display,
+        all_users=all_users,
+    )
+
+
+@app.route("/api/video-kegiatan", methods=["POST"])
+def upload_video_kegiatan():
+    # ===================== CEK SESSION & ROLE =====================
+    if "user_id" not in session:
+        return (
+            jsonify({"status": "error", "message": "Silahkan login terlebih dahulu."}),
+            401,
+        )
+
+    user_role = session.get("role")
+    if user_role == "kader":
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "message": "Fitur ini hanya dapat diakses oleh Admin.",
+                }
+            ),
+            403,
+        )
+
+    # ===================== LOGIKA UPLOAD VIDEO =====================
+    try:
+        video_title = request.form.get("video_title")
+        description = request.form.get("description")
+        kegiatan_id = request.form.get("kegiatan_id") or None
+        video = request.files.get("video")
+
+        if not video:
+            return jsonify({"status": "error", "message": "Video wajib diupload"}), 400
+
+        # 🔥 BATASI UKURAN VIDEO (misal 50MB)
+        MAX_SIZE = 50 * 1024 * 1024  # 50MB
+        video.seek(0, 2)
+        size = video.tell()
+        video.seek(0)
+
+        if size > MAX_SIZE:
+            return (
+                jsonify({"status": "error", "message": "Ukuran video maksimal 50MB"}),
+                400,
+            )
+
+        # 🔥 UPLOAD VIDEO KE CLOUDINARY (LEBIH CEPAT)
+        upload_result = cloudinary.uploader.upload(
+            video,
+            resource_type="video",
+            folder="kegiatan_video",
+            eager_async=True,  # ⬅️ TIDAK NUNGGU ENCODING
+            chunk_size=6_000_000,  # ⬅️ upload per 6MB (lebih stabil)
+        )
+
+        video_url = upload_result["secure_url"]
+
+        # 🔥 SIMPAN KE DATABASE
+        new_video = KegiatanVideo(
+            video_title=video_title,
+            description=description,
+            video_url=video_url,
+            kegiatan_id=kegiatan_id,
+        )
+
+        db.session.add(new_video)
+        db.session.commit()
+
+        return (
+            jsonify(
+                {
+                    "status": "success",
+                    "message": "Video kegiatan berhasil ditambahkan",
+                    "data": {
+                        "id": new_video.id,
+                        "video_title": video_title,
+                        "description": description,
+                        "video_url": video_url,
+                        "kegiatan_id": kegiatan_id,
+                    },
+                }
+            ),
+            200,
+        )
+
+    except Exception as e:
+        db.session.rollback()
+        return (
+            jsonify({"status": "error", "message": f"Gagal upload video: {str(e)}"}),
+            500,
+        )
+
+
+@app.route("/api/video-kegiatan/<int:video_id>", methods=["PUT"])
+def edit_video_kegiatan(video_id):
+    if "user_id" not in session:
+        return jsonify({"status": "error", "message": "Unauthorized"}), 401
+
+    data = request.get_json()
+    title = (data.get("video_title") or "").strip()
+    desc = (data.get("description") or "").strip()
+
+    if not title:
+        return jsonify({"status": "error", "message": "Judul wajib diisi"}), 400
+
+    video = KegiatanVideo.query.get(video_id)
+    if not video:
+        return jsonify({"status": "error", "message": "Video tidak ditemukan"}), 404
+
+    video.video_title = title
+    video.description = desc
+    db.session.commit()
+
+    return jsonify({"status": "success", "message": "Video berhasil diperbarui"})
+
+
+@app.route("/api/video-kegiatan/<int:video_id>", methods=["DELETE"])
+def delete_video_kegiatan(video_id):
+    if "user_id" not in session:
+        return jsonify({"status": "error", "message": "Unauthorized"}), 401
+
+    video = KegiatanVideo.query.get(video_id)
+    if not video:
+        return jsonify({"status": "error", "message": "Video tidak ditemukan"}), 404
+
+    # kalau file video disimpan lokal, bisa sekalian hapus
+    if video.video_url:
+        try:
+            filepath = os.path.join(app.root_path, video.video_url.replace("/", "", 1))
+            if os.path.exists(filepath):
+                os.remove(filepath)
+        except Exception as e:
+            print("Gagal hapus file:", e)
+
+    db.session.delete(video)
+    db.session.commit()
+
+    return jsonify({"status": "success", "message": "Video berhasil dihapus"})
+
+
+@app.route("/api/kegiatan-video", methods=["GET"])
+def get_all_kegiatan_video():
+    videos = KegiatanVideo.query.order_by(KegiatanVideo.created_at.desc()).all()
+
+    return jsonify(
+        [
+            {
+                "id": v.id,
+                "kegiatan_id": v.kegiatan_id,
+                "video_title": v.video_title,
+                "video_url": v.video_url,
+                "description": v.description,
+                "created_at": v.created_at.isoformat() if v.created_at else None,
+            }
+            for v in videos
+        ]
+    )
+
+
 @app.route("/api/visit", methods=["POST"])
 def track_visit():
-     print("Visitor masuk:", datetime.now())
+    print("Visitor masuk:", datetime.now())
 
-     db.session.execute(text("INSERT INTO data_keluarga.visitor DEFAULT VALUES"))
-     db.session.commit()
+    db.session.execute(text("INSERT INTO data_keluarga.visitor DEFAULT VALUES"))
+    db.session.commit()
 
-     return jsonify({"status": True})
+    return jsonify({"status": True})
+
 
 @app.route("/api/visit/count", methods=["GET"])
 def get_visit_count():
-     result = db.session.execute(text("SELECT COUNT(*) FROM data_keluarga.visitor"))
-     total = result.scalar()
-     return jsonify({"total": total})
+    result = db.session.execute(text("SELECT COUNT(*) FROM data_keluarga.visitor"))
+    total = result.scalar()
+    return jsonify({"total": total})
 
 
 if __name__ == "__main__":
-     app.run(debug=False)
-#if __name__ == "__main__":
- #   app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=False)
+# if __name__ == "__main__":
+#     app.run(host="0.0.0.0", port=5000, debug=True)

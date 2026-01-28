@@ -404,8 +404,6 @@
   <div class="kegiatan-container">
     <h2 data-aos="flip-left">KEGIATAN WARGA</h2>
   
-
-
   <!-- WADAH DINAMIS -->
   <div id="kegiatanGrid"></div>
 </div>
@@ -473,6 +471,17 @@
   </div>
 </div>
 <div id="toast" class="toast"></div>
+
+<section class="video-section">
+  <div class="video-grid" id="videoGrid"></div>
+
+  <div style="text-align:center; margin-top:20px;">
+    <button id="toggleVideoBtn" style="display:none;" class="btn-videotoggle">
+  Lihat lebih banyak
+</button>
+ 
+  </div>
+</section>
 
 
 
@@ -790,7 +799,86 @@ window.addEventListener("scroll", () => {
     header.classList.remove("scrolled");
   }
 });
- 
+
+let allVideos = [];
+let showAll = false;
+const LIMIT = 4;
+
+fetch("/api/kegiatan-video")
+  .then(res => res.json())
+  .then(videos => {
+    allVideos = Array.isArray(videos) ? videos : [];
+    renderVideos();
+  })
+  .catch(err => {
+    console.error(err);
+    document.getElementById("videoGrid").innerHTML =
+      "<p>Gagal memuat video.</p>";
+  });
+
+function renderVideos() {
+  const grid = document.getElementById("videoGrid");
+  const btn = document.getElementById("toggleVideoBtn");
+
+
+  grid.innerHTML = "";
+
+  const visibleVideos = showAll
+    ? allVideos
+    : allVideos.slice(0, LIMIT);
+
+  if (visibleVideos.length === 0) {
+    grid.innerHTML = "<p>Belum ada video kegiatan.</p>";
+    return;
+  }
+
+  visibleVideos.forEach(video => {
+    const card = document.createElement("div");
+    card.className = "video-card";
+
+    const thumbnail =
+      video.thumbnail_url ||
+      "{{ url_for('static', filename='img/logo/kampung.png') }}";
+
+    card.innerHTML = `
+      <video controls preload="metadata" poster="${thumbnail}">
+        <source src="${video.video_url}" type="video/mp4">
+      </video>
+
+      <div class="video-info">
+        <h4>${video.video_title}</h4>
+        <span>
+          ${
+            video.created_at
+              ? new Date(video.created_at).toLocaleDateString("id-ID", {
+                  day: "2-digit",
+                  month: "long",
+                  year: "numeric"
+                })
+              : "-"
+          }
+        </span>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+
+  // tampilkan / sembunyikan tombol
+  if (allVideos.length > LIMIT) {
+    btn.style.display = "inline-block";
+    btn.textContent = showAll
+      ? "Lihat lebih sedikit"
+      : "Lihat lebih banyak";
+  } else {
+    btn.style.display = "none";
+  }
+}
+
+document.getElementById("toggleVideoBtn").addEventListener("click", () => {
+  showAll = !showAll;
+  renderVideos();
+});
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ url_for('static', filename='js/home.js') }}"></script>

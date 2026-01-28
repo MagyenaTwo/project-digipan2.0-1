@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link href="static/img/logo/2.png" rel="icon">
-  <title>Digipan | kegiatan</title>
+  <title>Digipan | Video Kegiatan</title>
   <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="static/css/ruang-admin.min.css" rel="stylesheet">
@@ -102,7 +102,6 @@
     </div>
   </div>
 </li>
-
 <li class="nav-item">
     <a class="nav-link" href="{{ url_for('peraturan') }}">
     <i class="fas fa-gavel fa-lg"></i>
@@ -254,39 +253,57 @@
     <h1 class="h3 mb-0 text-gray-800">kegiatan</h1>
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/dashboard">Home</a></li>
-      <li class="breadcrumb-item active" aria-current="page">kegiatan</li>
+      <li class="breadcrumb-item active" aria-current="page">Video kegiatan</li>
     </ol>
   </div>
-  
-  <h4>Tambahkan Kegiatan Baru</h4>
-<form id="formkegiatan" action="/api/kegiatan" method="POST" enctype="multipart/form-data">
+  <h4>Tambahkan Video Kegiatan</h4>
+<form id="formVideoKegiatan" enctype="multipart/form-data">
   <div class="form-group">
-    <label for="title">Judul Kegiatan</label>
-    <input type="text" class="form-control" id="title" name="title" placeholder="Masukkan judul kegiatan" required>
+    <label>Judul Video</label>
+    <input type="text" class="form-control" name="video_title" required>
   </div>
 
   <div class="form-group">
-    <label for="date">Tanggal Kegiatan</label>
-    <input type="date" class="form-control" id="date" name="date" required>
+    <label>Deskripsi</label>
+    <textarea class="form-control" name="description" rows="3"></textarea>
   </div>
 
   <div class="form-group">
-    <label for="description">Deskripsi Kegiatan</label>
-    <textarea class="form-control" id="description" name="description" rows="5" placeholder="Tuliskan deskripsi kegiatan..." required></textarea>
+    <label>Upload Video</label>
+    <input type="file" class="form-control" name="video" id="videoInput" accept="video/*" required>
   </div>
+
+  <div class="form-group mt-3" id="videoPreview" style="display:none;">
+    <label>Preview Video</label><br>
+    <video id="previewPlayer" width="320" controls muted style="border-radius:8px;"></video>
+  </div>
+
+  <div class="form-group mt-2" id="uploadSpinner" style="display:none;">
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Uploading...
+  </div>
+  <div class="progress mt-2" id="uploadProgressWrapper" style="display:none; height:20px;">
+  <div class="progress-bar progress-bar-striped progress-bar-animated"
+       id="uploadProgress"
+       role="progressbar"
+       style="width:0%">
+    0%
+  </div>
+</div>
+
 
   <div class="form-group">
-    <label for="images">Upload Gambar Kegiatan</label>
-    <input type="file" class="form-control" id="images" name="images" multiple accept="image/*">
+    <label>Kegiatan (Opsional)</label>
+    <select name="kegiatan_id" class="form-control">
+      <option value="">-- Tidak terkait kegiatan --</option>
+      {% for k in kegiatan %}
+        <option value="{{ k.id }}">{{ k.title }}</option>
+      {% endfor %}
+    </select>
   </div>
 
-  <button type="submit" class="btn btn-primary" id="btnSubmit">
-  Tambah Kegiatan
-</button>
-
+  <button type="submit" class="btn btn-primary">Upload Video</button>
 </form>
-
-
 
   {% with messages = get_flashed_messages(with_categories=true) %}
   {% if messages %}
@@ -298,73 +315,89 @@
   {% endif %}
   {% endwith %}
 
-  <div class="table-responsive mt-4">
-    <table class="table text-center" style="border: none; background-color: #ffffff;">
-      <thead>
-        <tr style="background-color: #f8f8f8;">
-          <th class="py-3">No</th>
-          <th class="py-3">Isi</th>
-          <th class="py-3">Aksi</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for rule in all_rules %}
-        <tr style="background-color: #ffffff; border-bottom: 1px solid #ddd;">
-          <td class="py-3">{{ loop.index }}</td>
-          <td class="py-3 text-start">{{ rule.isi[:100] }}...</td>
-          <td class="py-3">
+<div class="table-responsive mt-4">
+  <table class="table text-center" style="background:#fff;">
+    <thead>
+      <tr style="background:#f8f8f8;">
+        <th>No</th>
+        <th>Judul Video</th>
+        <th>Deskripsi</th>
+        <th>Tanggal</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for v in videos %}
+      <tr>
+        <td>{{ loop.index0 + 1 }}</td>
+        <td class="text-start">{{ v.video_title }}</td>
+        <td class="text-start">
+          {{ v.description[:80] if v.description else '-' }}
+        </td>
+        <td>{{ v.created_at.strftime('%d-%m-%Y') }}</td>
+        <td>
           <button class="btn btn-sm btn-outline-primary btn-edit"
-        data-id="{{ rule.id }}">
-    <i class="fa fa-edit"></i> Edit
-</button>
+                  data-id="{{ v.id }}"
+                  data-title="{{ v.video_title }}"
+                  data-desc="{{ v.description }}"
+                  data-url="{{ v.video_url }}">
+            <i class="fa fa-edit"></i> Edit
+          </button>
 
-           <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${item.id}">
-    <i class="fa fa-trash"></i> Hapus
-</button>
-
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="editModalLabel">Edit kegiatan</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="editRuleForm">
-           <div class="mb-3">
-  <label for="editTitle" class="form-label">Judul</label>
-  <input type="text" class="form-control" id="editTitle" name="title">
+          <button class="btn btn-sm btn-outline-danger btn-delete"
+                  data-id="{{ v.id }}">
+            <i class="fa fa-trash"></i>Hapus
+          </button>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 
-<div class="mb-3">
-  <label for="editDate" class="form-label">Tanggal</label>
-  <input type="date" class="form-control" id="editDate" name="date">
-</div>
 
-<div class="mb-3">
-  <label for="editIsi" class="form-label">Isi</label>
-  <textarea class="form-control" id="editIsi" name="isi" rows="5"></textarea>
-</div>
+ <div class="modal fade" id="editModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
 
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-          <button type="button" class="btn btn-primary" id="saveEditRule">Simpan Perubahan</button>
-        </div>
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Video Kegiatan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
+
+      <div class="modal-body">
+        <form id="editVideoForm">
+          <input type="hidden" id="editId">
+
+          <div class="mb-3">
+            <label>Judul Video</label>
+            <input type="text" class="form-control" id="editTitle">
+          </div>
+
+          <div class="mb-3">
+            <label>Deskripsi</label>
+            <textarea class="form-control" id="editDesc" rows="4"></textarea>
+          </div>
+
+         
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+        <button class="btn btn-primary" id="saveEditVideo">Simpan</button>
+      </div>
+
     </div>
   </div>
+</div>
+
 
 </div>
 <!-- End Container Fluid -->
 </div>
-
+ </div>
+</div>
 <div id="notification-popup" class="modal" tabindex="-1" role="dialog" style="display:none;">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -398,199 +431,178 @@
   <i class="fas fa-angle-up"></i>
 </a>
 <script>
-const form = document.getElementById('formkegiatan');
-const btnSubmit = document.getElementById('btnSubmit'); // 🔥 TAMBAHAN
+const form = document.getElementById('formVideoKegiatan');
+const spinner = document.getElementById('uploadSpinner');
+const videoInput = document.getElementById('videoInput');
+const preview = document.getElementById('videoPreview');
+const previewPlayer = document.getElementById('previewPlayer');
+const tbody = document.querySelector("table tbody");
 
+// ================= PREVIEW VIDEO SEBELUM UPLOAD =================
+videoInput.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    previewPlayer.src = URL.createObjectURL(file);
+    preview.style.display = 'block';
+});
+
+// ================= AJAX SUBMIT FORM =================
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    spinner.style.display = 'inline-block';
 
     const formData = new FormData(form);
 
-    // 🔥 LOADING ON
-    btnSubmit.disabled = true;
-    const originalText = btnSubmit.innerHTML;
-    btnSubmit.innerHTML = `
-        <span class="spinner-border spinner-border-sm me-1"></span>
-        Menyimpan...
-    `;
-
     try {
-        const res = await fetch('/api/kegiatan', {
+        const res = await fetch('/api/video-kegiatan', {
             method: 'POST',
             body: formData
         });
 
         const data = await res.json();
+        spinner.style.display = 'none';
 
-        document.querySelectorAll(".alert").forEach(a => a.remove());
+        Swal.fire({
+            icon: data.status === 'success' ? 'success' : 'error',
+            title: data.status === 'success' ? 'Berhasil!' : 'Gagal!',
+            text: data.message
+        });
 
-        let type = data.status === "success" ? "success" : "danger";
-
-        const alert = document.createElement("div");
-        alert.className = `alert alert-${type} mt-3`;
-        alert.innerText = data.message ?? "Terjadi kesalahan";
-        form.insertAdjacentElement("afterend", alert);
-
-        setTimeout(() => {
-            alert.style.transition = "opacity 0.6s";
-            alert.style.opacity = "0";
-            setTimeout(() => alert.remove(), 600);
-        }, 3000);
-
-        if (data.status === "success") {
+        if (data.status === 'success') {
             form.reset();
-            loadKegiatan(); // 🔥 refresh tabel
+            preview.style.display = 'none';
+            addVideoToTable(data.data);
         }
 
-    } catch (error) {
-        console.error(error);
-
-        const alert = document.createElement("div");
-        alert.className = "alert alert-danger mt-3";
-        alert.innerText = "Gagal koneksi ke server!";
-        form.insertAdjacentElement("afterend", alert);
-
-        setTimeout(() => {
-            alert.style.transition = "opacity 0.6s";
-            alert.style.opacity = "0";
-            setTimeout(() => alert.remove(), 600);
-        }, 3000);
-    } finally {
-        // 🔥 LOADING OFF
-        btnSubmit.disabled = false;
-        btnSubmit.innerHTML = originalText;
+    } catch (err) {
+        spinner.style.display = 'none';
+        Swal.fire('Error', 'Gagal koneksi ke server', 'error');
+        console.error(err);
     }
 });
 
-async function loadKegiatan() {
-
-    const res = await fetch('/api/kegiatan');
-    const data = await res.json();
-
-    const tbody = document.querySelector("table tbody");
-    tbody.innerHTML = "";
-
-    data.forEach((item, index) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td class="py-3">${index + 1}</td>
-            <td class="py-3 text-start">
-                <strong>${item.title}</strong><br>
-                ${item.description.slice(0, 100)}...
-            </td>
-            <td class="py-3">
-                <button class="btn btn-sm btn-outline-primary btn-edit" data-id="${item.id}">
-                    <i class="fa fa-edit"></i> Edit
-                </button>
-                <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${item.id}">
-                    <i class="fa fa-trash"></i> Hapus
-                </button>
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
+// ================= FUNCTION TAMBAHKAN VIDEO KE TABEL TANPA RELOAD =================
+function addVideoToTable(video) {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+        <td>${tbody.children.length + 1}</td>
+        <td class="text-start">${video.video_title}</td>
+        <td class="text-start">${video.description ? video.description.slice(0,80) : '-'}</td>
+        <td>${new Date().toLocaleDateString('id-ID')}</td>
+        <td>
+            <button class="btn btn-sm btn-outline-primary btn-edit" data-id="${video.id}" data-title="${video.video_title}" data-desc="${video.description}" data-url="${video.video_url}">
+                <i class="fa fa-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${video.id}">
+                <i class="fa fa-trash"></i>
+            </button>
+        </td>
+    `;
+    tbody.appendChild(tr);
 }
 
-loadKegiatan();
+// ================= EVENT DELEGATION UNTUK EDIT & DELETE =================
 
-document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".btn-delete");
+// EDIT VIDEO
+tbody.addEventListener('click', function(e) {
+    if (e.target.closest('.btn-edit')) {
+        const btn = e.target.closest('.btn-edit');
+        const id = btn.dataset.id;
+        const title = btn.dataset.title;
+        const desc = btn.dataset.desc;
+        
+
+        document.getElementById('editId').value = id;
+        document.getElementById('editTitle').value = title;
+        document.getElementById('editDesc').value = desc;
+        
+
+        const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+        editModal.show();
+    }
+});
+
+document.getElementById('saveEditVideo').addEventListener('click', async function () {
+    const id = document.getElementById('editId').value;
+    const title = document.getElementById('editTitle').value;
+    const desc = document.getElementById('editDesc').value;
+
+    try {
+        const res = await fetch(`/api/video-kegiatan/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                video_title: title,
+                description: desc
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.status === 'success') {
+            Swal.fire('Berhasil!', 'Video berhasil diperbarui', 'success');
+
+            // update tabel tanpa reload
+            const row = document.querySelector(`.btn-edit[data-id="${id}"]`).closest('tr');
+            row.children[1].innerText = title;
+            row.children[2].innerText = desc ? desc.slice(0,80) : '-';
+
+            bootstrap.Modal.getInstance(document.getElementById('editModal')).hide();
+        } else {
+            Swal.fire('Gagal!', data.message, 'error');
+        }
+
+    } catch (err) {
+        Swal.fire('Error', 'Gagal koneksi ke server', 'error');
+        console.error(err);
+    }
+});
+tbody.addEventListener('click', function(e) {
+    const btn = e.target.closest('.btn-delete');
     if (!btn) return;
 
     const id = btn.dataset.id;
 
     Swal.fire({
-        title: 'Yakin hapus?',
-        text: 'Kegiatan akan dihapus permanen.',
+        title: 'Yakin ingin menghapus?',
+        text: 'Video yang dihapus tidak bisa dikembalikan!',
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Ya, hapus!'
-    }).then(res => {
-        if (!res.isConfirmed) return;
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, hapus!',
+        cancelButtonText: 'Batal'
+    }).then(async (result) => {
+        if (!result.isConfirmed) return;
 
-        fetch(`/api/kegiatan/${id}`, { method: "DELETE" })
-            .then(r => r.json())
-            .then(data => {
-                Swal.fire(
-                    data.status === "success" ? "Berhasil!" : "Gagal!",
-                    data.message,
-                    data.status
-                );
-
-                if (data.status === "success") {
-                    loadKegiatan();
-                }
+        try {
+            const res = await fetch(`/api/video-kegiatan/${id}`, {
+                method: 'DELETE'
             });
+            const data = await res.json();
+
+           if (data.status === 'success') {
+    Swal.fire('Terhapus!', 'Video berhasil dihapus', 'success')
+      .then(() => {
+        window.location.reload();
+      });
+            } else {
+                Swal.fire('Gagal!', data.message, 'error');
+            }
+
+        } catch (err) {
+            Swal.fire('Error', 'Gagal koneksi ke server', 'error');
+            console.error(err);
+        }
     });
-});
-
-function showAlert(msg, type = "success") {
-
-    document.querySelectorAll(".alert").forEach(a => a.remove());
-
-    const alert = document.createElement("div");
-    alert.className = `alert alert-${type} mt-3`;
-    alert.innerText = msg;
-
-    document.querySelector("#container-wrapper").insertAdjacentElement("afterbegin", alert);
-
-    setTimeout(() => {
-        alert.style.transition = "opacity 0.6s";
-        alert.style.opacity = "0";
-        setTimeout(() => alert.remove(), 600);
-    }, 3000);
-}
-
-document.addEventListener("click", async (e) => {
-    const btn = e.target.closest(".btn-edit");
-    if (!btn) return;
-
-    const id = btn.dataset.id;
-
-    const res = await fetch(`/api/kegiatan/${id}`);
-    const data = await res.json();
-
-    document.getElementById("editIsi").value = data.description;
-    document.getElementById("editTitle").value = data.title;
-    document.getElementById("editDate").value = data.date;
-
-    document.getElementById("saveEditRule").dataset.id = id;
-
-    const modal = new bootstrap.Modal(document.getElementById("editModal"));
-    modal.show();
-});
-
-document.getElementById("saveEditRule").addEventListener("click", async (e) => {
-
-    const id = e.target.dataset.id;
-
-    const payload = {
-        title: document.getElementById("editTitle").value,
-        date: document.getElementById("editDate").value,
-        description: document.getElementById("editIsi").value
-    };
-
-    const res = await fetch(`/api/kegiatan/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    });
-
-    const data = await res.json();
-
-    Swal.fire(
-        data.status === "success" ? "Berhasil!" : "Gagal!",
-        data.message,
-        data.status
-    );
-
-    if (data.status === "success") {
-        const modal = bootstrap.Modal.getInstance(document.getElementById("editModal"));
-        modal.hide();
-        loadKegiatan();
-    }
 });
 </script>
+
+
+
+
 <script src="static/vendor/jquery/jquery.min.js"></script>
 <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <script src="static/vendor/jquery-easing/jquery.easing.min.js"></script>
