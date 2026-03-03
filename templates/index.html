@@ -323,23 +323,37 @@
   </div>
 
   <!-- GRID -->
-  <div class="finance-grid">
-    <!-- PEMASUKAN -->
-    <div class="finance-card income" id="pemasukan" data-aos="fade-down">
-      <header>
-        <i class="fas fa-arrow-up"></i>
-        <h3>Pemasukan RT</h3>
-      </header>
+<div class="finance-grid">
 
-      <p class="desc">
-        Ringkasan dana masuk dari iuran warga dan sumber lain.
-      </p>
+  <!-- PEMASUKAN -->
+  <div class="finance-card income" id="pemasukan" data-aos="fade-down">
+    <header>
+      <i class="fas fa-arrow-up"></i>
+      <h3>Pemasukan RT</h3>
+    </header>
 
-      <div class="amount green">
-        <span>Total Pemasukan</span>
-        <strong id="total-pemasukan">Rp 0</strong>
-      </div>
+    <p class="desc">
+      Ringkasan dana masuk dari iuran warga dan sumber lain.
+    </p>
+
+    <div class="amount green">
+      <span>Total Pemasukan</span>
+      <strong id="total-pemasukan">Rp 0</strong>
     </div>
+
+    <!-- TAMBAHAN RINCIAN -->
+    <h4>Rincian Pemasukan</h4>
+    <ul id="pemasukan-list" class="income-list"></ul>
+
+    <div class="toggle-area">
+      <button id="lihat-lebih-pemasukan" class="toggle-btn" style="display:none;">
+        Lihat Lebih
+      </button>
+      <button id="lihat-sedikit-pemasukan" class="toggle-btn" style="display:none;">
+        Tutup
+      </button>
+    </div>
+  </div>
 
     <!-- PENGELUARAN -->
     <div class="finance-card expense" id="pengeluaran" data-aos="fade-up">

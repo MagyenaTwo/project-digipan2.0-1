@@ -312,16 +312,37 @@ nav ul li:hover > a {
 }
 
 /* ===== EXPENSE LIST ===== */
+.income-list,
 .expense-list {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 10px 0 0 0;
 }
 
+.income-list li,
 .expense-list li {
-  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
   border-bottom: 1px dashed #e5e7eb;
-  font-size: 14px;
+  font-size: 14px; /* lebih kecil */
+  color: #374151; /* abu gelap modern */
+  transition: all 0.2s ease;
+}
+
+.income-list li span,
+.expense-list li span {
+  font-weight: 600;
+  font-size: 14px; /* nominal sedikit lebih kecil */
+  color: #111827; /* lebih tegas */
+}
+
+.income-list li:hover,
+.expense-list li:hover {
+  background-color: #f9fafb;
+  padding-left: 6px;
+  border-radius: 6px;
 }
 
 /* ===== TOGGLE ===== */

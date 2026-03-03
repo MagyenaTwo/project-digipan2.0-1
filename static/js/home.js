@@ -123,7 +123,6 @@ document.querySelectorAll('i[data-color]').forEach(icon => {
 
 // // Auto-slide
 // setInterval(nextSlide, 5000);
-
 async function getLaporan() {
   try {
     const [resPemasukan, resPengeluaran] = await Promise.all([
@@ -134,57 +133,102 @@ async function getLaporan() {
     const dataPemasukan = await resPemasukan.json();
     const dataPengeluaran = await resPengeluaran.json();
 
+    // ========================
+    // TOTAL ANGKA
+    // ========================
     const elPemasukan = document.getElementById("total-pemasukan");
-    const elKas = document.getElementById("total-kas");
     const elPengeluaran = document.getElementById("total-pengeluaran");
-    const elIuran = document.getElementById("total-iuran");
 
-    if (elPemasukan) elPemasukan.textContent = "Rp " + dataPemasukan.total_pemasukan.toLocaleString();
-    if (elKas) elKas.textContent = "Rp " + dataPemasukan.total_kas.toLocaleString();
-    if (elPengeluaran) elPengeluaran.textContent = "Rp " + dataPengeluaran.total_pengeluaran.toLocaleString();
-    if (elIuran) elIuran.textContent = "Rp " + dataPengeluaran.total_iuran.toLocaleString();
+    if (elPemasukan)
+      elPemasukan.textContent =
+        "Rp " + dataPemasukan.total_pemasukan.toLocaleString();
 
+    if (elPengeluaran)
+      elPengeluaran.textContent =
+        "Rp " + dataPengeluaran.total_pengeluaran.toLocaleString();
+
+    // ========================
+    // RINCIAN PENGELUARAN
+    // ========================
     const pengeluaranList = document.getElementById("pengeluaran-list");
     const lihatLebihBtn = document.getElementById("lihat-lebih");
     const lihatSedikitBtn = document.getElementById("lihat-sedikit");
     const pengeluaranData = dataPengeluaran.pengeluaran_data;
 
-    if (!pengeluaranData || pengeluaranData.length === 0) {
-      pengeluaranList.innerHTML = "<li>Tidak ada data pengeluaran.</li>";
-      lihatLebihBtn.style.display = "none";
-      lihatSedikitBtn.style.display = "none";
-      return;
-    }
+    if (pengeluaranData && pengeluaranData.length > 0) {
+      let tampil = 1;
+      const totalData = pengeluaranData.length;
 
-    let tampil = 1;
-    const totalData = pengeluaranData.length;
+      function renderPengeluaran() {
+        pengeluaranList.innerHTML = pengeluaranData
+          .slice(0, tampil)
+          .map(
+            p =>
+              `<li>${p.nama_kegiatan} <span>Rp ${p.jumlah.toLocaleString()}</span></li>`
+          )
+          .join("");
 
-    function renderList() {
-      pengeluaranList.innerHTML = pengeluaranData
-        .slice(0, tampil)
-        .map(p => `<li>${p.nama_kegiatan} <span>Rp ${p.jumlah.toLocaleString()}</span></li>`)
-        .join("");
-
-      if (tampil < totalData) {
-        lihatLebihBtn.style.display = "inline-block";
-        lihatSedikitBtn.style.display = "none";
-      } else {
-        lihatLebihBtn.style.display = "none";
-        lihatSedikitBtn.style.display = "inline-block";
+        lihatLebihBtn.style.display =
+          tampil < totalData ? "inline-block" : "none";
+        lihatSedikitBtn.style.display =
+          tampil === totalData ? "inline-block" : "none";
       }
+
+      lihatLebihBtn.addEventListener("click", () => {
+        tampil = totalData;
+        renderPengeluaran();
+      });
+
+      lihatSedikitBtn.addEventListener("click", () => {
+        tampil = 1;
+        renderPengeluaran();
+      });
+
+      renderPengeluaran();
     }
 
-    lihatLebihBtn.addEventListener("click", () => {
-      tampil = totalData;
-      renderList();
-    });
+    // ========================
+    // RINCIAN PEMASUKAN (BARU)
+    // ========================
+    const pemasukanList = document.getElementById("pemasukan-list");
+    const lihatLebihPemasukan = document.getElementById("lihat-lebih-pemasukan");
+    const lihatSedikitPemasukan = document.getElementById("lihat-sedikit-pemasukan");
+    const pemasukanData = dataPemasukan.pemasukan_data;
 
-    lihatSedikitBtn.addEventListener("click", () => {
-      tampil = 1;
-      renderList();
-    });
+    if (pemasukanData && pemasukanData.length > 0) {
+      let tampilMasuk = 1;
+      const totalMasuk = pemasukanData.length;
 
-    renderList();
+      function renderPemasukan() {
+        pemasukanList.innerHTML = pemasukanData
+          .slice(0, tampilMasuk)
+          .map(p => `
+            <li>
+              ${p.nama_keluarga} 
+              <span>Rp ${p.jumlah.toLocaleString()}</span>
+            </li>
+          `)
+          .join("");
+
+        lihatLebihPemasukan.style.display =
+          tampilMasuk < totalMasuk ? "inline-block" : "none";
+        lihatSedikitPemasukan.style.display =
+          tampilMasuk === totalMasuk ? "inline-block" : "none";
+      }
+
+      lihatLebihPemasukan.addEventListener("click", () => {
+        tampilMasuk = totalMasuk;
+        renderPemasukan();
+      });
+
+      lihatSedikitPemasukan.addEventListener("click", () => {
+        tampilMasuk = 1;
+        renderPemasukan();
+      });
+
+      renderPemasukan();
+    }
+
   } catch (err) {
     console.error("Gagal memuat data laporan:", err);
   }
