@@ -137,11 +137,13 @@ async function getLaporan() {
     // TOTAL ANGKA
     // ========================
     const elPemasukan = document.getElementById("total-pemasukan");
+    const elKas = document.getElementById("total-kas");
     const elPengeluaran = document.getElementById("total-pengeluaran");
 
     if (elPemasukan)
       elPemasukan.textContent =
         "Rp " + dataPemasukan.total_pemasukan.toLocaleString();
+        if (elKas) elKas.textContent = "Rp " + dataPemasukan.total_kas.toLocaleString()
 
     if (elPengeluaran)
       elPengeluaran.textContent =
