@@ -2522,3 +2522,13 @@ body {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+.pdf-item {
+  outline: none;
+}
+
+.pdf-item:focus,
+.pdf-item:focus-visible,
+.pdf-item:active {
+  outline: none;
+  box-shadow: none;
+}
