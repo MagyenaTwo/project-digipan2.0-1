@@ -383,7 +383,18 @@
   <button id="lihat-keuangan-btn" class="btn-pdf">
     <i class="fas fa-file-pdf"></i> Laporan Keuangan Lengkap
   </button>
+ <div id="pdfModal" class="pdf-modal">
+  <div class="pdf-modal-content">
+    
+    <div class="pdf-modal-header">
+      <h3>📊 Laporan Keuangan</h3>
+      <span class="close-x" onclick="closePdfModal()">✕</span>
+    </div>
 
+    <div id="pdfList"></div>
+
+  </div>
+</div>
 
 <section id="informasi">
   <h2 data-aos="flip-left">INFORMASI</h2>
@@ -761,31 +772,64 @@ btnPeraturan.addEventListener("click", async () => {
 
 
 const btnKeuangan = document.getElementById("lihat-keuangan-btn");
+const pdfModal = document.getElementById("pdfModal");
+const pdfList = document.getElementById("pdfList");
 
 btnKeuangan.addEventListener("click", async () => {
-  const newWindow = window.open("", "_blank");
-
   try {
     const res = await fetch("/api/keuangan/pdf");
     const data = await res.json();
 
     if (data.status && data.data.length > 0) {
-      const dok = data.data[0];
 
-      // cukup pakai judul, tidak perlu URL
-      newWindow.location.href = `/api/keuangan/pdf/proxy/${encodeURIComponent(dok.judul)}`;
-      
+      // Kalau cuma 1 langsung buka
+      if (data.data.length === 1) {
+        const dok = data.data[0];
+        window.open(`/api/keuangan/pdf/proxy/${encodeURIComponent(dok.judul)}`, "_blank");
+        return;
+      }
+
+      // Kosongkan list dulu
+      pdfList.innerHTML = "";
+
+      // Buat list klik langsung
+      data.data.forEach((item) => {
+
+  const div = document.createElement("div");
+  div.classList.add("pdf-item");
+
+  div.innerHTML = `
+    <div class="pdf-info">
+      <div class="pdf-icon">
+        <i class="fas fa-file-pdf"></i>
+      </div>
+      <div class="pdf-title">${item.judul}</div>
+    </div>
+    <div class="pdf-open">Buka →</div>
+  `;
+
+  div.addEventListener("click", () => {
+    window.open(`/api/keuangan/pdf/proxy/${encodeURIComponent(item.judul)}`, "_blank");
+    closePdfModal();
+  });
+
+  pdfList.appendChild(div);
+});
+
+      pdfModal.style.display = "block";
+
     } else {
-      newWindow.close();
       alert("Tidak ada laporan keuangan tersedia.");
     }
 
   } catch (err) {
-    newWindow.close();
     alert("Gagal memuat laporan keuangan.");
   }
 });
 
+function closePdfModal() {
+  pdfModal.style.display = "none";
+}
 
 document.querySelectorAll(".surat-item").forEach(item => {
   item.addEventListener("click", () => {
