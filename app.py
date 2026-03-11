@@ -3781,6 +3781,11 @@ def get_all_kegiatan_video():
     )
 
 
+@app.route("/KegiatanWarga")
+def detailkegiatan():
+    return render_template("detail_kegiatan.html")
+
+
 @app.route("/api/visit", methods=["POST"])
 def track_visit():
     print("Visitor masuk:", datetime.now())

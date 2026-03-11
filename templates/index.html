@@ -419,7 +419,33 @@
     </div>
   </div>
 </section>
+<section id="pengurus-rt" style="margin-left:-10px; margin-right:-10px; margin-top: 50px; margin-bottom: 50px;">
 
+<h2>PENGURUS RT 08/01</h2>
+
+<p class="rt-desc">
+Pengurus RT 08/01 merupakan perwakilan warga yang bertugas mengelola
+administrasi lingkungan, menjaga keamanan dan kebersihan wilayah,
+serta menjadi penghubung antara warga dan pemerintah setempat.
+</p>
+<div class="slider" id="slider">
+<div class="track" id="track">
+
+<div class="profile"><img src="static/img/boy.png"><div class="nama">Ketua RT</div><div class="jabatan">Ketua RT</div></div>
+<div class="profile"><img src="static/img/boy.png"><div class="nama">Wakil Ketua RT</div><div class="jabatan">Wakil Ketua RT</div></div>
+<div class="profile"><img src="static/img/boy.png"><div class="nama">Sekretaris</div><div class="jabatan">Sekretaris</div></div>
+<div class="profile"><img src="static/img/boy.png"><div class="nama">Bendahara</div><div class="jabatan">Bendahara</div></div>
+<div class="profile"><img src="static/img/boy.png"><div class="nama">Keamanan</div><div class="jabatan">Keamanan</div></div>
+<div class="profile"><img src="static/img/boy.png"><div class="nama">Kebersihan</div><div class="jabatan">Kebersihan</div></div>
+<div class="profile"><img src="static/img/boy.png"><div class="nama">Kader</div><div class="jabatan">Kader</div></div>
+<div class="profile"><img src="static/img/boy.png"><div class="nama">Kader</div><div class="jabatan">Kader</div></div>
+<div class="profile"><img src="static/img/boy.png"><div class="nama">Kader</div><div class="jabatan">Kader</div></div>
+<div class="profile"><img src="static/img/boy.png"><div class="nama">Kader</div><div class="jabatan">Kader</div></div>
+
+</div>
+</div>
+
+</section>
 
 </main>
 
@@ -436,7 +462,7 @@
 </div>
 
   <div style="text-align:center;margin-top:16px;">
-    <button id="toggleBtn" class="btn-toggle">Lihat Semua</button>
+    <button id="btnSemuaKegiatan" class="btn-toggle">Lihat Semua</button>
   </div>
 </section>
 <div id="detailModal" class="modal">
@@ -939,6 +965,110 @@ document.getElementById("toggleVideoBtn").addEventListener("click", () => {
   showAll = !showAll;
   renderVideos();
 });
+
+const track = document.getElementById("track")
+const slider = document.getElementById("slider")
+
+track.innerHTML += track.innerHTML
+
+let position = 0
+let speed = 0.4
+let isDragging = false
+let startX = 0
+
+function updateScale(){
+
+const profiles = document.querySelectorAll(".profile")
+const sliderRect = slider.getBoundingClientRect()
+const center = sliderRect.left + sliderRect.width/2
+
+profiles.forEach(p=>{
+
+p.classList.remove("active")
+
+const rect = p.getBoundingClientRect()
+const itemCenter = rect.left + rect.width/2
+
+const distance = Math.abs(center - itemCenter)
+const maxDistance = 420
+
+let scale = 1 - (distance / maxDistance)
+
+if(scale < 0.75) scale = 0.75
+if(scale > 1.28) scale = 1.28
+
+p.style.transform = `scale(${scale})`
+
+if(distance < 80){
+p.classList.add("active")
+}
+
+})
+
+}
+
+function animate(){
+
+if(!isDragging){
+position -= speed
+}
+
+const halfWidth = track.scrollWidth / 2
+
+if(position <= -halfWidth){
+position += halfWidth
+}
+
+if(position >= 0){
+position -= halfWidth
+}
+
+track.style.transform = `translateX(${position}px)`
+
+updateScale()
+
+requestAnimationFrame(animate)
+}
+
+animate()
+
+slider.addEventListener("mousedown",e=>{
+isDragging=true
+startX=e.pageX
+})
+
+document.addEventListener("mouseup",()=>{
+isDragging=false
+})
+
+document.addEventListener("mousemove",e=>{
+if(!isDragging) return
+let move=e.pageX-startX
+position+=move
+startX=e.pageX
+})
+
+slider.addEventListener("touchstart",e=>{
+isDragging=true
+startX=e.touches[0].pageX
+})
+
+slider.addEventListener("touchend",()=>{
+isDragging=false
+})
+
+slider.addEventListener("touchmove",e=>{
+if(!isDragging) return
+let move=e.touches[0].pageX-startX
+position+=move*0.9
+startX=e.touches[0].pageX
+})
+
+
+document.getElementById("btnSemuaKegiatan").onclick = function(){
+  window.location.href = "{{ url_for('detailkegiatan') }}";
+};
+
 </script>
 
 <!-- <script src="https://performhouseholduneasy.com/99/c0/a7/99c0a72f81e1a3a5f1bb63ca660b1402.js"></script>

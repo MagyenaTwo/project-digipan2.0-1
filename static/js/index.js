@@ -159,6 +159,8 @@ document.getElementById('last-update-date-pemasukan').textContent = currentDate;
 
     let kegiatanIndex = 0;
 
+    
+    
 function slideKegiatan() {
     const slider = document.querySelector(".kegiatan-slider");
     const slides = document.querySelectorAll(".kegiatan-slider img");

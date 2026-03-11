@@ -299,7 +299,7 @@ nav ul li:hover > a {
 
 .amount.green {
   background: #ecfdf5;
-  color: #00ff3c;
+  color: #04aa2a;
 }
 
 .amount.red {
@@ -1280,9 +1280,10 @@ header.scrolled .logo .logo-text {
 
 /* ===== CARD KECIL ===== */
 .kegiatan-card.small {
-  display: grid;
+ display: grid;
   grid-template-columns: 160px 1fr;
-  height: 100%; /* 🔑 PENTING */
+  align-items: stretch;
+  height: 220px;
 }
 
 /* GAMBAR CARD KECIL */
@@ -1737,7 +1738,7 @@ body {
   transition: all .25s ease;
 }
 .close:hover {
-  background: var(--primary);
+  background: var(--brand-dark);
   transform: rotate(90deg) scale(1.1);
 }
 
@@ -2480,7 +2481,7 @@ body {
 .pdf-item:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 30px rgba(0,0,0,0.08);
-  border-color: #4f46e5;
+  border-color: #fff;
 }
 
 .pdf-info {
@@ -2531,4 +2532,334 @@ body {
 .pdf-item:active {
   outline: none;
   box-shadow: none;
+}
+
+/* ===== PENGURUS RT ===== */
+
+#pengurus-rt{
+text-align:center;
+padding:30px 20px;
+}
+
+#pengurus-rt h2{
+margin-bottom:40px;
+}
+
+.scene{
+width:600px;
+height:350px;
+margin:auto;
+perspective:1500px;
+}
+
+.carousel{
+width:100%;
+height:100%;
+position:relative;
+transform-style:preserve-3d;
+transition:transform .8s cubic-bezier(.22,.61,.36,1);
+cursor:grab;
+will-change:transform;
+}
+
+.carousel:active{
+cursor:grabbing;
+}
+
+
+/* ===== CARD ===== */
+
+.carousel .card{
+position:absolute;
+width:170px;
+height:220px;
+left:215px;
+top:70px;
+
+background:white;
+border-radius:18px;
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
+
+display:flex;
+flex-direction:column;
+align-items:center;
+
+padding-top:18px;
+
+transition:
+transform .5s cubic-bezier(.25,.8,.25,1),
+box-shadow .5s ease,
+filter .4s;
+}
+
+/* card lain sedikit redup */
+/* card tetap normal saat hover */
+.carousel:hover .card{
+filter:brightness(1);
+}
+
+/* ===== POP OUT EFFECT ===== */
+
+.carousel .card:hover{
+transform:scale(1.28) translateZ(420px);
+z-index:999;
+
+box-shadow:
+0 40px 90px rgba(0,0,0,0.45),
+0 0 35px rgba(52,172,176,0.45);
+
+border:1px solid #34acb0;
+
+filter:brightness(1);
+}
+
+/* ===== FOTO ===== */
+
+.carousel .card img{
+width:75px;
+height:75px;
+border-radius:50%;
+object-fit:cover;
+margin-bottom:10px;
+border:3px solid #34acb0;
+}
+
+/* ===== TEXT ===== */
+
+.carousel .card h3{
+margin:0;
+font-size:14px;
+}
+
+.badge{
+margin-top:5px;
+background:#34acb0;
+color:white;
+padding:3px 10px;
+border-radius:20px;
+font-size:11px;
+}
+
+.desc{
+font-size:11px;
+padding:0 10px;
+color:#555;
+margin-top:6px;
+}
+
+/* ===== POSISI MELINGKAR ===== */
+
+.carousel .card:nth-child(1){ transform:rotateY(0deg) translateZ(280px); }
+.carousel .card:nth-child(2){ transform:rotateY(36deg) translateZ(280px); }
+.carousel .card:nth-child(3){ transform:rotateY(72deg) translateZ(280px); }
+.carousel .card:nth-child(4){ transform:rotateY(108deg) translateZ(280px); }
+.carousel .card:nth-child(5){ transform:rotateY(144deg) translateZ(280px); }
+.carousel .card:nth-child(6){ transform:rotateY(180deg) translateZ(280px); }
+.carousel .card:nth-child(7){ transform:rotateY(216deg) translateZ(280px); }
+.carousel .card:nth-child(8){ transform:rotateY(252deg) translateZ(280px); }
+.carousel .card:nth-child(9){ transform:rotateY(288deg) translateZ(280px); }
+.carousel .card:nth-child(10){ transform:rotateY(324deg) translateZ(280px); }
+
+/* ===== MOBILE FIX ===== */
+
+@media (max-width:768px){
+
+#pengurus-rt{
+padding:30px 10px;
+}
+
+.scene{
+width:320px;
+height:260px;
+margin:auto;
+perspective:1000px;
+}
+
+/* card kecil */
+
+.carousel .card{
+width:105px;
+height:200px;
+left:100px;
+top:50px;
+}
+
+/* foto */
+
+.carousel .card img{
+width:55px;
+height:55px;
+}
+
+/* text */
+
+.carousel .card h3{
+font-size:12px;
+}
+
+.badge{
+font-size:9px;
+padding:2px 6px;
+}
+
+.desc{
+font-size:9px;
+}
+
+/* lingkaran kecil */
+
+.carousel .card:nth-child(1){ transform:rotateY(0deg) translateZ(180px); }
+.carousel .card:nth-child(2){ transform:rotateY(36deg) translateZ(180px); }
+.carousel .card:nth-child(3){ transform:rotateY(72deg) translateZ(180px); }
+.carousel .card:nth-child(4){ transform:rotateY(108deg) translateZ(180px); }
+.carousel .card:nth-child(5){ transform:rotateY(144deg) translateZ(180px); }
+.carousel .card:nth-child(6){ transform:rotateY(180deg) translateZ(180px); }
+.carousel .card:nth-child(7){ transform:rotateY(216deg) translateZ(180px); }
+.carousel .card:nth-child(8){ transform:rotateY(252deg) translateZ(180px); }
+.carousel .card:nth-child(9){ transform:rotateY(288deg) translateZ(180px); }
+.carousel .card:nth-child(10){ transform:rotateY(324deg) translateZ(180px); }
+
+}
+
+/* avatar default */
+
+.avatar{
+width:70px;
+height:70px;
+border-radius:50%;
+background:#e2e8f0;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:28px;
+color:#64748b;
+margin-bottom:10px;
+border:3px solid #34acb0;
+}
+
+
+
+/* SLIDER */
+.slider{
+width:100%;
+margin:0;
+overflow:hidden;
+cursor:grab;
+user-select:none;
+touch-action:pan-y;
+position:relative;
+}
+
+.slider:active{
+cursor:grabbing;
+}
+
+.track{
+display:flex;
+gap:90px;
+margin-top:50px;
+align-items:center;
+}
+
+.rt-desc{
+max-width:650px;
+margin:0 auto 30px;
+font-size:16px;
+line-height:1.6;
+text-align:center;
+}
+
+/* PROFILE */
+
+.profile{
+min-width:200px;
+text-align:center;
+transition:transform .3s ease, opacity .3s;
+}
+
+.profile img{
+width:160px;
+height:160px;
+border-radius:50%;
+object-fit:cover;
+border:7px solid white;
+box-shadow:0 20px 40px rgb(255, 255, 255);
+transition:all .35s ease;
+pointer-events:none;
+user-select:none;
+-webkit-user-drag:none;
+}
+
+/* hover */
+
+.profile:hover img{
+transform:scale(1.08);
+box-shadow:0 25px 55px rgba(55,154,157,0.45);
+}
+
+/* TEXT */
+
+.nama{
+margin-top:18px;
+font-weight:700;
+font-size:18px;
+color:#0f172a;
+}
+
+.jabatan{
+font-size:15px;
+color:#64748b;
+margin-top:4px;
+}
+
+/* CENTER EFFECT */
+
+.profile.active img{
+transform:scale(1.28);
+border-color:#379a9d;
+
+box-shadow:
+0 25px 60px rgba(0,0,0,0.25),
+0 0 30px rgba(55,154,157,0.7);
+}
+
+.profile.active .nama{
+color:#379a9d;
+}
+
+/* TABLET */
+
+@media(max-width:1024px){
+
+.track{
+gap:60px;
+}
+
+.profile{
+min-width:150px;
+}
+
+.profile img{
+width:120px;
+height:120px;
+}
+
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.track{
+gap:35px;
+}
+
+.profile{
+min-width:110px;
+}
+
+.profile img{
+width:90px;
+height:90px;
+}
 }

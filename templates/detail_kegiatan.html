@@ -1,0 +1,342 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMARTDELAPAN — Administrasi Modern</title>
+<link href="static/img/logo/2.png" rel="icon">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/detail-kegiatan.css') }}">
+  <meta name="monetag" content="85bd28f9c91936c67f61b795b91b6572">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+  
+<header>
+ <div class="nav-container">
+  <div class="logo">
+  <img src="static/img/logo/heading.png" alt="Logo Smartdelapan">
+  <span class="logo-text">SMARTDELAPAN</span>
+</div>
+
+  <nav>
+      <div class="hamburger" onclick="toggleMenu()">
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+      <ul id="navMenu">
+         <li><a href="/main"><i class="fas fa-home"></i> Beranda</a></li>
+        <li><a href="/main#layanan"><i class="fas fa-tools"></i> Layanan Utama</a></li>
+        <li>
+          <a href="/main#laporan"><i class="fas fa-file-invoice-dollar"></i> Laporan Keuangan ▾</a>
+          <ul>
+            <li><a href="/main#pemasukan">Pemasukan</a></li>
+            <li><a href="/main#pengeluaran">Pengeluaran</a></li>
+          </ul>
+        </li>
+         <li><a href="/main#informasi"><i class="fas fa-info-circle"></i> Informasi</a></li>
+        <li><a href="/main#kegiatan"><i class="fas fa-book"></i> Kegiatan</a></li>
+        <!-- <li><a href="/logoutuser" ><i class="fas fa-sign-out-alt"></i> Keluar</a></li> -->
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section id="kegiatan">
+  <div class="kegiatan-container">
+    <h2 data-aos="flip-left">KEGIATAN WARGA</h2>
+  
+  <!-- WADAH DINAMIS -->
+  <div id="kegiatanGrid"></div>
+</div>
+
+  
+</section>
+<div id="detailModal" class="modal">
+  <div class="modal-content">
+
+    <!-- CLOSE -->
+    <span class="close">&times;</span>
+
+    <!-- HEADER / HERO -->
+    <div class="modal-header">
+      <h2 id="modalTitle"></h2>
+
+      <!-- META FLOAT (BADGE + TANGGAL) -->
+      <div class="modal-meta-box">
+        <span class="badge">Kegiatan</span>
+        <span class="date">
+          📅 <span id="modalDate"></span>
+        </span>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="modal-body">
+      <div id="imageCount" class="image-count"></div>
+
+      <div id="modalImages" class="modal-images"></div>
+
+      <p id="modalDescription"></p>
+    </div>
+
+  </div>
+</div>
+<!-- PREVIEW GAMBAR FULLSCREEN -->
+<div id="imagePreview" class="image-preview">
+  <span class="close-preview">&times;</span>
+  <img id="previewImg">
+</div>
+
+
+<!-- Modal Kotak Saran -->
+<div class="suggestion-modal" id="suggestionModal">
+  <div class="suggestion-box">
+    
+    <button class="close-suggestion" id="closeSuggestion">&times;</button>
+    <h3>Kotak Saran Warga</h3>
+
+    <p class="info-saran">
+      Berikan masukan mengenai kebersihan, keamanan, kegiatan warga, atau hal lain yang bisa meningkatkan lingkungan kita.
+    </p>
+
+
+    <input type="text" id="userInput" placeholder="Nama Anda..." class="input-user">
+
+    <textarea id="saranInput" placeholder="Tulis saran Anda..."></textarea>
+    <button class="send-btn" id="kirimSaran">Kirim</button>
+  </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<section class="video-section">
+  <div class="video-grid" id="videoGrid"></div>
+
+  <div style="text-align:center; margin-top:20px;">
+    <button id="toggleVideoBtn" style="display:none;" class="btn-videotoggle">
+  Lihat lebih banyak
+</button>
+ 
+  </div>
+</section>
+
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-top">
+      <div class="footer-group-left">
+        <div class="footer-logo">
+          <img src="static/img/logo/logodepok.png" alt="Logo Depok" class="footer-img">
+          <span class="logo-text">SmartDelapan</span>
+        </div>
+        <div class="footer-partner">
+          <img src="static/img/logo/3.jpeg" alt="Logo Partner" class="footer-img partner-img">
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href="/tentang">Tentang</a>
+        <a href="/privasi">Kebijakan & Privasi</a>
+        <a href="/SyaratDanKetentuan">Syarat & Ketentuan</a>
+      </div>
+    </div>
+
+    
+    <div class="footer-copy">
+      © <span id="year"></span> SmartDelapan | Seluruh hak cipta dilindungi
+    </div>
+  </div>
+</footer>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+AOS.init({
+  duration: 900,
+  easing: 'ease-out-cubic',
+  offset: 120,
+  once: false
+});
+
+/* ================= GLOBAL ================= */
+
+let kegiatanCache = [];
+
+const modal = document.getElementById("detailModal");
+const modalTitle = document.getElementById("modalTitle");
+const modalImages = document.getElementById("modalImages");
+const modalDescription = document.getElementById("modalDescription");
+const modalDate = document.getElementById("modalDate");
+const modalClose = document.querySelector(".close");
+
+const preview = document.getElementById("imagePreview");
+const previewImg = document.getElementById("previewImg");
+const closePreview = document.querySelector(".close-preview");
+
+/* ================= UTIL ================= */
+
+function formatDate(date){
+  return new Date(date).toLocaleDateString("id-ID",{
+    day:"numeric",
+    month:"long",
+    year:"numeric"
+  });
+}
+
+function getImage(item){
+  try{
+    const imgs = Array.isArray(item.image_urls)
+      ? item.image_urls
+      : JSON.parse(item.image_urls);
+
+    return imgs[0] || "/static/img/default.jpg";
+  }catch{
+    return item.image_urls || "/static/img/default.jpg";
+  }
+}
+
+/* ================= LOAD KEGIATAN ================= */
+
+async function loadKegiatan(){
+
+  const container = document.getElementById("kegiatanGrid");
+
+  container.innerHTML = `<p>Loading...</p>`;
+
+  const res = await fetch("/api/kegiatan");
+  kegiatanCache = await res.json();
+
+  if(!kegiatanCache.length){
+    container.innerHTML = `<p>Tidak ada kegiatan.</p>`;
+    return;
+  }
+
+  renderItems(kegiatanCache);
+}
+
+/* ================= RENDER ITEMS ================= */
+
+function renderItems(items){
+
+  const container = document.getElementById("kegiatanGrid");
+
+  container.innerHTML = `
+    <div class="kegiatan-grid"></div>
+  `;
+
+  const grid = container.querySelector(".kegiatan-grid");
+
+  items.forEach(item => {
+
+    const card = document.createElement("div");
+    card.className = "kegiatan-card";
+
+    card.innerHTML = `
+      <img src="${getImage(item)}" loading="lazy">
+
+      <div class="card-body">
+
+        <span class="kegiatan-badge">
+          ${item.category || "Kegiatan"}
+        </span>
+
+        <h3>${item.title}</h3>
+
+        <p>${item.description.substring(0,80)}...</p>
+
+        <div class="kegiatan-meta">
+          <span>👤 ${item.admin || "Admin RT"}</span>
+          <span>📅 ${formatDate(item.date)}</span>
+        </div>
+
+        <button class="btn-detail" data-id="${item.id}">
+          Lihat Detail
+        </button>
+
+      </div>
+    `;
+
+    grid.appendChild(card);
+
+  });
+
+  document.querySelectorAll(".btn-detail").forEach(btn=>{
+    btn.onclick = ()=>openModal(btn.dataset.id);
+  });
+
+}
+
+/* ================= MODAL ================= */
+
+function openModal(id){
+
+  const data = kegiatanCache.find(item=>item.id==id);
+  if(!data) return;
+
+  modalTitle.textContent = data.title;
+  modalDescription.textContent = data.description;
+  modalDate.textContent = formatDate(data.date);
+
+  modalImages.innerHTML = "";
+
+  const imgs = Array.isArray(data.image_urls)
+    ? data.image_urls
+    : [data.image_urls];
+
+  imgs.forEach(url=>{
+
+    const img = document.createElement("img");
+    img.src = url || "/static/img/default.jpg";
+    img.loading = "lazy";
+
+    img.onclick = ()=>{
+      previewImg.src = img.src;
+      preview.style.display = "flex";
+      document.body.style.overflow = "hidden";
+    };
+
+    modalImages.appendChild(img);
+
+  });
+
+  modal.style.display = "block";
+}
+
+/* ================= CLOSE ================= */
+
+modalClose.onclick = ()=>{
+  modal.style.display = "none";
+};
+
+window.onclick = e=>{
+  if(e.target === modal){
+    modal.style.display = "none";
+  }
+};
+
+closePreview.onclick = ()=>{
+  preview.style.display = "none";
+  document.body.style.overflow = "";
+};
+
+preview.onclick = e=>{
+  if(e.target === preview){
+    preview.style.display = "none";
+    document.body.style.overflow = "";
+  }
+};
+
+/* ================= INIT ================= */
+
+loadKegiatan();
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+<script src="https://kit.fontawesome.com/your-own-kit.js" crossorigin="anonymous" async></script>
+
+</body>
+</html>
