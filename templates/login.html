@@ -1,88 +1,477 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <link href="static/img/logo/2.png" rel="icon">
-  <title>SMARTDELAPAN | Login</title>
-  <link href="static/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-  <link href="static/css/ruang-admin.min.css" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>SMARTDELAPAN | Login</title>
+
+<link rel="icon" href="static/img/logo/2.png">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+
+height:100vh;
+
+background:linear-gradient(135deg,#379a9d,#4bbbc0);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+}
+
+/* container */
+
+.login-container{
+
+width:100%;
+max-width:1000px;
+
+background:white;
+
+border-radius:20px;
+
+overflow:hidden;
+
+display:flex;
+
+box-shadow:0 40px 100px rgba(0,0,0,0.2);
+
+}
+
+/* left */
+
+.login-left{
+
+flex:1;
+
+background:linear-gradient(135deg,#379a9d,#2f7e80);
+
+color:white;
+
+padding:70px 50px;
+
+display:flex;
+flex-direction:column;
+justify-content:center;
+
+}
+
+.login-left img{
+
+width:90px;
+
+margin-bottom:25px;
+
+border-radius:14px;
+
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+
+}
+
+.login-left h1{
+
+font-size:36px;
+
+margin-bottom:12px;
+
+}
+
+.login-left p{
+
+opacity:.9;
+
+line-height:1.7;
+
+}
+
+/* right */
+
+.login-right{
+
+flex:1;
+
+padding:65px 55px;
+
+}
+
+.login-right h2{
+
+margin-bottom:25px;
+
+font-weight:600;
+
+color:#333;
+
+}
+
+/* input */
+
+.input-group{
+
+position:relative;
+
+margin-bottom:18px;
+
+}
+
+.input-group input{
+
+width:100%;
+
+padding:13px 45px;
+
+border-radius:9px;
+
+border:1px solid #ddd;
+
+font-size:14px;
+
+transition:.3s;
+
+}
+
+.input-group input:focus{
+
+border-color:#379a9d;
+
+outline:none;
+
+box-shadow:0 0 0 3px rgba(55,154,157,0.15);
+
+}
+
+.input-icon{
+
+position:absolute;
+
+left:14px;
+top:50%;
+
+transform:translateY(-50%);
+
+opacity:.6;
+
+}
+
+.toggle-pass{
+
+position:absolute;
+
+right:14px;
+top:50%;
+
+transform:translateY(-50%);
+
+cursor:pointer;
+
+opacity:.6;
+
+}
+
+/* remember */
+
+.remember{
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+margin-bottom:20px;
+
+font-size:14px;
+
+color:#555;
+
+}
+
+/* button */
+
+.btn-login{
+
+width:100%;
+
+padding:13px;
+
+border:none;
+
+border-radius:9px;
+
+background:#379a9d;
+
+color:white;
+
+font-size:15px;
+
+font-weight:500;
+
+cursor:pointer;
+
+transition:.3s;
+
+box-shadow:0 8px 25px rgba(55,154,157,.4);
+
+}
+
+.btn-login:hover{
+
+background:#2f7e80;
+
+transform:translateY(-2px);
+
+}
+
+/* version */
+
+.version{
+
+margin-top:25px;
+
+font-size:12px;
+
+text-align:center;
+
+color:#888;
+
+}
+
+/* toast alert */
+
+.toast{
+
+position:fixed;
+
+top:20px;
+right:20px;
+
+background:white;
+
+padding:14px 18px;
+
+border-radius:10px;
+
+box-shadow:0 10px 35px rgba(0,0,0,.2);
+
+display:flex;
+
+gap:10px;
+
+align-items:center;
+
+animation:slideIn .4s ease;
+
+}
+
+.toast-success{
+
+border-left:4px solid #10b981;
+
+}
+
+.toast-warning{
+
+border-left:4px solid #fbff05;
+
+}
+
+.toast-danger{
+
+border-left:4px solid #ef4444;
+
+}
+
+.toast-info{
+color: #ef4444;
+border-left:4px solid #ef4444;
+
+}
+
+@keyframes slideIn{
+
+from{
+transform:translateX(50px);
+opacity:0;
+}
+
+to{
+transform:translateX(0);
+opacity:1;
+}
+
+}
+
+/* mobile */
+
+@media(max-width:768px){
+
+.login-container{
+
+flex-direction:column;
+
+}
+
+.login-left{
+
+text-align:center;
+
+}
+
+}
+
+</style>
+
 </head>
 
-<body class="bg-gradient-login">
-  <!-- Login Content -->
+<body>
 
- <div class="container mt-3">
-  {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <div id="flash-messages">
-        {% for category, message in messages %}
-          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
-  {% endwith %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+
+<div class="toast toast-{{category}}">
+<span>
+{% if category == 'success' %}✔{% else %}✖{% endif %}
+</span>
+<span>{{message}}</span>
 </div>
 
-  </div>
-  <div class="container-login">
-    <div class="row justify-content-center">
-      <div class="col-xl-6 col-lg-12 col-md-9">
-        <div class="card shadow-sm my-5">
-          <div class="card-body p-0">
-            <div class="row">
-              <div class="col-lg-12">
-                <div class="login-form">
-                  <div class="text-center">
-                    <h1 class="h2 font-weight-bold text-primary mb-4">DASHBOARD SMARTDELAPAN </h1>
-                    <h1 class="h4 text-gray-900 mb-4">Login</h1>
-                  </div>
-                  <form class="user" method="POST" action="/cms">
-                  <div class="form-group">
-                    <input type="text" class="form-control" name="username" placeholder="Masukkan Nama Pengguna" required>
-                  </div>
-                  <div class="form-group">
-                    <input type="password" class="form-control" name="password" placeholder="Masukkan Password" required>
-                  </div>
-                  <div class="form-group">
-                    <div class="custom-control custom-checkbox small" style="line-height: 1.5rem;">
-                      <input type="checkbox" class="custom-control-input" id="customCheck">
-                      <label class="custom-control-label" for="customCheck">Remember Me</label>
-                    </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary btn-block">Masuk</button>
-                </form>
-                  <hr>
-                  <div class="text-center">
-                    <a class="font-weight-bold small" >Versi 1.0</a>
-                  </div>
-                  <div class="text-center">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Login Content -->
-  <script src="static/vendor/jquery/jquery.min.js"></script>
-  <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="static/vendor/jquery-easing/jquery.easing.min.js"></script>
-  <script src="static/js/ruang-admin.min.js"></script>
-  <script src="static/js/main.js"></script>
-</body>
+{% endfor %}
+{% endif %}
+{% endwith %}
 
+<div class="login-container">
+
+<div class="login-left">
+
+<img src="static/img/logo/3.jpeg">
+
+<h1>SMARTDELAPAN</h1>
+
+<p>
+Sistem Dashboard Manajemen RT untuk mengelola data warga,
+laporan keuangan, dan layanan masyarakat secara digital.
+</p>
+
+</div>
+
+<div class="login-right">
+
+<h2>Login Dashboard</h2>
+
+<form method="POST" action="/cms">
+
+<div class="input-group">
+
+<span class="input-icon">👤</span>
+
+<input id="username" type="text" name="username" placeholder="Username" required>
+
+</div>
+
+<div class="input-group">
+
+<span class="input-icon">🔒</span>
+
+<input id="password" type="password" name="password" placeholder="Password" required>
+
+<span class="toggle-pass" onclick="togglePass()">👁</span>
+
+</div>
+
+<div class="remember">
+
+<input type="checkbox" id="remember" name="remember">
+
+<label for="remember">Remember Me</label>
+
+</div>
+
+<button class="btn-login">
+Masuk ke Dashboard
+</button>
+
+</form>
+
+<div class="version">
+SMARTDELAPAN CMS • Versi 2.0
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* show password */
+
+function togglePass(){
+
+let p=document.getElementById("password");
+
+p.type=p.type==="password"?"text":"password";
+
+}
+
+/* remember username */
+
+const username=document.getElementById("username");
+const remember=document.getElementById("remember");
+
+if(localStorage.getItem("rememberUser")){
+
+username.value=localStorage.getItem("rememberUser");
+
+remember.checked=true;
+
+}
+
+document.querySelector("form").addEventListener("submit",function(){
+
+if(remember.checked){
+
+localStorage.setItem("rememberUser",username.value);
+
+}else{
+
+localStorage.removeItem("rememberUser");
+
+}
+
+});
+
+/* hide toast */
+
+setTimeout(()=>{
+
+document.querySelectorAll(".toast").forEach(t=>{
+
+t.style.opacity="0";
+
+t.style.transform="translateX(40px)";
+
+setTimeout(()=>t.remove(),400);
+
+});
+
+},3000);
+
+</script>
+
+</body>
 </html>
+

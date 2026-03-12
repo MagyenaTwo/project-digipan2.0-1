@@ -1,0 +1,179 @@
+*{
+box-sizing:border-box;
+}
+
+body{
+margin:0;
+font-family:Segoe UI,sans-serif;
+background:linear-gradient(135deg,#379a9d,#4fb2b5,#6fd4d7);
+height:100vh;
+}
+
+/* wrapper */
+
+.login-wrapper{
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+padding:20px;
+}
+
+/* container */
+
+.login-container{
+display:flex;
+width:900px;
+max-width:95%;
+background:white;
+border-radius:18px;
+overflow:hidden;
+box-shadow:0 25px 60px rgba(0,0,0,0.2);
+animation:fadeIn .6s ease;
+}
+
+/* LEFT SIDE */
+
+.login-left{
+flex:1;
+background:linear-gradient(160deg,#379a9d,#2f8689);
+color:white;
+padding:50px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+text-align:center;
+}
+
+.login-left img{
+width:90px;
+margin:auto;
+margin-bottom:20px;
+}
+
+.login-left h1{
+font-size:32px;
+margin-bottom:10px;
+font-weight:700;
+}
+
+.login-left p{
+font-size:15px;
+opacity:.9;
+line-height:1.6;
+}
+
+/* RIGHT SIDE */
+
+.login-right{
+flex:1;
+padding:50px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+.login-right h2{
+margin-bottom:25px;
+font-weight:600;
+color:#333;
+}
+
+/* form */
+
+.form-group{
+margin-bottom:18px;
+}
+
+.form-group input{
+width:100%;
+padding:13px;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:14px;
+transition:.3s;
+}
+
+.form-group input:focus{
+outline:none;
+border-color:#379a9d;
+box-shadow:0 0 0 2px rgba(55,154,157,.2);
+}
+
+/* remember */
+
+.remember{
+font-size:14px;
+margin-bottom:20px;
+color:#666;
+}
+
+/* button */
+
+.btn-login{
+width:100%;
+padding:13px;
+background:#379a9d;
+border:none;
+border-radius:10px;
+color:white;
+font-weight:600;
+cursor:pointer;
+transition:.3s;
+}
+
+.btn-login:hover{
+background:#2f8689;
+transform:translateY(-1px);
+box-shadow:0 8px 20px rgba(0,0,0,.2);
+}
+
+/* flash */
+
+.alert{
+border-radius:8px;
+font-size:14px;
+padding:10px;
+margin-bottom:15px;
+}
+
+/* version */
+
+.version{
+text-align:center;
+margin-top:20px;
+font-size:13px;
+color:#888;
+}
+
+/* animation */
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(20px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+/* mobile */
+
+@media(max-width:768px){
+
+.login-container{
+flex-direction:column;
+}
+
+.login-left{
+padding:35px;
+}
+
+.login-right{
+padding:35px;
+}
+
+}

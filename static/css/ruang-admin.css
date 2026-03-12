@@ -25,7 +25,7 @@ a:focus {
 }
 
 #wrapper #content-wrapper {
-  background-color: #fafdfb;
+  background-color: #eef7f7;
   width: 100%;
   overflow-x: hidden
 }
@@ -43,7 +43,6 @@ a:focus {
   padding-right: 1.5rem
 }
 
-
 .scroll-to-top {
   position: fixed;
   right: 1rem;
@@ -53,322 +52,181 @@ a:focus {
   height: 2.75rem;
   text-align: center;
   color: #fff;
-  background: rgba(90, 92, 105, .5);
+  background: rgba(55, 154, 157, .7);
   line-height: 46px;
   transition: all .3s ease-in-out;
-  -webkit-transition: all .3s ease-in-out
-}
-
-.scroll-to-top:focus,
-.scroll-to-top:hover {
-  color: #fff;
-  transition: all .3s ease-in-out;
-  -webkit-transition: all .3s ease-in-out
 }
 
 .scroll-to-top:hover {
-  background: #5a5c69;
-  transition: all .3s ease-in-out;
-  -webkit-transition: all .3s ease-in-out
+  background: #2c7f82;
 }
 
 .scroll-to-top i {
   font-weight: 800
 }
 
-@-webkit-keyframes growIn {
-  0% {
-      -webkit-transform: scale(.9);
-      transform: scale(.9);
-      opacity: 0
-  }
-
-  100% {
-      -webkit-transform: scale(1);
-      transform: scale(1);
-      opacity: 1
-  }
-}
-
-@keyframes growIn {
-  0% {
-      -webkit-transform: scale(.9);
-      transform: scale(.9);
-      opacity: 0
-  }
-
-  100% {
-      -webkit-transform: scale(1);
-      transform: scale(1);
-      opacity: 1
-  }
-}
-
-.animated--grow-in,
-.sidebar .nav-item .collapse {
-  -webkit-animation-name: growIn;
-  animation-name: growIn;
-  -webkit-animation-duration: .2s;
-  animation-duration: .2s;
-  -webkit-animation-timing-function: transform cubic-bezier(.18, 1.25, .4, 1), opacity cubic-bezier(0, 1, .4, 1);
-  animation-timing-function: transform cubic-bezier(.18, 1.25, .4, 1), opacity cubic-bezier(0, 1, .4, 1)
-}
-
-@-webkit-keyframes fadeIn {
-  0% {
-      opacity: 0
-  }
-
-  100% {
-      opacity: 1
-  }
-}
-
-@keyframes fadeIn {
-  0% {
-      opacity: 0
-  }
-
-  100% {
-      opacity: 1
-  }
-}
-
-.animated--fade-in {
-  -webkit-animation-name: fadeIn;
-  animation-name: fadeIn;
-  -webkit-animation-duration: .2s;
-  animation-duration: .2s;
-  -webkit-animation-timing-function: opacity cubic-bezier(0, 1, .4, 1);
-  animation-timing-function: opacity cubic-bezier(0, 1, .4, 1)
-}
+/* ================= PRIMARY ================= */
 
 .bg-gradient-primary {
-  background-color: #6777ef;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #6777ef), to(#303f9f));
-  background-image: linear-gradient(180deg, #6777ef 10%, #303f9f 100%);
-  background-size: cover
-}
-
-.bg-gradient-secondary {
-  background-color: #757575;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #757575), to(#60616f));
-  background-image: linear-gradient(180deg, #757575 10%, #60616f 100%);
-  background-size: cover
-}
-
-.bg-gradient-success {
-  background-color: #66bb6a;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #66bb6a), to(#13855c));
-  background-image: linear-gradient(180deg, #66bb6a 10%, #13855c 100%);
+  background-color: #379a9d;
+  background-image: linear-gradient(180deg,#379a9d 0%,#4fb2b5 50%,#6fd4d7 100%);
   background-size: cover
 }
 
 .bg-gradient-info {
-  background-color: #3abaf4;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #3abaf4), to(#258391));
-  background-image: linear-gradient(180deg, #3abaf4 10%, #258391 100%);
+  background-color: #379a9d;
+  background-image: linear-gradient(180deg,#379a9d 10%,#2c7f82 100%);
   background-size: cover
+}
+
+/* ================= SECONDARY COLORS ================= */
+
+.bg-gradient-secondary {
+  background-color: #7a8c8d;
+  background-image: linear-gradient(180deg,#7a8c8d 10%,#5f6f70 100%);
+}
+
+.bg-gradient-success {
+  background-color: #42b883;
+  background-image: linear-gradient(180deg,#42b883 10%,#2f9e6f 100%);
 }
 
 .bg-gradient-warning {
-  background-color: #ffa426;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #ffa426), to(#dda20a));
-  background-image: linear-gradient(180deg, #f6c23e 10%, #ffa426 100%);
-  background-size: cover
+  background-color: #ffb84d;
+  background-image: linear-gradient(180deg,#ffd27f 10%,#ffb84d 100%);
 }
 
 .bg-gradient-danger {
-  background-color: #fc544b;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #fc544b), to(#be2617));
-  background-image: linear-gradient(180deg, #fc544b 10%, #be2617 100%);
-  background-size: cover
+  background-color: #ff6b6b;
+  background-image: linear-gradient(180deg,#ff6b6b 10%,#d64545 100%);
 }
 
 .bg-gradient-light {
-  background-color: #e3eaef;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #e3eaef), to(#c2cbe5));
-  background-image: linear-gradient(180deg, #e3eaef 10%, #c2cbe5 100%);
-  background-size: cover
+  background-color: #eef7f7;
+  background-image: linear-gradient(180deg,#eef7f7 10%,#dbeeee 100%);
 }
 
 .bg-gradient-dark {
-  background-color: #212121;
-  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(10%, #212121), to(#373840));
-  background-image: linear-gradient(180deg, #212121 10%, #373840 100%);
-  background-size: cover
+  background-color: #1f2f30;
+  background-image: linear-gradient(180deg,#1f2f30 10%,#324849 100%);
 }
 
 .bg-gradient-default {
-  background: linear-gradient(87deg, #172b4d 0, #1a174d 100%) !important
+  background: linear-gradient(87deg,#2c7f82 0,#379a9d 100%) !important
 }
 
 .bg-gradient-login {
-  background-color: #f8f9fc;
-  background-size: cover
+  background: linear-gradient(135deg,#eaf7f7,#d4f0f1);
 }
 
-.bg-gray-100 {
-  background-color: #f8f9fc !important
-}
+/* ================= GRAY ================= */
 
-.bg-gray-200 {
-  background-color: #eaecf4 !important
-}
-
-.bg-gray-300 {
-  background-color: #dddfeb !important
-}
-
-.bg-gray-400 {
-  background-color: #d1d3e2 !important
-}
-
-.bg-gray-500 {
-  background-color: #b7b9cc !important
-}
-
-.bg-gray-600 {
-  background-color: #858796 !important
-}
-
-.bg-gray-700 {
-  background-color: #6e707e !important
-}
-
-.bg-gray-800 {
-  background-color: #5a5c69 !important
-}
-
-.bg-gray-900 {
-  background-color: #3a3b45 !important
-}
+.bg-gray-100 { background-color:#f8f9fc!important }
+.bg-gray-200 { background-color:#eaecf4!important }
+.bg-gray-300 { background-color:#dddfeb!important }
+.bg-gray-400 { background-color:#d1d3e2!important }
+.bg-gray-500 { background-color:#b7b9cc!important }
+.bg-gray-600 { background-color:#858796!important }
+.bg-gray-700 { background-color:#6e707e!important }
+.bg-gray-800 { background-color:#5a5c69!important }
+.bg-gray-900 { background-color:#3a3b45!important }
 
 .o-hidden {
   overflow: hidden !important
 }
 
-.text-xs {
-  font-size: 15px
-}
+/* ================= TEXT ================= */
 
-.text-lg {
-  font-size: 1.2rem
-}
+.text-xs { font-size:15px }
+.text-lg { font-size:1.2rem }
 
-.text-gray-100 {
-  color: #f8f9fc !important
-}
+.text-gray-100 { color:#f8f9fc!important }
+.text-gray-200 { color:#eaecf4!important }
+.text-gray-300 { color:#dddfeb!important }
+.text-gray-400 { color:#d1d3e2!important }
+.text-gray-500 { color:#333!important }
+.text-gray-600 { color:#858796!important }
+.text-gray-700 { color:#6e707e!important }
+.text-gray-800 { color:#5a5c69!important }
+.text-gray-900 { color:#000!important }
 
-.text-gray-200 {
-  color: #eaecf4 !important
-}
-
-.text-gray-300 {
-  color: #dddfeb !important
-}
-
-.text-gray-400 {
-  color: #d1d3e2 !important
-}
-
-.text-gray-500 {
-  color: #000000 !important;
-}
-
-.text-gray-600 {
-  color: #858796 !important
-}
-
-.text-gray-700 {
-  color: #6e707e !important
-}
-
-.text-gray-800 {
-  color: #5a5c69 !important
-}
-
-.text-gray-900 {
-  color: #0000 !important
-}
+/* ================= ICON ================= */
 
 .icon-circle {
-  height: 2.5rem;
-  width: 2.5rem;
-  border-radius: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  justify-content: center
+  height:2.5rem;
+  width:2.5rem;
+  border-radius:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#379a9d;
+  color:white;
 }
 
+/* ================= BORDER ================= */
+
 .border-left-primary {
-  border-left: .25rem solid #3f51b5 !important
+  border-left:.25rem solid #379a9d!important
 }
 
 .border-bottom-primary {
-  border-bottom: .25rem solid #3f51b5 !important
+  border-bottom:.25rem solid #379a9d!important
 }
 
 .border-left-secondary {
-  border-left: .25rem solid #757575 !important
+  border-left:.25rem solid #7a8c8d!important
 }
 
 .border-bottom-secondary {
-  border-bottom: .25rem solid #757575 !important
+  border-bottom:.25rem solid #7a8c8d!important
 }
 
 .border-left-success {
-  border-left: .25rem solid #66bb6a !important
+  border-left:.25rem solid #42b883!important
 }
 
 .border-bottom-success {
-  border-bottom: .25rem solid #66bb6a !important
+  border-bottom:.25rem solid #42b883!important
 }
 
 .border-left-info {
-  border-left: .25rem solid #4dd0e1 !important
+  border-left:.25rem solid #6fd4d7!important
 }
 
 .border-bottom-info {
-  border-bottom: .25rem solid #4dd0e1 !important
+  border-bottom:.25rem solid #6fd4d7!important
 }
 
 .border-left-warning {
-  border-left: .25rem solid #ffeb3b !important
+  border-left:.25rem solid #ffb84d!important
 }
 
 .border-bottom-warning {
-  border-bottom: .25rem solid #ffeb3b !important
+  border-bottom:.25rem solid #ffb84d!important
 }
 
 .border-left-danger {
-  border-left: .25rem solid #ef5350 !important
+  border-left:.25rem solid #ff6b6b!important
 }
 
 .border-bottom-danger {
-  border-bottom: .25rem solid #ef5350 !important
+  border-bottom:.25rem solid #ff6b6b!important
 }
 
 .border-left-light {
-  border-left: .25rem solid #f8f9fc !important
+  border-left:.25rem solid #f8f9fc!important
 }
 
 .border-bottom-light {
-  border-bottom: .25rem solid #f8f9fc !important
+  border-bottom:.25rem solid #f8f9fc!important
 }
 
 .border-left-dark {
-  border-left: .25rem solid #5a5c69 !important
+  border-left:.25rem solid #1f2f30!important
 }
 
 .border-bottom-dark {
-  border-bottom: .25rem solid #5a5c69 !important
+  border-bottom:.25rem solid #1f2f30!important
 }
 
 .progress-sm {
@@ -597,7 +455,7 @@ a:focus {
 }
 
 .bg-navbar {
-  background-color: #6777ef
+  background-color: #379a9d
 }
 
 .sidebar {
@@ -1900,7 +1758,7 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .form-control:focus {
-  border: 1px solid #6777ef
+  border: 1px solid #379a9d
 }
 
 .input-group-append span {
