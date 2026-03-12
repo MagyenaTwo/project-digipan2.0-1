@@ -342,8 +342,10 @@ def main():
 @app.route("/cms", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form.get("username").strip()
-        password = request.form.get("password").strip()
+
+        username = request.form.get("username", "").strip()
+        password = request.form.get("password", "").strip()
+        remember = request.form.get("remember")  # ambil checkbox
 
         if not username or not password:
             flash("Username dan password harus diisi.", "warning")
@@ -352,27 +354,38 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user and check_password_hash(user.password, password):
+
+            # session login
             session["user_id"] = user.id
             session["username"] = user.username
             session["role"] = user.role
-            session.permanent = True
 
+            # remember me logic
+            if remember:
+                session.permanent = True
+            else:
+                session.permanent = False
+
+            # waktu jakarta
             jakarta_tz = pytz.timezone("Asia/Jakarta")
-            now_jakarta = datetime.now(jakarta_tz).replace(
-                tzinfo=None
-            )  # ✅ Buang informasi timezone
+            now_jakarta = datetime.now(jakarta_tz).replace(tzinfo=None)
 
+            # activity log
             new_activity = Activity(
                 user_id=user.id,
                 action="Login ke Dashboard Digipan",
                 timestamp=now_jakarta,
             )
+
             db.session.add(new_activity)
             db.session.commit()
 
+            flash("Login berhasil!", "success")
+
             return redirect(url_for("dashboard"))
+
         else:
-            flash("Username atau password salah. Silakan coba lagi.", "danger")
+            flash("Username atau password salah.", "danger")
 
     return render_template("login.html")
 
