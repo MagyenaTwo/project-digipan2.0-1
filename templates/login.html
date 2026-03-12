@@ -22,15 +22,12 @@ font-family:'Poppins',sans-serif;
 }
 
 body{
-
-height:100vh;
-
+min-height:100vh;
 background:linear-gradient(135deg,#379a9d,#4bbbc0);
-
 display:flex;
 align-items:center;
 justify-content:center;
-
+padding:20px;
 }
 
 /* container */
@@ -275,30 +272,25 @@ align-items:center;
 
 animation:slideIn .4s ease;
 
+max-width:90%;
+
 }
 
 .toast-success{
-
 border-left:4px solid #10b981;
-
 }
 
 .toast-warning{
-
 border-left:4px solid #fbff05;
-
 }
 
 .toast-danger{
-
 border-left:4px solid #ef4444;
-
 }
 
 .toast-info{
-color: #ef4444;
+color:#ef4444;
 border-left:4px solid #ef4444;
-
 }
 
 @keyframes slideIn{
@@ -315,20 +307,103 @@ opacity:1;
 
 }
 
-/* mobile */
+/* TABLET */
+
+@media(max-width:992px){
+
+.login-container{
+max-width:700px;
+}
+
+.login-left{
+padding:50px 35px;
+}
+
+.login-right{
+padding:50px 35px;
+}
+
+}
+
+/* MOBILE */
 
 @media(max-width:768px){
 
+body{
+padding:15px;
+}
+
 .login-container{
-
 flex-direction:column;
-
+border-radius:15px;
 }
 
 .login-left{
 
 text-align:center;
+align-items:center;
 
+padding:35px 25px;
+
+}
+
+.login-left h1{
+font-size:26px;
+}
+
+.login-left p{
+font-size:14px;
+}
+
+.login-left img{
+width:70px;
+}
+
+.login-right{
+padding:35px 25px;
+}
+
+.login-right h2{
+font-size:20px;
+text-align:center;
+}
+
+.input-group input{
+padding:12px 40px;
+font-size:14px;
+}
+
+.btn-login{
+padding:12px;
+font-size:14px;
+}
+
+.toast{
+top:15px;
+right:15px;
+font-size:13px;
+}
+
+}
+
+/* SMALL MOBILE */
+
+@media(max-width:480px){
+
+.login-left{
+padding:30px 20px;
+}
+
+.login-right{
+padding:30px 20px;
+}
+
+.login-left h1{
+font-size:22px;
+}
+
+.login-right h2{
+font-size:18px;
 }
 
 }
@@ -417,8 +492,6 @@ SMARTDELAPAN CMS • Versi 2.0
 
 <script>
 
-/* show password */
-
 function togglePass(){
 
 let p=document.getElementById("password");
@@ -426,8 +499,6 @@ let p=document.getElementById("password");
 p.type=p.type==="password"?"text":"password";
 
 }
-
-/* remember username */
 
 const username=document.getElementById("username");
 const remember=document.getElementById("remember");
@@ -443,25 +514,18 @@ remember.checked=true;
 document.querySelector("form").addEventListener("submit",function(){
 
 if(remember.checked){
-
 localStorage.setItem("rememberUser",username.value);
-
 }else{
-
 localStorage.removeItem("rememberUser");
-
 }
 
 });
-
-/* hide toast */
 
 setTimeout(()=>{
 
 document.querySelectorAll(".toast").forEach(t=>{
 
 t.style.opacity="0";
-
 t.style.transform="translateX(40px)";
 
 setTimeout(()=>t.remove(),400);
