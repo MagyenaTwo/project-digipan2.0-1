@@ -219,7 +219,7 @@ nav ul li:hover > a {
   /* Jarak antar Section */
   #layanan, #laporan, #informasi, #tutorial {
       margin-top: 60px;
-  }
+  } 
 
   h2 { 
     font-size: 2rem; 
