@@ -14,13 +14,24 @@
     --radius: 8px;
     --shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
     --shadow-hover: 0 10px 20px rgba(0, 0, 0, 0.12);
+    --baru:#008b8b;
   }
 
   * {
   -webkit-tap-highlight-color: transparent;
   -webkit-touch-callout: none;
 }
+/* Chrome, Safari ve yeni Edge için */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
+}
 
+/* Firefox ve eski IE/Edge için */
+html, body {
+    -ms-overflow-style: none;  /* IE ve Edge */
+    scrollbar-width: none;  /* Firefox */
+}
   * { box-sizing: border-box; margin:0; padding:0; }
   body { 
     background: var(--bg);
@@ -34,7 +45,9 @@
   a { text-decoration: none; color: var(--brand); }
   h1, h2, h3 { color: var(--text); font-weight: 700; }
 header {
-  background-image: url('../img/logo/bek7.jpg');
+  /* background-image: url('../img/logo/bek7.jpg');
+   */
+  background-color: var(--baru);
   background-size: 100%;      /* 🔥 bikin gambar “lebih kecil / zoom out” */
   background-position: center;
   background-repeat: no-repeat;
@@ -62,7 +75,7 @@ header.scrolled .logo {
 
 /* Tetap jaga warna menu tetap putih */
 header.scrolled nav ul li a {
-  color: #34acb0 !important;
+  color: var(--baru) !important;
 }
 
 /* Tapi saat hover, boleh sedikit transparan */
@@ -144,7 +157,7 @@ nav ul li:hover > a {
     position: absolute; 
     top: 50px;
     left:0; 
-    background: var(--brand-dark); 
+    background: var(--baru); 
     border-radius: var(--radius); 
     min-width: 200px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.3);
@@ -211,7 +224,7 @@ nav ul li:hover > a {
   h2 { 
     font-size: 2rem; 
     margin-bottom: 30px; 
-    color: var(--brand-dark);
+    color: #000;
     text-align: center;
     position: relative;
     padding-bottom: 15px;
@@ -511,7 +524,7 @@ nav ul li:hover > a {
   align-items: center;
   padding: 12px 16px;
   cursor: pointer;
-  background: #f9f9f9;
+  background: #fff;
   font-weight: 700;
 }
 
@@ -1311,10 +1324,10 @@ header.scrolled .logo .logo-text {
 /* ===== BADGE & META ===== */
 .kegiatan-badge {
   width: fit-content;
-  background: linear-gradient(135deg, #34acb0, #2aa1a6);
+  background: var(--baru);
   color: #fff;
   padding: 3px 10px;
-  border-radius: 20px;
+  border-radius: 10px;
   font-size: 11px;
   font-weight: 600;
 }
@@ -1335,7 +1348,7 @@ header.scrolled .logo .logo-text {
 .btn-detail {
   margin-top: 6px;
   align-self: flex-start;
-  background: #34acb0;
+  background: var(--baru);
   color: #fff;
   padding: 6px 14px;
   border: none;
@@ -1521,7 +1534,7 @@ body {
 }
 
 .btn.primary {
-  background: linear-gradient(90deg, var(--brand), #5ce1e6);
+  background: var(--baru);
   color: #fff;
   box-shadow: 0 6px 18px rgba(37,99,235,0.28);
 }
@@ -1601,8 +1614,8 @@ body {
 
 .btn-toggle {
   padding: 8px 16px;
-  background-color: #fff;
-  color: black;
+  background-color: var(--baru);
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -1845,7 +1858,7 @@ body {
 
 
 .btn-pdf {
-  background: linear-gradient(135deg, #34acb0, #3db8b0);
+  background: var(--baru);
   color: #fff;
   font-weight: bold;
   font-size: 16px;
@@ -1889,10 +1902,10 @@ body {
 /* card */
 .surat-item {
   width: 100%;
-  background: #f0fff4; /* hijau muda */
+  background: #fff; /* hijau muda */
   padding: 14px 18px;
   border-radius: 12px;
-  color: #1d7b3a; /* hijau tua untuk teks */
+  color: #000; /* hijau tua untuk teks */
   font-weight: 600;
   box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   cursor: pointer;
@@ -1901,7 +1914,7 @@ body {
 }
 
 .surat-item:hover {
-  background: #e6f9ed; /* hover */
+  background: #fff; /* hover */
 }
 
 /* Header */
